@@ -1,0 +1,42 @@
+/**
+ * Created by 圆环之理 on 2018/5/11.
+ *
+ * 功能：配置所有的地址
+ *
+ * */
+'use strict';
+
+const urlConfig = {
+    api: {
+        //app请求路径
+        host: 'https://www.lockcoin.net/',
+        //交易大厅ioUrl
+        socketIOUrl: 'wss://hq.lockcoin.net',
+        //热更新下载最新app路径
+        appReleaseApk: 'https://www.lockcoin.net/app/app-release.apk',
+        //第一次打开app启动图
+        guideImage: [
+            require("../static/startPicture/guide_1_1.png"),
+            require("../static/startPicture/guide_1_1.png"),
+        ],
+        //第二次打开app启动图
+        splash: [
+            require("../static/startPicture/guide_1_1.png"),
+        ],
+        //热更新appID
+        android: {
+            "appId": 11534,
+            "appKey": "_LH2pJOAncZC96MxMcnIl7ivZojRy0Dw"
+        },
+        ios: {
+            "appId": 11534,
+            "appKey": "_LH2pJOAncZC96MxMcnIl7ivZojRy0Dw"
+        },
+        versionApp: 3.0,//判断是否有杠杆资产 ps：3.1有
+        isRMB: false,//是否有人民币，(人民币充值、人民币提现)
+        isTabView: true,//首页tab排版
+        isPhone: false//是否有手机注册
+    },
+};
+
+export default urlConfig;
