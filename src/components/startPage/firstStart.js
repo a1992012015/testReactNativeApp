@@ -16,7 +16,7 @@ import {
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { connect } from 'react-redux';
-import { NavigationActions } from 'react-navigation';
+import { StackActions, NavigationActions } from 'react-navigation';
 
 import { START_PAGE_DATA } from '../../store/actions/ActionTypes';
 import appUrl from '../../utils/urlConfig';
@@ -34,17 +34,16 @@ class FirstStart extends PureComponent {
     _toLogin = () => {
         console.log('进入函数');
 
-        const { dispatch } = this.props;
+        const { dispatch, navigation } = this.props;
 
         dispatch({ type: START_PAGE_DATA });
 
-        const navigateAction = NavigationActions.navigate({
-            routeName: 'TabBar',
-
-            params: {},
+        const resetAction = StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({ routeName: 'TabBar' })],
         });
 
-        this.props.navigation.dispatch(navigateAction);
+        navigation.dispatch(resetAction);
     };
     // 渲染
     render() {

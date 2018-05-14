@@ -14,7 +14,7 @@ import {
     StyleSheet,
     Image
 } from 'react-native';
-import { NavigationActions } from 'react-navigation'
+import { StackActions, NavigationActions } from 'react-navigation';
 
 import appUrl from '../../utils/urlConfig';
 import TabBar from '../../view/main/tabBar';
@@ -31,33 +31,28 @@ class SecondStart extends PureComponent {
     componentDidMount() {
         this._toMain();
     }
+    test(){
+        console.log(this.props.navigation.state);
+    }
     //第二次启动APP开始启动页会自动消失
     _toMain = () => {
         if(config.api.dEnvironment){
             //打包
             this.timer = setTimeout(() => {
                 //界面加载完开始执行
-                InteractionManager.runAfterInteractions(() => {
-                    const navigateAction = NavigationActions.navigate({
-                        routeName: 'TabBar',
-
-                        params: {},
-                    });
-
-                    this.props.navigation.dispatch(navigateAction);
+                const resetAction = StackActions.reset({
+                    index: 0,
+                    actions: [NavigationActions.navigate({ routeName: 'TabBar' })],
                 });
+                this.props.navigation.dispatch(resetAction);
             }, 2000);
         }else{
             //本地调试
-            InteractionManager.runAfterInteractions(() => {
-                const navigateAction = NavigationActions.navigate({
-                    routeName: 'TabBar',
-
-                    params: {},
-                });
-
-                this.props.navigation.dispatch(navigateAction);
+            const resetAction = StackActions.reset({
+                index: 0,
+                actions: [NavigationActions.navigate({ routeName: 'TabBar' })],
             });
+            this.props.navigation.dispatch(resetAction);
         }
     };
 

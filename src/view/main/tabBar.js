@@ -11,7 +11,7 @@ import {
     StyleSheet,
     View,
     Image,
-    Dimensions, AsyncStorage,
+    Dimensions,
 } from 'react-native';
 import {connect} from 'react-redux';
 import store from 'react-native-simple-store';
@@ -26,7 +26,8 @@ import Assets from '../../view/assets';//个人资产
 import CTwoC from '../cTowC';//c2c
 import Notice from '../../view/notice';//公告页面
 import MySelf from '../../view/mySelf';//个人信息页面
-import Login from '../../view/login';//登陆页面
+import Login from '../../view/login';
+//登陆页面
 
 const { width } = Dimensions.get('window');
 const TAB_ITEMS = [
@@ -88,7 +89,7 @@ class TabBarView extends PureComponent {
     }
     //真实的DOM被渲染出来后调用
     componentDidMount() {
-        console.log("this.props.selected",this.props.selected);
+        console.log("this.props.navigation",this.props.navigation.state);
     }
     //底部标签的点击事件
     tabPage = (name,tabTitle) => {
@@ -127,6 +128,8 @@ class TabBarView extends PureComponent {
 
                     })
                 }
+            }).catch(error => {
+                console.log(error)
             })
         } else {
             this.setState({

@@ -23,7 +23,7 @@ const config = {
         isRMB:appUrl.api.isRMB,//是否显示人民币
         isTabView:appUrl.api.isTabView,//首页tab排版
         isPhone:appUrl.api.isPhone,//是否有手机注册
-        dEnvironment:true,//开发环境   false 本地   true 正式
+        dEnvironment:false,//开发环境   false 本地   true 正式
 
         index: {
             indexList:'mobile/nouser/appmarketlist.do',//首页List数据
