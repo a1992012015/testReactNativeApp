@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React,{Component} from 'react';
+import React,{ Component } from 'react';
 import {
     Dimensions,
     InteractionManager,
@@ -14,7 +14,7 @@ import {
     StyleSheet,
     Image
 } from 'react-native';
-import {NavigationActions} from 'react-navigation'
+import { NavigationActions } from 'react-navigation'
 
 import appUrl from '../../utils/urlConfig';
 import TabBar from '../../view/main/tabBar';

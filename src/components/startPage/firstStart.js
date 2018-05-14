@@ -15,10 +15,10 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import Swiper from 'react-native-swiper'
-import {connect} from 'react-redux';
-import {NavigationActions} from 'react-navigation'
+import { connect } from 'react-redux';
+import { NavigationActions } from 'react-navigation'
 
-import appurl from '../../utils/urlConfig'
+import appUrl from '../../utils/urlConfig'
 import p from '../../utils/tranfrom'
 
 const {width, height} = Dimensions.get('window');
@@ -36,15 +36,16 @@ class FirstStart extends Component {
     }
 
     _toLogin = () => {
+        console.log('进入函数');
         const {enterSlide} = this.props;
-        enterSlide();
+        /*enterSlide();
         const resetAction = NavigationActions.reset({
             index: 0,
             actions: [
                 NavigationActions.navigate({routeName: 'TabBar'})
             ]
         });
-        this.props.navigation.dispatch(resetAction);
+        this.props.navigation.dispatch(resetAction);*/
 
     };
     // 渲染
@@ -61,23 +62,23 @@ class FirstStart extends Component {
                         loop={false}
                 >
                     {
-                        appurl.api.guideImage.map((item,index)=>{
+                        appUrl.api.guideImage.map((item,index)=>{
                             return(
                                 <View key={index}>
                                     {
-                                        appurl.api.guideImage.length-1 === index?
+                                        appUrl.api.guideImage.length-1 === index?
 
                                             <TouchableOpacity
                                                 activeOpacity={1}
                                                 onPress={this._toLogin}
                                                 style={btnStyle}>
                                                 <Image style={page}
-                                                       source={appurl.api.guideImage[index]}
+                                                       source={appUrl.api.guideImage[index]}
                                                 />
                                             </TouchableOpacity>
                                             :
                                             <Image style={page}
-                                                   source={appurl.api.guideImage[index]}
+                                                   source={appUrl.api.guideImage[index]}
                                             />
                                     }
                                 </View>

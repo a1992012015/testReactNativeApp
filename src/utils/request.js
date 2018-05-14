@@ -9,9 +9,9 @@
 import {
     Alert
 } from 'react-native';
-import {NavigationActions} from 'react-navigation'
+import { NavigationActions } from 'react-navigation'
 import store from 'react-native-simple-store';
-import {getLanguages} from 'react-native-i18n';
+import { getLanguages } from 'react-native-i18n';
 
 const request = {};
 /*get请求*/
@@ -57,7 +57,7 @@ request.post = async function (url) {
     return fetch(url,{
         method: 'POST',
         headers: {
-            "Accept": "application/json;charset=utf-8",
+            'Accept': 'application/json;charset=utf-8',
             'Content-Type': 'application/x-www-form-urlencoded',
         }
     }).then((response) => response.json()).catch(error => error);

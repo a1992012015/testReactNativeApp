@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, {PureComponent} from 'react'
+import React, { PureComponent } from 'react'
 import {
     StyleSheet,
     BackHandler,
@@ -17,14 +17,14 @@ import {
     StatusBar,
     Platform
 } from 'react-native';
-import {connect} from 'react-redux';
-import {NavigationActions} from 'react-navigation';
+import { connect } from 'react-redux';
+import { NavigationActions } from 'react-navigation';
 
 import FirstStart from '../../components/startPage/firstStart'
 import SecondStart from '../../components/startPage/secondStart';
-import {NaviGoBack} from '../../components/goBack';
+import { NaviGoBack } from '../../components/goBack';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 let _navigator;
 
 class App extends PureComponent {
@@ -44,9 +44,7 @@ class App extends PureComponent {
     async componentWillMount() {
         await AsyncStorage.getItem('firstFlag').then(data => {
             if (data === 'yes') {
-                this.setState({
-                    firstFlag: true
-                })
+                console.log('有启动页的flag')
             }
         })
     }
@@ -66,11 +64,7 @@ class App extends PureComponent {
     };
     //初次启动点击图片储存状态
     _enterSlide = () => {
-        this.setState({
-            firstFlag: true
-        }, () => {
-            AsyncStorage.setItem('firstFlag', 'yes')
-        })
+        console.log('设置启动页的flag')
     };
     //监听安卓的返回键
     _onBackAndroid = () => {
@@ -91,9 +85,12 @@ class App extends PureComponent {
 
     render() {
         if (!this.state.firstFlag) {
+            //第一次启动app显示的图片
+            console.log('app第一次启动');
             return <FirstStart enterSlide={this._enterSlide} {...this.props} />
         }else{
-            console.log('app位置');
+            //第一次之后启动app显示的图片
+            console.log('app第二次启动');
             return (
                 <View style={styles.bootPage}>
                     <SecondStart {...this.props} />
@@ -122,7 +119,7 @@ const styles = StyleSheet.create({
 });
 
 export default connect((state) => {
-    const {HomeReducer} = state;
+    const { HomeReducer } = state;
     return {
         HomeReducer
     }

@@ -6,12 +6,12 @@
  */
 'use strict';
 
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import {
     View,
     Text
 } from 'react-native' ;
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
 
 class Home extends PureComponent {

@@ -6,12 +6,12 @@
  */
 'use strict';
 
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import {
     View,
     Text
 } from 'react-native' ;
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
 
 class Assets extends PureComponent {
@@ -31,7 +31,7 @@ class Assets extends PureComponent {
 }
 
 export default connect((state) => {
-    const {HomeReducer} = state;
+    const { HomeReducer } = state;
     return {
         HomeReducer
     }

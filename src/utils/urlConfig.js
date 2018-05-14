@@ -17,7 +17,7 @@ const urlConfig = {
         //第一次打开app启动图
         guideImage: [
             require("../static/startPicture/guide_1_1.png"),
-            require("../static/startPicture/guide_1_1.png"),
+            require("../static/startPicture/guide_2_2.png"),
         ],
         //第二次打开app启动图
         splash: [

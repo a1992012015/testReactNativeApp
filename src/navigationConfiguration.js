@@ -7,7 +7,7 @@
 'use strict';
 
 import React from 'react'
-import {StackNavigator} from 'react-navigation';
+import { StackNavigator } from 'react-navigation';
 
 import App from './view/main/app';
 import TabBar from './view/main/tabBar';
@@ -21,18 +21,18 @@ import Login from './view/login';
 
 const routeConfiguration = {
     /*入口*/
-    App: {screen: App},
+    App: { screen: App },
     /*底部标签*/
-    TabBar:{screen: TabBar},
+    TabBar:{ screen: TabBar },
     /*底部TAB对应的页面*/
-    Home:{screen: Home},
-    Lobby:{screen: Lobby},
-    Assets:{screen: Assets},
-    CTowC:{screen: CTowC},
-    Notice:{screen: Notice},
-    MySelf:{screen: MySelf},
+    Home:{ screen: Home },
+    Lobby:{ screen: Lobby },
+    Assets:{ screen: Assets },
+    CTowC:{ screen: CTowC },
+    Notice:{ screen: Notice },
+    MySelf:{ screen: MySelf },
     /*登陆*/
-    Login:{screen: Login},
+    Login:{ screen: Login },
 };
 
 const stackNavigatorConfiguration = {
