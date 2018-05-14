@@ -12,20 +12,18 @@ import {
     BackHandler,
     View,
     ToastAndroid,
-    AsyncStorage,
     Dimensions,
     StatusBar,
     Platform
 } from 'react-native';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
+import PropTypes from 'prop-types'; // ES6
 
 import FirstStart from '../../components/startPage/firstStart'
 import SecondStart from '../../components/startPage/secondStart';
-import { NaviGoBack } from '../../components/goBack';
 
 const { width, height } = Dimensions.get('window');
-let _navigator;
 
 class App extends PureComponent {
     constructor(props) {
@@ -33,7 +31,7 @@ class App extends PureComponent {
         BackHandler.addEventListener('hardwarePress', () => this._onBackAndroid());
         this.state = {
             booted: false,//无法找到具体作用的参数
-            firstFlag: false,//判断是否是第一次启动APP
+            firstFlag: props.StartPage.pageFlag,//判断是否是第一次启动APP
             isLogin: false,
             member: null,
             touchPwdIsOpen: false,
@@ -41,12 +39,8 @@ class App extends PureComponent {
         }
     }
     //在完成首次渲染之前调用
-    async componentWillMount() {
-        await AsyncStorage.getItem('firstFlag').then(data => {
-            if (data === 'yes') {
-                console.log('有启动页的flag')
-            }
-        })
+    componentWillMount() {
+        console.log(this.props.StartPage.pageFlag);
     }
     //真实的DOM被渲染出来后调用
     componentDidMount() {
@@ -58,22 +52,16 @@ class App extends PureComponent {
         Platform.OS === 'android' ? StatusBar.setTranslucent(true) : '';
 
     }
-
-    goBack = () => {
-        return NaviGoBack(_navigator);
-    };
-    //初次启动点击图片储存状态
-    _enterSlide = () => {
-        console.log('设置启动页的flag')
-    };
     //监听安卓的返回键
     _onBackAndroid = () => {
         const { dispatch, navigation } = this.props;
-        console.log(this.props.navigation.state.routeName);
-        if (navigation.state.routeName !== "App") {//不在主页则返回上一页
+        console.log(navigation.state.routeName);
+        //不在主页则返回上一页
+        if (navigation.state.routeName !== "App") {
             dispatch(NavigationActions.back());
             return true;
         }
+        //连续返回两次则退出程序
         if (this.lastBackButtonPress + 2000 >= new Date().getTime()) {
             BackHandler.exitApp();
             return true;
@@ -87,7 +75,7 @@ class App extends PureComponent {
         if (!this.state.firstFlag) {
             //第一次启动app显示的图片
             console.log('app第一次启动');
-            return <FirstStart enterSlide={this._enterSlide} {...this.props} />
+            return <FirstStart {...this.props} />
         }else{
             //第一次之后启动app显示的图片
             console.log('app第二次启动');
@@ -117,10 +105,14 @@ const styles = StyleSheet.create({
 
     }
 });
+// 属性类型
+FirstStart.propTypes = {
+    StartPage: PropTypes.objectOf(PropTypes.bool.isRequired).isRequired,
+};
 
 export default connect((state) => {
-    const { HomeReducer } = state;
+    const { StartPage } = state;
     return {
-        HomeReducer
+        StartPage
     }
 })(App);

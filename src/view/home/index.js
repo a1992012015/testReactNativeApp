@@ -10,9 +10,8 @@ import React, { PureComponent } from 'react';
 import {
     View,
     Text
-} from 'react-native' ;
+} from 'react-native';
 import { connect } from 'react-redux';
-
 
 class Home extends PureComponent {
     // 构造
@@ -20,19 +19,23 @@ class Home extends PureComponent {
         super(props);
         // 初始状态
     }
+    //测试储存数据的问题
+    test = () => {
+        console.log(this.props.StartPage)
+    };
     // 渲染
     render() {
         return (
             <View>
-                <Text>这里是主页</Text>
+                <Text onPress={this.test}>这里是主页</Text>
             </View>
         );
     }
 }
 
 export default connect((state) => {
-    const {HomeReducer} = state;
+    const {StartPage} = state;
     return {
-        HomeReducer
+        StartPage
     }
 })(Home);

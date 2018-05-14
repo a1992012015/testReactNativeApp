@@ -13,11 +13,14 @@ import {combineReducers} from 'redux';
 import HomeReducer from './HomeReducer';
 import TradingReducer from './TradingReducer';
 import IndexLoopReducer from './IndexLoopReducer';
+import StartPage from "./startPage";
+
 export default combineReducers({
 
     HomeReducer,
     TradingReducer,
-    IndexLoopReducer
+    IndexLoopReducer,
+    StartPage,
 
 });
 

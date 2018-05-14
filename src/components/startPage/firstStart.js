@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, {Component} from 'react';
+import React, { PureComponent } from 'react';
 import {
     Dimensions,
     StyleSheet,
@@ -14,43 +14,41 @@ import {
     Image,
     TouchableOpacity,
 } from 'react-native';
-import Swiper from 'react-native-swiper'
+import Swiper from 'react-native-swiper';
 import { connect } from 'react-redux';
-import { NavigationActions } from 'react-navigation'
+import { NavigationActions } from 'react-navigation';
 
-import appUrl from '../../utils/urlConfig'
-import p from '../../utils/tranfrom'
+import { START_PAGE_DATA } from '../../store/actions/ActionTypes';
+import appUrl from '../../utils/urlConfig';
+import p from '../../utils/tranfrom';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
-class FirstStart extends Component {
-    // 默认属性
-    static defaultProps = {};
-    // 属性类型
-    static propTypes = {};
+class FirstStart extends PureComponent {
     // 构造
     constructor(props) {
         super(props);
         // 初始状态
-        /*this.state = {};*/
     }
-
+    //首次启动app点击最后一张图片的操作函数
     _toLogin = () => {
         console.log('进入函数');
-        const {enterSlide} = this.props;
-        /*enterSlide();
-        const resetAction = NavigationActions.reset({
-            index: 0,
-            actions: [
-                NavigationActions.navigate({routeName: 'TabBar'})
-            ]
-        });
-        this.props.navigation.dispatch(resetAction);*/
 
+        const { dispatch } = this.props;
+
+        dispatch({ type: START_PAGE_DATA });
+
+        const navigateAction = NavigationActions.navigate({
+            routeName: 'TabBar',
+
+            params: {},
+        });
+
+        this.props.navigation.dispatch(navigateAction);
     };
     // 渲染
     render() {
-        const {wrapper, dot, activeDot, btnStyle, page} = styles;
+        const { wrapper, dot, activeDot, btnStyle, page } = styles;
         return (
             <View style={{flex:1}}>
                 <Swiper autoplay={false}
@@ -66,8 +64,7 @@ class FirstStart extends Component {
                             return(
                                 <View key={index}>
                                     {
-                                        appUrl.api.guideImage.length-1 === index?
-
+                                        appUrl.api.guideImage.length-1 === index?//当是最后一张图片的时候则添加点击事件
                                             <TouchableOpacity
                                                 activeOpacity={1}
                                                 onPress={this._toLogin}
@@ -90,7 +87,6 @@ class FirstStart extends Component {
             </View>
         );
     }
-
 }
 
 const styles = StyleSheet.create({
@@ -113,10 +109,9 @@ const styles = StyleSheet.create({
     }
 });
 
-
 export default connect((state) => {
-    const {MineReducer} = state;
+    const { StartPage } = state;
     return {
-        MineReducer
+        StartPage,
     }
 })(FirstStart);

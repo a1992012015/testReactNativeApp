@@ -20,3 +20,6 @@ export const FETCHING_TRADING_DATA = 'FETCHING_TRADING_DATA';
 //首页
 export const FETCH_HOME_DATA = 'FETCH_HOME_DATA';
 export const FETCHING_HOME_DATA = 'FETCHING_HOME_DATA';
+
+//启动页面的图片显示
+export const START_PAGE_DATA = 'START_PAGE_DATA';

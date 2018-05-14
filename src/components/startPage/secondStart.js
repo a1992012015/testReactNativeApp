@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React,{ Component } from 'react';
+import React,{ PureComponent } from 'react';
 import {
     Dimensions,
     InteractionManager,
@@ -20,57 +20,48 @@ import appUrl from '../../utils/urlConfig';
 import TabBar from '../../view/main/tabBar';
 import config from '../../utils/config';
 
-const {height, width} = Dimensions.get('window');
+const { height, width } = Dimensions.get('window');
 
-class SecondStart extends Component {
+class SecondStart extends PureComponent {
+    //构造函数
     constructor(props) {
         super(props);
-        this.state = {
-            logined: false,
-        }
     }
-
+    //真实的DOM被渲染出来后调用
     componentDidMount() {
         this._toMain();
     }
-/*
-    _openWithTouchId = () => {
-        this._toMain();
-    };*/
-
+    //第二次启动APP开始启动页会自动消失
     _toMain = () => {
-        let that = this;
-
         if(config.api.dEnvironment){
             //打包
             this.timer = setTimeout(() => {
                 //界面加载完开始执行
                 InteractionManager.runAfterInteractions(() => {
-                    const resetAction = NavigationActions.reset({
-                        index: 0,
-                        actions: [
-                            NavigationActions.navigate({routeName: 'TabBar'})
-                        ]
+                    const navigateAction = NavigationActions.navigate({
+                        routeName: 'TabBar',
+
+                        params: {},
                     });
-                    that.props.navigation.dispatch(resetAction);
+
+                    this.props.navigation.dispatch(navigateAction);
                 });
             }, 2000);
         }else{
             //本地调试
             InteractionManager.runAfterInteractions(() => {
-                const resetAction = NavigationActions.reset({
-                    index: 0,
-                    actions: [
-                        NavigationActions.navigate({routeName: 'TabBar'})
-                    ]
+                const navigateAction = NavigationActions.navigate({
+                    routeName: 'TabBar',
+
+                    params: {},
                 });
-                that.props.navigation.dispatch(resetAction);
+
+                this.props.navigation.dispatch(navigateAction);
             });
         }
     };
 
     render() {
-        console.log('查看执行顺序');
         return (
             <View style={styles.bootPage}>
                 <Image style={styles.page}

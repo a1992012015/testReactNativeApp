@@ -6,12 +6,12 @@
  */
 'use strict';
 
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import {
     StyleSheet,
     View,
     Image,
-    Dimensions,
+    Dimensions, AsyncStorage,
 } from 'react-native';
 import {connect} from 'react-redux';
 import store from 'react-native-simple-store';
@@ -19,7 +19,7 @@ import TabNavigator from 'react-native-tab-navigator';
 
 import I18n from '../../utils/i18n';//语言控制
 import p from '../../utils/tranfrom';//返回图像大小
-import {InitUserInfo} from '../../store/actions/HomeAction';//状态
+import { InitUserInfo } from '../../store/actions/HomeAction';//状态
 import Home from '../../view/home';//主页入口
 import Lobby from '../../view/lobby';//交易大厅
 import Assets from '../../view/assets';//个人资产
@@ -28,7 +28,7 @@ import Notice from '../../view/notice';//公告页面
 import MySelf from '../../view/mySelf';//个人信息页面
 import Login from '../../view/login';//登陆页面
 
-const {width} = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 const TAB_ITEMS = [
     {
         title: I18n.t('Index'),
@@ -39,7 +39,7 @@ const TAB_ITEMS = [
     },
     {
         title: I18n.t('TradingHall'),
-        name: 'Business',
+        name: 'Lobby',
         icon: require("../../static/tabBar/Lobby.png"),
         selectIcon: require("../../static/tabBar/Lobby_select.png"),
         component: Lobby
@@ -54,7 +54,7 @@ const TAB_ITEMS = [
     },
     {
         title: 'c2c',
-        name: 'ctwoc',
+        name: 'cTwoC',
         icon: require("../../static/tabBar/Assets.png"),
         selectIcon: require("../../static/tabBar/Assets_selsect.png"),
         component: CTwoC
@@ -62,14 +62,14 @@ const TAB_ITEMS = [
 
     {
         title: I18n.t('NewsInformation'),
-        name: 'credit',
+        name: 'notice',
         icon: require("../../static/tabBar/Notice.png"),
         selectIcon: require("../../static/tabBar/Notice_select.png"),
         component: Notice
     },
     {
         title: I18n.t('personCenter'),
-        name: 'cart',
+        name: 'mySelf',
         icon: require("../../static/tabBar/MySelf.png"),
         selectIcon: require("../../static/tabBar/MySelf_select.png"),
         component: MySelf
@@ -81,7 +81,7 @@ class TabBarView extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            selectedTab: 'home',//this.props.selected === '' || this.props.selected === null ? 'home' : this.props.selected,
+            selectedTab: 'home',//显示的界面
             isLogin: false,
             tabTitle:null,
         };
@@ -90,27 +90,41 @@ class TabBarView extends PureComponent {
     componentDidMount() {
         console.log("this.props.selected",this.props.selected);
     }
-
+    //底部标签的点击事件
     tabPage = (name,tabTitle) => {
+
         let strD = new Date().getTime();
         console.log(`事件开始时间${strD}`);
-        if (name === 'cart' || name === 'assets' || name ==='ctwoc') {
-            //StatusBar.setBarStyle('light-content');
+
+        const { selectedTab } = this.state;
+        //点击当前选择的标签无效
+        if(selectedTab === name){
+            console.log('重复点击无效');
+            let endD = new Date().getTime();
+            console.log(`一共花费${(endD - strD) / 1000}`);
+            return;
+        }
+
+        if (name === 'mySelf' || name === 'assets' || name ==='cTwoC') {
+            console.log('123');
             store.get('member').then(member => {
+                console.log(member);
                 if (!member) {
-                    this.props.navigation.navigate('Login',{ISForm:true});
+                    this.props.navigation.navigate('Login',{ ISForm:true });
                 } else {
-                    const {dispatch} = this.props;
+                    const { dispatch } = this.props;
                     dispatch(InitUserInfo(this.props));
                     this.setState({
                         selectedTab: name,
-                        tabTitle:tabTitle
+                        tabTitle: tabTitle
                     },()=>{
                         this.setState({
                             tabTitle:null
                         });
+
                         let endD = new Date().getTime();
                         console.log(`一共花费${(endD - strD) / 1000}`);
+
                     })
                 }
             })
@@ -122,8 +136,10 @@ class TabBarView extends PureComponent {
                 this.setState({
                     tabTitle:null
                 });
+
                 let endD = new Date().getTime();
                 console.log(`一共花费${(endD - strD) / 1000}`);
+
             });
         }
     };
@@ -151,18 +167,21 @@ class TabBarView extends PureComponent {
                             return (
                                 item?
                                     <TabNavigator.Item
-                                        key={index}
-                                        title={item.title}
-                                        selected={this.state.selectedTab === item.name}
-                                        selectedTitleStyle={styles.selectedTextStyle}
-                                        titleStyle={styles.textStyle}
-                                        renderIcon={() => <Image source={item.icon}
-                                                                 style={styles.iconStyle}/>}
-                                        renderSelectedIcon={() => <Image source={item.selectIcon}
-                                                                         style={styles.iconStyle}/>}
+                                        key={ index }
+                                        title={ item.title }
+                                        selected={ this.state.selectedTab === item.name }
+                                        selectedTitleStyle={ styles.selectedTextStyle }
+                                        titleStyle={ styles.textStyle }
+                                        renderIcon={ () => <Image source={ item.icon }
+                                                                 style={ styles.iconStyle }/> }
+                                        renderSelectedIcon={ () => <Image source={ item.selectIcon }
+                                                                         style={ styles.iconStyle }/> }
                                         onPress={() =>  this.tabPage(item.name)}
                                     >
-                                        <Component {...this.props}  tabPage={this.tabPage} tabTitle={this.state.tabTitle}/>
+                                        <Component { ...this.props }
+                                                   tabPage={ this.tabPage }
+                                                   tabTitle={ this.state.tabTitle }
+                                        />
                                     </TabNavigator.Item>
                                     :null
                             )
