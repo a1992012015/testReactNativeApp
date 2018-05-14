@@ -11,9 +11,12 @@ import {
     StyleSheet,
     View,
     Image,
+    ToastAndroid,
     Dimensions,
+    BackHandler,
 } from 'react-native';
-import {connect} from 'react-redux';
+import { NavigationActions } from "react-navigation";
+import { connect } from 'react-redux';
 import store from 'react-native-simple-store';
 import TabNavigator from 'react-native-tab-navigator';
 
@@ -79,8 +82,18 @@ const TAB_ITEMS = [
 
 
 class TabBarView extends PureComponent {
+    _didFocusSubscription;
+    _willBlurSubscription;
+
     constructor(props) {
         super(props);
+
+        this._didFocusSubscription = props.navigation.addListener('didFocus', payload => {
+                console.debug('didBlur', payload);
+                return BackHandler.addEventListener('hardwareBackPress', this._onBackAndroid);
+            }
+        );
+
         this.state = {
             selectedTab: 'home',//显示的界面
             isLogin: false,
@@ -90,7 +103,35 @@ class TabBarView extends PureComponent {
     //真实的DOM被渲染出来后调用
     componentDidMount() {
         console.log("this.props.navigation",this.props.navigation.state);
+        this._willBlurSubscription = this.props.navigation.addListener('willBlur', payload => {
+                console.debug('willBlur', payload);
+                return BackHandler.removeEventListener('hardwareBackPress', this._onBackAndroid)
+            }
+        );
     }
+    //组件被移出
+    componentWillUnmount() {
+        this._didFocusSubscription && this._didFocusSubscription.remove();
+        this._willBlurSubscription && this._willBlurSubscription.remove();
+    }
+    //监听安卓的返回键
+    _onBackAndroid = () => {
+        const { dispatch, navigation } = this.props;
+        console.log(navigation.state);
+        //不在主页则返回上一页
+        if (navigation.state.routeName !== "TabBar") {
+            dispatch(NavigationActions.back());
+            return true;
+        }
+        //连续返回两次则退出程序
+        if (this.lastBackButtonPress + 2000 >= new Date().getTime()) {
+            BackHandler.exitApp();
+            return true;
+        }
+        ToastAndroid.show('再按一次退出应用', ToastAndroid.SHORT);
+        this.lastBackButtonPress = new Date().getTime();
+        return true;
+    };
     //底部标签的点击事件
     tabPage = (name,tabTitle) => {
 
