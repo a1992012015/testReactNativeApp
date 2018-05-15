@@ -30,9 +30,4 @@ class MySelf extends PureComponent {
     }
 }
 
-export default connect((state) => {
-    const {HomeReducer} = state;
-    return {
-        HomeReducer
-    }
-})(MySelf);
+export default MySelf;

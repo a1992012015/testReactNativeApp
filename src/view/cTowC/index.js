@@ -30,9 +30,4 @@ class CTowC extends PureComponent {
     }
 }
 
-export default connect((state) => {
-    const {HomeReducer} = state;
-    return {
-        HomeReducer
-    }
-})(CTowC);
+export default CTowC;

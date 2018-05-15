@@ -30,9 +30,4 @@ class Assets extends PureComponent {
     }
 }
 
-export default connect((state) => {
-    const { HomeReducer } = state;
-    return {
-        HomeReducer
-    }
-})(Assets);
+export default Assets;

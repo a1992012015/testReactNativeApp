@@ -16,7 +16,6 @@ import {
     BackHandler,
 } from 'react-native';
 import { NavigationActions } from "react-navigation";
-import { connect } from 'react-redux';
 import store from 'react-native-simple-store';
 import TabNavigator from 'react-native-tab-navigator';
 
@@ -87,11 +86,9 @@ class TabBarView extends PureComponent {
 
     constructor(props) {
         super(props);
-
-        this._didFocusSubscription = props.navigation.addListener('didFocus', payload => {
-                console.debug('didBlur', payload);
-                return BackHandler.addEventListener('hardwareBackPress', this._onBackAndroid);
-            }
+        //添加导航获取焦点事件（如果有过渡，过渡完成）
+        this._didFocusSubscription = props.navigation.addListener('didFocus', () =>
+            BackHandler.addEventListener('hardwareBackPress', this._onBackAndroid)
         );
 
         this.state = {
@@ -103,10 +100,9 @@ class TabBarView extends PureComponent {
     //真实的DOM被渲染出来后调用
     componentDidMount() {
         console.log("this.props.navigation",this.props.navigation.state);
-        this._willBlurSubscription = this.props.navigation.addListener('willBlur', payload => {
-                console.debug('willBlur', payload);
-                return BackHandler.removeEventListener('hardwareBackPress', this._onBackAndroid)
-            }
+        //添加导航失去焦点事件（如果有过渡，过渡完成）
+        this._willBlurSubscription = this.props.navigation.addListener('willBlur', () =>
+            BackHandler.removeEventListener('hardwareBackPress', this._onBackAndroid)
         );
     }
     //组件被移出
@@ -148,7 +144,6 @@ class TabBarView extends PureComponent {
         }
 
         if (name === 'mySelf' || name === 'assets' || name ==='cTwoC') {
-            console.log('123');
             store.get('member').then(member => {
                 console.log(member);
                 if (!member) {
@@ -269,9 +264,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default connect((state) => {
-    const {HomeReducer} = state;
-    return {
-        HomeReducer
-    }
-})(TabBarView);
+export default TabBarView;

@@ -30,9 +30,4 @@ class Notice extends PureComponent {
     }
 }
 
-export default connect((state) => {
-    const {HomeReducer} = state;
-    return {
-        HomeReducer
-    }
-})(Notice);
+export default Notice;

@@ -30,9 +30,4 @@ class Lobby extends PureComponent {
     }
 }
 
-export default connect((state) => {
-    const {HomeReducer} = state;
-    return {
-        HomeReducer
-    }
-})(Lobby);
+export default Lobby;

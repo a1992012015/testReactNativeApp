@@ -18,21 +18,25 @@ import CTowC from './view/cTowC';
 import Notice from './view/notice';
 import MySelf from './view/mySelf';
 import Login from './view/login';
+import ForgotPass from './view/login/forgotPass';
+import SignUp from './view/login/signUp';
 
 const routeConfiguration = {
     /*入口*/
     App: { screen: App },
     /*底部标签*/
-    TabBar:{ screen: TabBar },
+    TabBar: { screen: TabBar },
     /*底部TAB对应的页面*/
-    Home:{ screen: Home },
-    Lobby:{ screen: Lobby },
-    Assets:{ screen: Assets },
-    CTowC:{ screen: CTowC },
-    Notice:{ screen: Notice },
-    MySelf:{ screen: MySelf },
+    Home: { screen: Home },
+    Lobby: { screen: Lobby },
+    Assets: { screen: Assets },
+    CTowC: { screen: CTowC },
+    Notice: { screen: Notice },
+    MySelf: { screen: MySelf },
     /*登陆*/
-    Login:{ screen: Login },
+    Login: { screen: Login },
+    ForgotPass: { screen: ForgotPass },
+    SignUp: { screen: SignUp }
 };
 
 const stackNavigatorConfiguration = {

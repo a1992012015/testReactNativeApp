@@ -8,7 +8,7 @@ export default {
     HourJiaoYiLiang:'DayTrading',
     zuorishoupanjia:'PreviousClose',
     Login:'Login',
-    register:'Register',
+    signUp:'SignUp',
     please_write_email:'Please enter your email number',
     please_write_pwd:'Enter Your Password',
     forgotpassword:'Forgot Your Password',
