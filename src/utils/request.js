@@ -28,11 +28,10 @@ request.get = async function (url) {
 /*拼接post接口的参数*/
 const joinParamsPost = async function (params) {
     let token = await store.get('member').then(member => member && member.token);
-    console.log(token);
-    let languages = await getLanguages().then(languages => {
-        console.log(languages); // ['en-US', 'en']
-        return languages;
-    });
+    console.log('token=>',token);
+
+    let languages = await getLanguages().then(languages => languages);
+
     if(languages[0].indexOf("zh") > -1){
         languages = 'zh_CN';
     }else if(languages[0].indexOf("en") > -1){

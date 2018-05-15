@@ -110,6 +110,7 @@ class Index extends PureComponent {
     //组件接收到新的props时调用，并将其作为参数nextProps使用
     componentWillReceiveProps(nextProps) {
         const { IndexLoopReducer } = nextProps;
+        console.log(IndexLoopReducer);
         if (!IndexLoopReducer.homeLoading) {
             this.handleData(IndexLoopReducer.homeData);
         }
@@ -254,17 +255,17 @@ class Index extends PureComponent {
         Overlay.show(overlayView);
     }
 
-   /* show = () => {
-        this.setState({
-            checkOpen:true
-        })
-    };
+    /* show = () => {
+         this.setState({
+             checkOpen:true
+         })
+     };
 
-    _click=()=>{
-        this.setState({
-            checkOpen:false
-        });
-    };*/
+     _click=()=>{
+         this.setState({
+             checkOpen:false
+         });
+     };*/
 
     handleData = (homeData) => {
         let areaData = {};
@@ -307,15 +308,14 @@ class Index extends PureComponent {
     };
     /*首頁转换交易区的点击事件*/
     handleCustomIndexSelect = (index) => {
-        let indexItem = this.state.areaList;
-        let {headList} = this.state;
+        let { headList, areaList } = this.state;
 
-        if (indexItem) {
+        if (areaList) {
             this.setState({
                 ...this.state,
                 itemText: headList[index],
                 customStyleIndex: index,
-                indexData: indexItem[headList[index]]
+                indexData: areaList[headList[index]]
             });
         } else {
             this.setState({
@@ -327,10 +327,19 @@ class Index extends PureComponent {
     };
     //下拉刷新
     queryIndex = () =>{
-        const {dispatch} = this.props;
-        let URL = config.api.host + config.api.index.indexList;
-        request.setPost(URL).then(responseText => {
+        const { dispatch } = this.props;
+        let URL = config.api.index.indexList;
+        request.post(URL).then(responseText => {
+
+            if(response.ok){//判断接口是否请求成功
+                console.log('接口请求失败进入失败函数');
+                //toast.show('登陆失败', 50000);
+                return;
+            }
+
             dispatch(homeLoop(responseText));
+        }).catch(() => {
+            console.log('进入失败函数');
         });
     };
     //渲染
@@ -356,24 +365,27 @@ class Index extends PureComponent {
                     </View>
 
                     <RollingCaption  {...this.props}/>
-                    <SegmentedControlTab values={this.state.headList}
-                                         selectedIndex={this.state.customStyleIndex}
-                                         onTabPress={this.handleCustomIndexSelect}
-                                         borderRadius={0}
-                                         tabsContainerStyle={{height: p(70), backgroundColor: '#1F2229', marginVertical: p(20)}}
-                                         tabStyle={{
-                                             backgroundColor: '#1F2229',
-                                             borderWidth: StyleSheet.hairlineWidth,
-                                             borderColor: '#313840',
-                                         }}
-                                         activeTabStyle={{backgroundColor: '#313840'}}
-                                         tabTextStyle={{color: '#FFFFFF',fontSize:p(32)}}
-                                         activeTabTextStyle={{color: '#FFFFFF'}}/>
-                    <FlatList horizontal={false}
-                              data={this.state.indexData}
-                              renderItem={this._renderRow}
-                              onEndReachedThreshold={1}
-                              refreshing={false}
+                    <SegmentedControlTab
+                        values={this.state.headList}
+                        selectedIndex={this.state.customStyleIndex}
+                        onTabPress={this.handleCustomIndexSelect}
+                        borderRadius={0}
+                        tabsContainerStyle={{height: p(70), backgroundColor: '#1F2229', marginVertical: p(20)}}
+                        tabStyle={{
+                            backgroundColor: '#1F2229',
+                            borderWidth: StyleSheet.hairlineWidth,
+                            borderColor: '#313840',
+                        }}
+                        activeTabStyle={{backgroundColor: '#313840'}}
+                        tabTextStyle={{color: '#FFFFFF',fontSize:p(32)}}
+                        activeTabTextStyle={{color: '#FFFFFF'}}/>
+                    <FlatList
+                        horizontal={false}
+                        data={this.state.indexData}
+                        renderItem={this._renderRow}
+                        keyExtractor = {(item, index) => index.toString()}
+                        onEndReachedThreshold={1}
+                        refreshing={false}
                     />
 
                 </ScrollView>
