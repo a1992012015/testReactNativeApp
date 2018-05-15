@@ -30,8 +30,8 @@ import p from '../../utils/tranfrom';
 import config from '../../utils/config';
 import request from '../../utils/request';
 import md5 from '../../utils/hrymd5';
-import CheckModal from '../../components/CheckModal';
-import SModal from '../../components/SModal';
+import CheckModal from '../../components/checkModal';
+import SModal from '../../components/sModal';
 import MenuSelect, { MenuItem } from '../../components/MenuItem/index';
 
 //返回图像大小
@@ -227,8 +227,8 @@ class Login extends PureComponent {
 
             if(responseText.ok){//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
-                toast.show('登陆失败', 50000);
-                return
+                toast.show('登陆失败', 5000);
+                return;
             }
 
             if (responseText) {

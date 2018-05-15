@@ -113,6 +113,13 @@ export default class CheckModal extends PureComponent {
 
         request.post(url).then((responseText) => {
             console.log("responseText",responseText);
+
+            if(responseText.ok){//判断接口是否请求成功
+                console.log('接口请求失败进入失败函数');
+                toast.show('登陆失败', 5000);
+                return;
+            }
+
             request.manyLogin(this.props, responseText);
             if (responseText.success) {
                 this.setState({
@@ -151,6 +158,12 @@ export default class CheckModal extends PureComponent {
         request.post(url).then((responseText) => {
 
             request.manyLogin(this.props, responseText);
+
+            if(responseText.ok){//判断接口是否请求成功
+                console.log('接口请求失败进入失败函数');
+                toast.show('登陆失败', 5000);
+                return;
+            }
 
             if (responseText) {
                 if (responseText.success) {
@@ -226,6 +239,12 @@ export default class CheckModal extends PureComponent {
         request.post(url).then((responseText) => {
 
             request.manyLogin(this.props, responseText);//验证登陆函数
+
+            if(responseText.ok){//判断接口是否请求成功
+                console.log('接口请求失败进入失败函数');
+                toast.show('登陆失败', 5000);
+                return;
+            }
 
             if (responseText.success) {
 

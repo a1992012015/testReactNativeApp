@@ -12,7 +12,7 @@ import config from '../../utils/config';
 
 export let InitUserInfo = (props) => {
     return dispatch => {
-        let URL = `${config.api.host}${config.api.person.isRealUrl}`;
+        let URL = `${config.api.person.isRealUrl}`;
         console.log(URL);
         dispatch(fetchIndexMiddleBanner());
         request.post(URL).then((responseText) => {
