@@ -150,11 +150,12 @@ export default class Item_1 extends PureComponent {
                 <View style={{flex:1,marginBottom:config.api.isTabView?p(100):0}}>
                     <ScrollView style={{ flex:1,backgroundColor: '#fafafa'}}>
                         <View style={styles.ViewFlex}>
+                            {/*标题*/}
                             <View style={{marginTop:p(50)}}>
                                 <Text style={styles.textStyle}>买入：{this.state.coinCode}</Text>
                             </View>
                         </View>
-
+                        {/*买入价输入框*/}
                         <View style={styles.ViewFlex}>
                             <View style={styles.inputView}>
                                 <TextInput
@@ -172,6 +173,7 @@ export default class Item_1 extends PureComponent {
                                 <Text style={{color:'#EA2000'}}>{this.state.buyMoney}</Text>
                             </View>
                         </View>
+                        {/*买入量输入框*/}
                         <View style={styles.ViewFlex}>
                             <View style={styles.inputTextStyle}>
                                 <Text style={{color:'#565A5D'}}>买入量({this.state.coinCode})：</Text>
@@ -188,6 +190,7 @@ export default class Item_1 extends PureComponent {
                                 />
                             </View>
                         </View>
+                        {/*需要的数量*/}
                         <View style={{flexDirection:'row',marginLeft:p(64),marginTop:p(30),alignItems:'center'}}>
                             <Text style={styles.textStyle}>需要</Text>
                             <Text style={{color:'#EA2000',marginLeft:p(10),marginRight:p(10),fontSize:p(30)}}>
@@ -195,6 +198,7 @@ export default class Item_1 extends PureComponent {
                             </Text>
                             <Text style={styles.textStyle}>CNY</Text>
                         </View>
+                        {/*买入按钮*/}
                         <View style={[styles.ViewFlex,{marginTop:p(40)}]}>
                             <TouchableOpacity
                                 onPress={()=>this.appCreateTransaction()}
@@ -202,12 +206,14 @@ export default class Item_1 extends PureComponent {
                                 <Text style={{color:'#FFF'}}>立即买入</Text>
                             </TouchableOpacity>
                         </View>
-
+                        {/*显示买入规则文本*/}
                         <View style={[styles.ViewFlex,{marginTop:p(30),alignItems:'center'}]}>
                             {this.prompt()}
                         </View>
+                        {/*加載特效組建*/}
                         <Loading visible={this.state.loading}/>
                     </ScrollView>
+                    {/*存疑？ => 完成订单的弹出窗*/}
                     <BuySellModal isOpen={this.state.isOpen} setItemText={this.setItemText} isType="buy" {...this.props} buySellData={this.state.buySellData} isGoBack={false}/>
                 </View>
             )
@@ -221,7 +227,6 @@ export default class Item_1 extends PureComponent {
             )
         }
     }
-
 }
 
 let styles = StyleSheet.create({

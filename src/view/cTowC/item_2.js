@@ -2,33 +2,29 @@
  * Created by hurongsoft on 2018/1/23.
  */
 
-import React, {Component} from 'react';
+import React, { PureComponent } from 'react';
 import {
     StyleSheet,
     View,
     Text,
-    ListView,
     ActivityIndicator,
     Dimensions,
-    Alert,
     ScrollView,
     TextInput,
     TouchableOpacity,
 } from 'react-native';
+import { Toast } from 'teaset'
 
+import config from '../../utils/config';
+import p from '../../utils/tranfrom';
+import  request from '../../utils/request';
+import Loading from '../../components/loading';
+import BuySellModal from './buySellModal';
 
-import config from '../../../utils/config';
-import p from '../../../utils/Transfrom';
-import Title from '../../../components/Title';
-import  request from '../../../utils/request';
-import Icon from 'react-native-vector-icons/Ionicons'
-import {Toast} from 'teaset'
-import Loading from '../../../utils/loading';
-import BuySellModal from '../ctc/BuySellModal';
 const {width, height}=Dimensions.get('window');
 
-
-export default class Item_2 extends Component {
+export default class Item_2 extends PureComponent {
+    //构建
     constructor(props){
         super(props);
         this.state = {
@@ -40,9 +36,7 @@ export default class Item_2 extends Component {
             ctcMoney:0
         }
     }
-
-
-
+    //实例渲染完成之后调用
     componentDidMount() {
         this.setState({
             sellMoney:this.props.c2cBuySellList.c2cSellPrice,
@@ -50,62 +44,75 @@ export default class Item_2 extends Component {
             loading:false
         })
     }
-
+    //接收到新的props调用
     componentWillReceiveProps(props) {
-        let {coinCode,c2cBuySellList} = props;
+        const { coinCode, c2cBuySellList } = props;
+        const { c2cSellPrice } = c2cBuySellList;
+        const { ref_buyNum } = this.refs;
+
         this.setState({
-            coinCode:coinCode,
-            sellMoney:c2cBuySellList.c2cSellPrice,
-            ctcMoney:0,
-            loading:false
-        })
-        this.refs.ref_buyNum.clear();
+            coinCode: coinCode,
+            sellMoney: c2cSellPrice,
+            ctcMoney: 0,
+            loading: false
+        });
+
+        ref_buyNum.clear();
     }
     buyMoney=(money)=>{
         this.setState({
             sellMoney:money
         })
-    }
+    };
+
     buyNum=(num)=>{
         this.setState({
-            buyNum:num
-        },()=>{
-            let money = num*this.state.sellMoney;
+            buyNum: num
+        }, () => {
+            let money = num * this.state.sellMoney;
             money = Math.floor(money * 100) / 100;
             this.setState({
-                ctcMoney:money
+                ctcMoney: money
             })
         })
-    }
+    };
+
     appCreateTransaction=()=>{
-        if(this.state.sellMoney==''||this.state.sellMoney==undefined){
+        if(this.state.sellMoney === '' || this.state.sellMoney === undefined){
             Toast.fail("请填写卖出价");
             return
-        }if(this.state.buyNum==''||this.state.buyNum==undefined){
+        }
+
+        if(this.state.buyNum === '' || this.state.buyNum === undefined){
             Toast.fail("请填写卖出量");
             return
         }
+
         if(isNaN(this.state.buyNum)|| this.state.buyNum<0){
             Toast.fail('请输入正确的数量');
             return;
         }
+
         this.setState({
             loading:true
-        })
+        });
+
         let url = config.api.host+config.api.ctc.appCreateTransaction+'?transactionType=2&transactionPrice='+this.state.sellMoney+
             '&transactionCount='+this.state.buyNum+'&coinCode='+this.state.coinCode;
         request.post(url).then(responseText => {
             request.manyLogin(this.props, responseText);
+
             this.setState({
                 loading:false
-            })
+            });
+
             if(responseText.success){
                 Toast.success("卖出成功");
                 this.setState({
                     buySellData:responseText.obj,
-                    //isOpen:true,
                     ctcMoney:0
-                })
+                });
+
                 this.props.c2cBuySellFunction(this.state.coinCode)
                 this.refs.ref_buyNum.clear();
             }else{
