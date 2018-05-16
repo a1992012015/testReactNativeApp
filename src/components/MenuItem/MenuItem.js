@@ -54,11 +54,11 @@ const styles = StyleSheet.create({
         maxWidth: 248,
         minWidth: 124,
     },
-
     title: {
         fontSize: 14,
         fontWeight: '400',
         paddingHorizontal: 16,
+        color: '#FFFFFF',
     },
 });
 

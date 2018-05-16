@@ -1,7 +1,7 @@
 /**
  * Created by 圆环之理 on 2018/5/11.
  *
- * 功能：
+ * 功能：首页顶部轮播图组件
  *
  */
 'use strict';
@@ -34,7 +34,7 @@ class SwiperBanner extends PureComponent {
             images: [],
             height: p(200),
             loop: true,
-            floor: '',
+            //floor: '',
             isLoading: false
         }
     }
@@ -44,11 +44,9 @@ class SwiperBanner extends PureComponent {
         const url = config.api.index.banner;
 
         request.post(url).then(response => {
-            console.log('banner',response);
 
             if(response.ok){//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
-                //toast.show('登陆失败', 50000);
                 return;
             }
 
@@ -58,6 +56,8 @@ class SwiperBanner extends PureComponent {
                 isLoading: true,
                 height: height,
             })
+        }).catch(error => {
+            console.log('进入失败函数=>', error);
         })
 
     }
@@ -68,15 +68,17 @@ class SwiperBanner extends PureComponent {
         if (isLoading) {
             return (
 
-                <Swiper autoplay={true}
-                        style={styles.wrapper}
-                        height={height}
-                        dot={<View style={ styles.dot}/>}
-                        activeDot={<View style={ styles.activeDot}/>}
-                        paginationStyle={{
-                            bottom: p(10), left: 0, right: 0
-                        }}
-                        loop={loop}
+                <Swiper
+                    autoplay={true}                                 //是否自动播放
+                    dot={<View style={styles.dot}/>}                //未选中的圆点样式
+                    activeDot={<View style={ styles.activeDot}/>}   //选中的小圆点样式
+                    loop={loop}                                     //滑动到最后一张是否继续滑动
+                    autoplayTimeout={4}                             //每隔4秒切换
+                    paginationStyle={{                              //小圆点的位置：距离底部10px
+                        bottom: p(10), left: 0, right: 0
+                    }}
+                    style={styles.wrapper}
+                    height={height}
                 >
                     {
                         images.map((item, index) => {
@@ -91,8 +93,9 @@ class SwiperBanner extends PureComponent {
                     }
                 </Swiper>)
         } else {
-            return <View style={{width:width, height:width*.5}}
-                         resizeMode='stretch'
+            return <View
+                style={{width:width, height:width*.5}}
+                resizeMode='stretch'
             />
         }
 

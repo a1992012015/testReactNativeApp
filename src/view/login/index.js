@@ -133,6 +133,27 @@ class Login extends PureComponent {
     }
     //真实的DOM被渲染出来后调用
     componentDidMount() {
+        //检查是否有之前登陆过的账号
+        AsyncStorage.getItem('loginUserName').then((data) => {
+            if(data){
+                let strName=[];
+                let str = data.split(',');
+                let num=0;
+                for(let i=str.length - 1; i >= 0; i--){
+                    if(num === 5){
+                        break;
+                    }else{
+                        num++;
+                        let text={text:str[i],value:i};
+                        strName.push(text);
+                    }
+                }
+                this.setState({
+                    strName:strName
+                })
+            }
+        });
+
         StatusBar.setBarStyle('light-content');
         //检查是否关闭页面的标记
         const { params } = this.props.navigation.state;
@@ -322,7 +343,7 @@ class Login extends PureComponent {
             index: 0,
             actions: [NavigationActions.navigate({ routeName: 'TabBar' })],
         });
-
+        const { navigation } = this.props;
         navigation.dispatch(resetAction);
     };
     //隐藏验证码弹出框
@@ -411,17 +432,19 @@ class Login extends PureComponent {
 
                     </View>
                     {/*登陆过的用户名显示列表*/}
-                    <MenuSelect ref={this.setMenuRef}
-                                style={{width:width-p(40),backgroundColor:'#313840'}}
+                    <MenuSelect
+                        ref={this.setMenuRef}
+                        style={{width:width-p(40),backgroundColor:'#313840'}}
                     >
                         <ScrollView>
                             {
                                 this.state.strName.length && this.state.strName.map((item, index) =>
 
-                                    <MenuItem key={index}
-                                              onPress={() => this._selectPerson(1, item)}
+                                    <MenuItem
+                                        key={index}
+                                        onPress={() => this._selectPerson(1, item)}
                                     >
-                                        item.text
+                                        {item.text}
                                     </MenuItem>
                                 )
                             }

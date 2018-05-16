@@ -59,7 +59,7 @@ class Index extends PureComponent {
             headList: [],
             areaList: [],
             indexData: [],
-            itemText: 'CNY',
+            itemText: 'BTC',
             dialogVisible: false,
             progressVisible: false,
             defaultDialogVisible: false,
@@ -82,7 +82,7 @@ class Index extends PureComponent {
                 markSuccess();
             } else if (isRolledBack) {
                 //更新失败了,版本被回滚
-                this.showPop('zoomOut', true,'温馨提示','更新失败,版本已回滚',0,'')
+                this.showPop('zoomOut', true, '温馨提示', '更新失败,版本已回滚', 0, '')
             }else{
                 this.checkUpdate()
             }
@@ -90,9 +90,33 @@ class Index extends PureComponent {
     };
     //真实的DOM被渲染出来后调用
     componentDidMount() {
+
+        const { IndexLoopReducer } = this.props;
+        console.log('在缓存里面拿到数据=>',IndexLoopReducer);
+        if (!IndexLoopReducer.homeLoading) {
+            this.handleData(IndexLoopReducer.homeData);
+        }
+
+        //this.pollingData();
+    }
+    //组件接收到新的props时调用，并将其作为参数nextProps使用
+    componentWillReceiveProps(nextProps) {
+        const { IndexLoopReducer } = nextProps;
+        console.log('轮询拿到的数据', IndexLoopReducer);
+
+        if (!IndexLoopReducer.homeLoading) {
+            this.handleData(IndexLoopReducer.homeData);
+        }
+    }
+    //组件被移除之前被调用
+    componentWillUnmount() {
+        clearInterval(this.dexInter);
+    }
+    //轮询获取首页数据
+    pollingData = () => {
         const { dispatch } = this.props;
         //开启计时器循环拿取首页显示数据
-        this.dexInter = setInterval(function () {
+        this.dexInter = setTimeout(() => {
             let URL = config.api.index.indexList;
             request.post(URL).then(responseText => {
 
@@ -103,35 +127,13 @@ class Index extends PureComponent {
                 }
 
                 dispatch(homeLoop(responseText));
+                this.pollingData();
+            }).catch(error => {
+                console.log('进入失败函数', error);
             });
         }, 1000);
-        this.oneLoad = 1;
-    }
-    //组件接收到新的props时调用，并将其作为参数nextProps使用
-    componentWillReceiveProps(nextProps) {
-        const { IndexLoopReducer } = nextProps;
-        console.log(IndexLoopReducer);
-        if (!IndexLoopReducer.homeLoading) {
-            this.handleData(IndexLoopReducer.homeData);
-        }
-    }
-    //组件被移除之前被调用
-    componentWillUnmount() {
-        clearInterval(this.dexInter);
-    }
-
-    doUpdate = (info,overlayPopView) => {
-        overlayPopView.close();
-        this.showPop('zoomOut', true,'温馨提示','正在更新,请稍等...',2,'');
-        downloadUpdate(info).then(hash => {
-            this.showPop('zoomOut', true,'温馨提示','已更新完毕,请重启您的应用!',3,hash)
-        }).catch(err => {
-            console.dir('更新错误=>',err);
-            overlayPopView.close();
-            this.showPop('zoomOut', true,'温馨提示','更新失败',0,'')
-        });
     };
-
+    //檢測app版本并且提示更新
     checkUpdate = () => {
         checkUpdate(appKey).then(info => {
             this.info = info;
@@ -149,18 +151,32 @@ class Index extends PureComponent {
             this.showPop('zoomOut', true,'温馨提示','更新失败',0,'')
         });
     };
+    //正在更新执行中
+    doUpdate = (info,overlayPopView) => {
+        overlayPopView.close();
+        this.showPop('zoomOut', true,'温馨提示','正在更新,请稍等...',2,'');
+        downloadUpdate(info).then(hash => {
+            this.showPop('zoomOut', true,'温馨提示','已更新完毕,请重启您的应用!',3,hash)
+        }).catch(err => {
+            console.dir('更新错误=>',err);
+            overlayPopView.close();
+            this.showPop('zoomOut', true,'温馨提示','更新失败',0,'')
+        });
+    };
     //更新弹出层
     showPop(type, modal, title, content, step, hash) {
         let overlayView = (
-            <Overlay.PopView style={{alignItems: 'center', justifyContent: 'center'}}
-                             type={type}
-                             modal={modal}
-                             ref={v => this.overlayPopView = v}
+            <Overlay.PopView
+                style={{alignItems: 'center', justifyContent: 'center'}}
+                type={type}
+                modal={modal}
+                ref={v => this.overlayPopView = v}
             >
                 <View style={{alignItems: 'center', justifyContent: 'center', bottom: -p(40), zIndex: 9999}}>
-                    <Image resizeMode='stretch'
-                           style={{width: p(80), height: p(80)}}
-                           source={require('../../static/home/to_update.png')}
+                    <Image
+                        resizeMode='stretch'
+                        style={{width: p(80), height: p(80)}}
+                        source={require('../../static/home/to_update.png')}
                     />
                 </View>
 
@@ -182,39 +198,42 @@ class Index extends PureComponent {
                             <View style={{alignItems:'center',justifyContent:'center',marginTop:p(40),marginBottom:p(30)}}>
                                 {
                                     step === 1 ?
-                                        <TouchableOpacity onPress={() => this.doUpdate(this.info, this.overlayPopView)}
-                                                          style={{
-                                                              alignItems: 'center',
-                                                              justifyContent: 'center',
-                                                              borderRadius: p(5),
-                                                              width: width - p(300),
-                                                              backgroundColor:'#D95411',
-                                                              height:p(60)
-                                                          }}
+                                        <TouchableOpacity
+                                            onPress={() => this.doUpdate(this.info, this.overlayPopView)}
+                                            style={{
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                borderRadius: p(5),
+                                                width: width - p(300),
+                                                backgroundColor:'#D95411',
+                                                height:p(60)
+                                            }}
                                         >
                                             <Text style={{color:'#FFF',fontSize:p(24)}}>确认</Text>
                                         </TouchableOpacity>
                                         : step === 3 ?
-                                        <TouchableOpacity onPress={() => switchVersion(hash)}
-                                                          style={{
-                                                              alignItems: 'center',
-                                                              justifyContent: 'center',
-                                                              borderRadius: p(5),
-                                                              width: width - p(300),
-                                                              backgroundColor:'#D95411',
-                                                              height:p(60)}}
+                                        <TouchableOpacity
+                                            onPress={() => switchVersion(hash)}
+                                            style={{
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                borderRadius: p(5),
+                                                width: width - p(300),
+                                                backgroundColor:'#D95411',
+                                                height:p(60)}}
                                         >
                                             <Text style={{color:'#FFF',fontSize:p(24)}}>确认</Text>
                                         </TouchableOpacity>
                                         : step === 4 ?
-                                            <TouchableOpacity onPress={() => Linking.openURL(hash)}
-                                                              style={{
-                                                                  alignItems: 'center',
-                                                                  justifyContent: 'center',
-                                                                  borderRadius: p(5),
-                                                                  width: width - p(300),
-                                                                  backgroundColor: '#D95411',
-                                                                  height:p(60)}}
+                                            <TouchableOpacity
+                                                onPress={() => Linking.openURL(hash)}
+                                                style={{
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    borderRadius: p(5),
+                                                    width: width - p(300),
+                                                    backgroundColor: '#D95411',
+                                                    height:p(60)}}
                                             >
                                                 <Text style={{color:'#FFF',fontSize:p(24)}}>确认</Text>
                                             </TouchableOpacity>
@@ -222,16 +241,17 @@ class Index extends PureComponent {
                                 }
                                 {
                                     step !== 3 ?
-                                        <TouchableOpacity onPress={() => this.overlayPopView && this.overlayPopView.close()}
-                                                          style={{
-                                                              alignItems: 'center',
-                                                              justifyContent: 'center',
-                                                              borderRadius: p(5),
-                                                              width: width - p(300),
-                                                              marginTop: p(30),
-                                                              backgroundColor: '#D95411',
-                                                              height: p(60)
-                                                          }}
+                                        <TouchableOpacity
+                                            onPress={() => this.overlayPopView && this.overlayPopView.close()}
+                                            style={{
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                borderRadius: p(5),
+                                                width: width - p(300),
+                                                marginTop: p(30),
+                                                backgroundColor: '#D95411',
+                                                height: p(60)
+                                            }}
                                         >
                                             <Text style={{color:'#FFF',fontSize:p(24)}}>取消</Text>
                                         </TouchableOpacity>
@@ -240,11 +260,12 @@ class Index extends PureComponent {
                             </View>
                             : step === 2 ?
                             <View style={{alignItems:'center',justifyContent:'center',marginTop:p(40),marginBottom:p(30)}}>
-                                <ProgressBarAndroid color="#D95411"
-                                                    styleAttr='Horizontal'
-                                                    progress={this.state.progress}
-                                                    indeterminate={true}
-                                                    style={{marginTop:10,width:width-p(300)}}
+                                <ProgressBarAndroid
+                                    color="#D95411"
+                                    styleAttr='Horizontal'
+                                    progress={this.state.progress}
+                                    indeterminate={true}
+                                    style={{marginTop:10,width:width-p(300)}}
                                 />
                             </View>
                             :null
@@ -254,19 +275,7 @@ class Index extends PureComponent {
         );
         Overlay.show(overlayView);
     }
-
-    /* show = () => {
-         this.setState({
-             checkOpen:true
-         })
-     };
-
-     _click=()=>{
-         this.setState({
-             checkOpen:false
-         });
-     };*/
-
+    //首页数据渲染函数
     handleData = (homeData) => {
         let areaData = {};
         let headData = [];
@@ -295,11 +304,6 @@ class Index extends PureComponent {
             }
         });
 
-        if (this.oneLoad === 1) {
-            this.state.itemText = headData[0];
-            this.oneLoad++;
-        }
-
         this.setState({
             areaList: areaData,
             headList: headData,
@@ -312,14 +316,12 @@ class Index extends PureComponent {
 
         if (areaList) {
             this.setState({
-                ...this.state,
                 itemText: headList[index],
                 customStyleIndex: index,
                 indexData: areaList[headList[index]]
             });
         } else {
             this.setState({
-                ...this.state,
                 itemText: headList[index],
                 customStyleIndex: index
             });
@@ -345,26 +347,29 @@ class Index extends PureComponent {
     //渲染
     render() {
         return (
-
             <View style={{backgroundColor: '#1F2229', flex: 1, marginBottom: p(100)}}>
-
+                {/*标题组件*/}
                 <Title titleName={I18n.t('Index')} canBack={false} {...this.props} />
+
                 <ScrollView
                     style={{flex: 1, margin: p(20)}}
-                    showsVerticalScrollIndicator={false}
-                    scrollsToTop={true}
+                    showsVerticalScrollIndicator={false}//当此属性为true的时候，显示一个水平方向的滚动条。
+                    scrollsToTop={true}//当此值为true时，点击状态栏的时候视图会滚动到顶部。默认值为true
                     scrollEventThrottle={1}
                     refreshControl={
-                        <RefreshControl refreshing={false}
-                                        onRefresh={this.queryIndex}
+                        <RefreshControl
+                            refreshing={false}
+                            onRefresh={this.queryIndex}
                         />
                     }
                 >
+                    {/*首页轮播图*/}
                     <View style={{height: width * .45}}>
                         <SwiperBanner height={width * .45}/>
                     </View>
-
+                    {/*公告信息*/}
                     <RollingCaption  {...this.props}/>
+                    {/*交易分区的切换TAB*/}
                     <SegmentedControlTab
                         values={this.state.headList}
                         selectedIndex={this.state.customStyleIndex}
@@ -378,7 +383,9 @@ class Index extends PureComponent {
                         }}
                         activeTabStyle={{backgroundColor: '#313840'}}
                         tabTextStyle={{color: '#FFFFFF',fontSize:p(32)}}
-                        activeTabTextStyle={{color: '#FFFFFF'}}/>
+                        activeTabTextStyle={{color: '#FFFFFF'}}
+                    />
+                    {/*显示每条数据的涨幅情况信息*/}
                     <FlatList
                         horizontal={false}
                         data={this.state.indexData}
@@ -392,31 +399,36 @@ class Index extends PureComponent {
             </View>
         );
     }
-
+    //行情升降的显示方式
     rowContent = (currentExchangPrice, lastExchangPrice, keep) => {
         if (currentExchangPrice < lastExchangPrice) {
+            //对比昨日降低的百分比
             return (
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <Text style={{fontSize: p(36), color: '#28D74E'}}>
                         {parseFloat(currentExchangPrice).toFixed(keep)}
                     </Text>
-                    <Image style={{width: p(30), height: p(30)}}
-                           source={require('../../static/home/lowarrow.png')}
+                    <Image
+                        style={{width: p(30), height: p(30)}}
+                        source={require('../../static/home/lowarrow.png')}
                     />
                 </View>
             )
         } else if (currentExchangPrice > lastExchangPrice) {
+            //对比昨日涨幅的百分比
             return (
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <Text style={{fontSize: p(36), color: '#F6574D'}}>
                         {parseFloat(currentExchangPrice).toFixed(keep)}
                     </Text>
-                    <Image style={{width: p(30), height: p(30)}}
-                           source={require('../../static/home/uparrow.png')}
+                    <Image
+                        style={{width: p(30), height: p(30)}}
+                        source={require('../../static/home/uparrow.png')}
                     />
                 </View>
             )
         } else {
+            //不升也不降的显示方式
             return (
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <Text style={{fontSize: p(36), color: '#FFFFFF'}}>
@@ -426,11 +438,11 @@ class Index extends PureComponent {
             )
         }
     };
-
+    //点击跳转交易大厅
     transDetail = (row) => {
         this.props.tabPage('Business', row.coinCode);
     };
-
+    //每一行数据的显示方式
     _renderRow = ({item}) => {
         const { value } = item;
         let {
@@ -446,13 +458,18 @@ class Index extends PureComponent {
         } = value;
         RiseAndFall = parseFloat(RiseAndFall).toFixed(3);
         return (
-            <TouchableOpacity onPress={() => this.transDetail(value)}
-                              activeOpacity={.8}>
+            <TouchableOpacity
+                onPress={() => this.transDetail(value)}
+                activeOpacity={.8}
+            >
                 <View style={[styles.contentView, {backgroundColor: '#313840', height: p(72)}]}>
                     <View style={styles.contentView}>
-                        <Image style={{width: p(35), height: p(35)}}
-                               source={{uri: `${config.api.host}${picturePath}`}}
+                        {/*每条数据标题左侧币种图标*/}
+                        <Image
+                            style={{width: p(35), height: p(35)}}
+                            source={{uri: `${config.api.host}${picturePath}`}}
                         />
+                        {/*每条数据的币种名称*/}
                         <Text style={[styles.textView, {
                             fontSize: p(32),
                             marginLeft: p(8)
@@ -460,13 +477,15 @@ class Index extends PureComponent {
                             {item.value.name}_{this.state.itemText}
                         </Text>
                     </View>
-                    <Image style={{width: p(35), height: p(35)}}
-                           source={require('../../static/home/arrow.png')}
+                    {/*每条数据的右侧箭头图标*/}
+                    <Image
+                        style={{width: p(35), height: p(35)}}
+                        source={require('../../static/home/arrow.png')}
                     />
                 </View>
                 <View style={{borderWidth: StyleSheet.hairlineWidth, borderColor: '#313840'}}>
                     <View style={[styles.contentView, {backgroundColor: '#1F2229'}]}>
-
+                        {/*显示对比涨幅百分比*/}
                         {this.rowContent(currentExchangPrice, lastExchangPrice, price_keepDecimalFor)}
 
                         {
@@ -504,24 +523,28 @@ class Index extends PureComponent {
                         }
                     </View>
                     <View style={{flexDirection: 'row', paddingHorizontal: p(20), paddingBottom: p(10)}}>
+                        {/*最高价*/}
                         <View style={{width: '25%'}}>
                             <Text style={styles.textFont}>{I18n.t('zuiGao')}</Text>
                             <Text style={styles.textFont}>
                                 {parseFloat(maxPrice).toFixed(price_keepDecimalFor)}
                             </Text>
                         </View>
+                        {/*最低价*/}
                         <View style={{width: '25%'}}>
                             <Text style={styles.textFont}>{I18n.t('zuiDi')}</Text>
                             <Text style={styles.textFont}>
                                 {parseFloat(minPrice).toFixed(price_keepDecimalFor)}
                             </Text>
                         </View>
+                        {/*昨日收盘价*/}
                         <View style={{width: '25%'}}>
                             <Text numberOfLines={1} style={styles.textFont}>{I18n.t('zuorishoupanjia')}</Text>
                             <Text style={styles.textFont}>
                                 {parseFloat(yesterdayPrice).toFixed(price_keepDecimalFor)}
                             </Text>
                         </View>
+                        {/*日成交量*/}
                         <View style={{width: '25%'}}>
                             <Text numberOfLines={1} style={styles.textFont}>{I18n.t('HourJiaoYiLiang')}</Text>
                             <Text style={styles.textFont}>

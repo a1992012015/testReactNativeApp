@@ -29,6 +29,7 @@ import CTwoC from '../cTowC';//c2c
 import Notice from '../../view/notice';//公告页面
 import MySelf from '../../view/mySelf';//个人信息页面
 import Login from '../../view/login';
+import {connect} from "react-redux";
 //登陆页面
 
 const { width } = Dimensions.get('window');
@@ -104,6 +105,12 @@ class TabBarView extends PureComponent {
         this._willBlurSubscription = this.props.navigation.addListener('willBlur', () =>
             BackHandler.removeEventListener('hardwareBackPress', this._onBackAndroid)
         );
+        //删除登陆缓存 => 测试用
+        /*store.delete('member').then(suss => {
+            console.log(suss)
+        }).catch(error => {
+            console.log(error)
+        })*/
     }
     //组件被移出
     componentWillUnmount() {
@@ -149,11 +156,13 @@ class TabBarView extends PureComponent {
                 if (!member) {
                     this.props.navigation.navigate('Login',{ ISForm:true });
                 } else {
-                    const { dispatch } = this.props;
-                    dispatch(InitUserInfo(this.props));
+                    //每次跳转都会获取用户资产 => 存疑无需获取
+                    /*const { dispatch } = this.props;
+                    dispatch(InitUserInfo(this.props));*/
+
                     this.setState({
                         selectedTab: name,
-                        tabTitle: tabTitle
+                        tabTitle: tabTitle,
                     },()=>{
                         this.setState({
                             tabTitle:null
@@ -264,4 +273,9 @@ const styles = StyleSheet.create({
     }
 });
 
-export default TabBarView;
+export default connect((state) => {
+    const { IndexLoopReducer } = state;
+    return {
+        IndexLoopReducer
+    }
+})(TabBarView);

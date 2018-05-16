@@ -1,7 +1,7 @@
 /**
  * Created by 圆环之理 on 2018/5/15.
  *
- * 功能：
+ * 功能：公告信息轮播组件
  *
  */
 'use strict';
@@ -9,6 +9,7 @@
 import React, { PureComponent } from 'react'
 import {
     View,
+    Text,
     Image,
     Dimensions,
     StyleSheet,
@@ -19,7 +20,6 @@ import Swiper from 'react-native-swiper';
 import p from '../utils/tranfrom';
 import config from '../utils/config';
 import request from '../utils/request';
-//import HtmlText from './htmlText';
 
 const { width } = Dimensions.get('window');
 
@@ -43,32 +43,34 @@ export default class RollingCaption extends PureComponent {
 
             if(response.ok){//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
-                //toast.show('登陆失败', 50000);
                 return;
             }
-
+            console.log('获取公告信息=>', response);
             const { obj } = response;
             this.setState({
                 articleList: obj,
                 isLoading: true,
             })
-        })
+        }).catch(error => {
+            console.log('进入失败函数=>', error)
+        });
     }
-
-    newsDetail = (id) => {
+    //点击信息函数跳转到具体的公告
+    newsDetail = id => {
         let url = `${config.api.index.articleContent}${id}`;
 
         request.post(url).then(response => {
 
             if(response.ok){//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
-                //toast.show('登陆失败', 50000);
                 return;
             }
 
             const { obj } = response;
             this.props.navigation.navigate('consDetail', {content: obj.content,title: obj.title, ...this.props})
-        })
+        }).catch(error => {
+            console.log('进入失败函数=>', error)
+        });
     };
 
     render() {
@@ -79,24 +81,25 @@ export default class RollingCaption extends PureComponent {
                 <View style={styles.allViewStyle}>
                     <View style={{flexDirection: 'row', justifyContent: 'center', paddingHorizontal: 10}}>
                         <View style={{justifyContent: 'center',paddingVertical:p(20),paddingRight:p(20)}}>
-                            <Image source={require('../static/home/lg.png')}
-                                   style={{width: 20, height: 20, resizeMode: 'stretch'}}
+                            <Image
+                                source={require('../static/home/lg.png')}
+                                style={{width: 20, height: 20, resizeMode: 'stretch'}}
                             />
                         </View>
-                        <Swiper style={{backgroundColor: '#313840', paddingHorizontal: 5}}
-                                showsPagination={false} height={39} width={width - 65}
-                                showsButtons={false} horizontal={false} autoplay={true} autoplayTimeout={5}>
+                        <Swiper
+                            style={{backgroundColor: '#313840', paddingHorizontal: 5}}
+                            showsPagination={false} height={39} width={width - 65}
+                            showsButtons={false} horizontal={false} autoplay={true} autoplayTimeout={5}>
                             {
                                 articleList.map((item, index) => {
                                     return (
                                         <TouchableOpacity
                                             onPress={()=>this.newsDetail(item.id)}
                                             key={index}
-                                            style={{justifyContent: 'center', height: 39
-                                        }}>
-                                            {/*<HtmlText  html={item.title} />*/}
+                                            style={{justifyContent: 'center', height: 39}}
+                                        >
+                                            <Text style={{color: '#FFFFFF'}}>{item.title}</Text>
                                         </TouchableOpacity>
-
                                     )
                                 })
                             }
@@ -106,7 +109,6 @@ export default class RollingCaption extends PureComponent {
             )
         } else {
             return <View />
-
         }
 
     }
