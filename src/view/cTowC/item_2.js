@@ -1,6 +1,10 @@
 /**
- * Created by hurongsoft on 2018/1/23.
+ * Created by 圆环之理 on 2018/5/16.
+ *
+ * 功能：C2C页面组件 => 卖出界面组件
+ *
  */
+'use strict';
 
 import React, { PureComponent } from 'react';
 import {
@@ -38,10 +42,11 @@ export default class Item_2 extends PureComponent {
     }
     //实例渲染完成之后调用
     componentDidMount() {
+        const { c2cSellPrice } = this.props.c2cBuySellList;
         this.setState({
-            sellMoney:this.props.c2cBuySellList.c2cSellPrice,
-            coinCode:this.props.coinCode,
-            loading:false
+            sellMoney: c2cSellPrice,
+            coinCode: this.props.coinCode,
+            loading: false,
         })
     }
     //接收到新的props调用
@@ -59,13 +64,14 @@ export default class Item_2 extends PureComponent {
 
         ref_buyNum.clear();
     }
-    buyMoney=(money)=>{
+
+    buyMoney = money => {
         this.setState({
             sellMoney:money
         })
     };
 
-    buyNum=(num)=>{
+    buyNum = num => {
         this.setState({
             buyNum: num
         }, () => {
@@ -80,15 +86,15 @@ export default class Item_2 extends PureComponent {
     appCreateTransaction=()=>{
         if(this.state.sellMoney === '' || this.state.sellMoney === undefined){
             Toast.fail("请填写卖出价");
-            return
+            return;
         }
 
         if(this.state.buyNum === '' || this.state.buyNum === undefined){
             Toast.fail("请填写卖出量");
-            return
+            return;
         }
 
-        if(isNaN(this.state.buyNum)|| this.state.buyNum<0){
+        if(isNaN(this.state.buyNum) || this.state.buyNum < 0){
             Toast.fail('请输入正确的数量');
             return;
         }
@@ -97,79 +103,62 @@ export default class Item_2 extends PureComponent {
             loading:true
         });
 
-        let url = config.api.host+config.api.ctc.appCreateTransaction+'?transactionType=2&transactionPrice='+this.state.sellMoney+
-            '&transactionCount='+this.state.buyNum+'&coinCode='+this.state.coinCode;
+        let url = `${config.api.ctc.appCreateTransaction}?transactionType=2&transactionPrice=${this.state.sellMoney}&transactionCount=${this.state.buyNum}&coinCode=${this.state.coinCode}`;
+
         request.post(url).then(responseText => {
             request.manyLogin(this.props, responseText);
+
+            if(response.ok){//判断接口是否请求成功
+                console.log('接口请求失败进入失败函数');
+                return;
+            }
 
             this.setState({
                 loading:false
             });
 
+            const { obj, msg } = responseText;
+            const { ref_buyNum } = this.refs;
             if(responseText.success){
                 Toast.success("卖出成功");
                 this.setState({
-                    buySellData:responseText.obj,
-                    ctcMoney:0
+                    buySellData: obj,
+                    ctcMoney: 0,
                 });
 
-                this.props.c2cBuySellFunction(this.state.coinCode)
-                this.refs.ref_buyNum.clear();
+                this.props.c2cBuySellFunction(this.state.coinCode);
+                ref_buyNum.clear();
             }else{
-                Toast.fail(responseText.msg);
+                Toast.fail(msg);
             }
         });
-
-
     };
 
-    prompt=()=>{
-        if(projectapp == "bjyx" || projectapp == "thaisabc"){
-            return(
-                <View style={{marginLeft:p(10)}}>
-                    <Text style={styles.promptText}>1.C2C交易为用户之间点对点的交易，直接转账打币，平台不接受充值汇款;</Text>
-                    <Text style={styles.promptText}>2.买卖商户均为实名认证商户，并提供保证金，可放心兑换;</Text>
-                    <Text style={styles.promptText}>3.请使用本人绑定的银行卡进行汇款</Text>
-                </View>
-            )
-        }else if(projectapp == "coinking" || projectapp == "hkwx"){
-            return(
-                <View style={{marginLeft:p(10)}}>
-                    <Text style={styles.promptText}>1.C2C交易为用户之间点对点的交易，直接转账打币，平台不接受充值汇款;</Text>
-                    <Text style={styles.promptText}>2.买卖商户均为实名认证商户，并提供保证金，可放心兑换;</Text>
-                    <Text style={styles.promptText}>3.请使用本人绑定的银行卡进行汇款，其他任何方式汇款都会退款。（禁止微信和支付宝）;</Text>
-                    <Text style={styles.promptText}>4.商家处理时间9:00-21:00非处理时间的订单会在第二天9:00开始处理，一般接单后24小时内会完成打款。;</Text>
-                </View>
-            )
-        }else{
-            return(
-                <View style={{marginLeft:p(10)}}>
-                    <Text style={styles.promptText}>1.C2C交易为用户之间点对点的交易，直接转账打币，平台不接受充值汇款;</Text>
-                    <Text style={styles.promptText}>2.买卖商户均为实名认证商户，并提供保证金，可放心兑换;</Text>
-                    <Text style={styles.promptText}>3.如需申请成为商户请发邮件到{this.mail()};</Text>
-                    <Text style={styles.promptText}>4.请使用本人绑定的银行卡进行汇款，其他任何方式汇款都会退款。（禁止微信和支付宝）;</Text>
-                    <Text style={styles.promptText}>5.商家处理时间9:00-21:00非处理时间的订单会在第二天9:00开始处理，一般接单后24小时内会完成打款。;</Text>
-                </View>
-            )
-        }
+    prompt = () => {
+        return(
+            <View style={{marginLeft:p(10)}}>
+                <Text style={styles.promptText}>1.C2C交易为用户之间点对点的交易，直接转账打币，平台不接受充值汇款;</Text>
+                <Text style={styles.promptText}>2.买卖商户均为实名认证商户，并提供保证金，可放心兑换;</Text>
+                <Text style={styles.promptText}>3.如需申请成为商户请发邮件到{this.mail()};</Text>
+                <Text style={styles.promptText}>4.请使用本人绑定的银行卡进行汇款，其他任何方式汇款都会退款。（禁止微信和支付宝）;</Text>
+                <Text style={styles.promptText}>5.商家处理时间9:00-21:00非处理时间的订单会在第二天9:00开始处理，一般接单后24小时内会完成打款。;</Text>
+            </View>
+        )
     };
 
     mail = () =>{
-        if(projectapp=="vitascoin"){
-            return "support@vitascoin.com"
-        }else{
-            return "develop@hurong.com"
-        }
+        return "develop@hurong.com";
     };
 
     render(){
         if (this.state.loadData) {
             return (
-                <View style={{flex:1,marginBottom:config.api.isTabView?p(100):0}}>
+                <View style={{flex: 1, marginBottom: config.api.isTabView ? p(100) : 0}}>
                     <ScrollView
-                        style={{ flex:1,backgroundColor: '#fafafa'}}>
+                        style={{ flex:1, backgroundColor: '#fafafa'}}
+                    >
                         <View style={styles.ViewFlex}>
-                            <View style={{marginTop:p(50)}}>
+                            <View style={{marginTop: p(50)}}>
                                 <Text style={styles.textStyle}>卖出：{this.state.coinCode}</Text>
                             </View>
                         </View>
@@ -190,7 +179,6 @@ export default class Item_2 extends PureComponent {
                                     onChangeText={(text) => {this.buyMoney(text)}}
                                 />
                                 <Text style={{color:'#EA2000'}}>{this.state.sellMoney}</Text>
-
                             </View>
                         </View>
                         <View style={styles.ViewFlex}>
@@ -209,9 +197,9 @@ export default class Item_2 extends PureComponent {
                                 />
                             </View>
                         </View>
-                        <View style={{flexDirection:'row',marginLeft:p(64),marginTop:p(30),alignItems:'center'}}>
+                        <View style={{flexDirection: 'row', marginLeft: p(64), marginTop: p(30), alignItems: 'center'}}>
                             <Text style={styles.textStyle}>需要</Text>
-                            <Text style={{color:'#018F67',marginLeft:p(10),marginRight:p(10),fontSize:p(30)}}>
+                            <Text style={{color: '#018F67', marginLeft: p(10), marginRight: p(10), fontSize: p(30)}}>
                                 {this.state.ctcMoney}
                             </Text>
                             <Text style={styles.textStyle}>CNY</Text>
@@ -219,19 +207,25 @@ export default class Item_2 extends PureComponent {
                         <View style={[styles.ViewFlex,{marginTop:p(40)}]}>
                             <TouchableOpacity
                                 onPress={()=>this.appCreateTransaction()}
-                                style={styles.touchableStyle}>
+                                style={styles.touchableStyle}
+                            >
                                 <Text style={{color:'#FFF'}}>立即卖出</Text>
                             </TouchableOpacity>
-
                         </View>
 
-                        <View style={[styles.ViewFlex,{marginTop:p(30),alignItems:'center'}]}>
+                        <View style={[styles.ViewFlex, {marginTop: p(30), alignItems: 'center'}]}>
                             {this.prompt()}
                         </View>
 
                         <Loading visible={this.state.loading}/>
                     </ScrollView>
-                    <BuySellModal isOpen={this.state.isOpen} isType="sell" {...this.props} buySellData={this.state.buySellData} isGoBack={false}/>
+                    <BuySellModal
+                        isOpen={this.state.isOpen}
+                        isType="sell"
+                        {...this.props}
+                        buySellData={this.state.buySellData}
+                        isGoBack={false}
+                    />
                 </View>
             )
         }else{
@@ -249,51 +243,54 @@ export default class Item_2 extends PureComponent {
 
 let styles = StyleSheet.create({
     promptText:{
-        color:'#2b2b2b',
-        fontSize:p(26),
-        lineHeight:p(40),
-        marginTop:p(20)
+        color: '#2b2b2b',
+        fontSize: p(26),
+        lineHeight: p(40),
+        marginTop: p(20),
     },
     touchableStyle:{
-        height:p(70),width:width-p(120),
-        backgroundColor:'#f8671b',borderRadius:p(5),
-        alignItems:'center',justifyContent:'center'
+        height: p(70),
+        width: width - p(120),
+        backgroundColor: '#f8671b',
+        borderRadius: p(5),
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     inputTextStyle:{
-        flexDirection:'row',
-        height:p(80),
-        alignItems:'center',
-        borderRadius:p(5),
-        padding:p(8),
-        marginTop:p(20),
-        width:width-p(120),
-        borderWidth:p(2),
-        borderColor:'#e6e6e6'
+        flexDirection: 'row',
+        height: p(80),
+        alignItems: 'center',
+        borderRadius: p(5),
+        padding: p(8),
+        marginTop: p(20),
+        width: width - p(120),
+        borderWidth: p(2),
+        borderColor: '#e6e6e6',
     },
     inputTextView:{
-        flex:1,
-        height:p(80),
-        fontSize:p(26),
-        color:'#018F67'
+        flex: 1,
+        height: p(80),
+        fontSize: p(26),
+        color: '#018F67',
     },
     inputView:{
-        flexDirection:'row',
-        height:p(80),
-        alignItems:'center',
-        backgroundColor:'#ebebeb',
-        borderRadius:p(5),
-        padding:p(8),
-        marginTop:p(20),
-        width:width-p(120),
+        flexDirection: 'row',
+        height: p(80),
+        alignItems: 'center',
+        backgroundColor: '#ebebeb',
+        borderRadius: p(5),
+        padding: p(8),
+        marginTop: p(20),
+        width: width - p(120),
     },
     textStyle:{
-        color:'#646464',
-        fontSize:p(28),
+        color: '#646464',
+        fontSize: p(28),
     },
     ViewFlex:{
-        width:width-p(20),
-        alignItems:'center',
-        justifyContent:'center',
-        marginLeft:p(10)
+        width: width - p(20),
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginLeft: p(10),
     }
-})
+});

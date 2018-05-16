@@ -36,7 +36,7 @@ const routeConfiguration = {
     /*登陆*/
     Login: { screen: Login },
     ForgotPass: { screen: ForgotPass },
-    SignUp: { screen: SignUp }
+    SignUp: { screen: SignUp },
 };
 
 const stackNavigatorConfiguration = {
