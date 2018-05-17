@@ -64,7 +64,7 @@ request.post = async function (url) {
         headers: {
             'Accept': 'application/json;charset=utf-8',
             'Content-Type': 'application/x-www-form-urlencoded',
-        }
+        },
     }).then(response => response.json()).catch(error => {
         console.log(error);
         return { ok: true };

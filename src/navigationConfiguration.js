@@ -40,6 +40,8 @@ import Address from "./view/mySelf/Address/Address";
 import AddAddress from "./view/mySelf/Address/AddAddress";
 import BankCard from "./view/mySelf/bankCard/bankCard";
 import AddBankCard from "./view/mySelf/bankCard/AddBankCard";
+import Recommend from "./view/mySelf/recommend";
+import ConsDetail from "./view/notice/consDetail";
 
 const routeConfiguration = {
     /*入口*/
@@ -73,11 +75,13 @@ const routeConfiguration = {
     Address: { screen: Address },
     AddAddress: { screen: AddAddress },
     BankCard: { screen: BankCard },
+    AddBankCard: { screen: AddBankCard },
+    Recommend: { screen: Recommend },
+    ConsDetail: { screen: ConsDetail },
     /*登陆*/
     Login: { screen: Login },
     ForgotPass: { screen: ForgotPass },
     SignUp: { screen: SignUp },
-    AddBankCard: { screen: AddBankCard },
 };
 
 const stackNavigatorConfiguration = {
