@@ -86,7 +86,7 @@ request.setPost = async function (url) {
         return { ok: true };
     })
 };
-
+/*获取图片的函数*/
 request.upImage = async function (url, formData) {
     url = await  joinParamsPost(url);
 
@@ -95,9 +95,10 @@ request.upImage = async function (url, formData) {
         headers: {
             'Content-Type': 'multipart/form-data',
         },
-        body: formData
+        body: formData,
     }).then((response) => response.json()).catch(error => {
-        console.log(error)
+        console.log(error);
+        return { ok: true };
     })
 };
 /*猜测为图片参数拼接函数，并未使用*/
