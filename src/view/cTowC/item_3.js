@@ -77,7 +77,7 @@ export default class Item_3 extends PureComponent {
         request.post(url).then(responseText => {
             request.manyLogin(this.props, responseText);
 
-            if(response.ok){//判断接口是否请求成功
+            if(responseText.ok){//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
@@ -90,6 +90,8 @@ export default class Item_3 extends PureComponent {
                     isOpen: true,
                 })
             }
+        }).catch(error => {
+            console.log('进入失败函数 =>', error);
         });
     };
 

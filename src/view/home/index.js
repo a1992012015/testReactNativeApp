@@ -52,24 +52,12 @@ class Index extends PureComponent {
         super(props);
 
         this.state = {
-            data: [],
-            selectedIndex: 0,
-            selectedIndices: [0],
             customStyleIndex: 0,
             headList: [],
             areaList: [],
             indexData: [],
             itemText: 'BTC',
-            dialogVisible: false,
-            progressVisible: false,
-            defaultDialogVisible: false,
-            progressTitle: '',
-            progressMessage: '',
-            confirmTitle: '',
-            confirmMessage: '',
-            tipText: '',
-            progress:0.1,
-            disableView:false
+            progress: 0.1,
         }
     }
 
@@ -480,7 +468,7 @@ class Index extends PureComponent {
                     {/*每条数据的右侧箭头图标*/}
                     <Image
                         style={{width: p(35), height: p(35)}}
-                        source={require('../../static/home/arrow.png')}
+                        source={require('../../static/arrow.png')}
                     />
                 </View>
                 <View style={{borderWidth: StyleSheet.hairlineWidth, borderColor: '#313840'}}>

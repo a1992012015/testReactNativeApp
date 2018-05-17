@@ -34,24 +34,22 @@ export default class CheckModal extends PureComponent {
         super(props);
         // 初始状态
         this.state = {
-            isOpen:false,
-            type:1,
-            code:null,
+            isOpen: false,
+            type: 1,
+            code: null,
             checkCodeText: "获取验证码",
             codeStyle: styles.codeObtain,
             codeSent: true,
-            timeId:'',
-            isCheckCode:false,
-            smsCode:'',
-            telephone:'',
-            customStyleIndex:0,
-            username:'',
-            googleCode:'',
-            responseText:'',
-            user:'',
-            password:'',
-            keyboardSpace:0,
-            nicknameModalVisible:true,
+            timeId: '',
+            isCheckCode: false,
+            smsCode: '',
+            telephone: '',
+            customStyleIndex: 0,
+            username: '',
+            googleCode: '',
+            user: '',
+            password: '',
+            keyboardSpace: 0,
             flag: true,//禁止重复点击获取验证码
         };
         //监听输入键盘显示事件
@@ -76,13 +74,13 @@ export default class CheckModal extends PureComponent {
     componentWillReceiveProps(nextProps) {
         if(nextProps.user){
             this.setState({
-                isOpen:nextProps.checkOpen,
-                telephone:nextProps.user.phone,
-                type:nextProps.type,
-                username:nextProps.user.username,
-                user:nextProps.user,
-                password:nextProps.password,
-                transPassURL:nextProps.transPassURL
+                isOpen: nextProps.checkOpen,
+                telephone: nextProps.user.phone,
+                type: nextProps.type,
+                username: nextProps.user.username,
+                user: nextProps.user,
+                password: nextProps.password,
+                transPassURL: nextProps.transPassURL
             })
         }
     }
@@ -214,13 +212,7 @@ export default class CheckModal extends PureComponent {
     };
     //验证码提交函数
     savePhone = () => {
-        //const { withdraw } = this.props;
         const { toast } = this.refs;
-        //console.log(withdraw);
-        /*if(withdraw){
-            withdraw(this.state.smsCode);
-            return;
-        }*/
         if (null === this.state.telephone || '' === this.state.telephone) {
             toast.show('请输入手机号码', DURATION.LENGTH_SHORT);
             return;
@@ -301,7 +293,7 @@ export default class CheckModal extends PureComponent {
     }
     //生成不同验证规则下的UI界面
     checkType = (state) =>{
-        let {customStyleIndex} = this.state;
+        let { customStyleIndex } = this.state;
         if(state === 0){//短信验证
             return(
                 <View style={{flex:1,alignItems:'center'}}>

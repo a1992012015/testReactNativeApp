@@ -119,16 +119,13 @@ class Login extends PureComponent {
         // 初始状态
         this.state = {
             ISForm: false,//判断是关闭还是重定向
-            customStyleIndex: 0,
             name: null,//输入的用户名
             pwd: null,//输入的密码
-            loginIng: false,
             userIsLogin: false,
-            checkOpen:false,
-            type:0,
-            user:'',
-            strName:[],
-            region:'cn_86',
+            checkOpen: false,
+            type: 0,
+            user: '',
+            strName: [],
         }
     }
     //真实的DOM被渲染出来后调用
@@ -149,7 +146,7 @@ class Login extends PureComponent {
                     }
                 }
                 this.setState({
-                    strName:strName
+                    strName: strName
                 })
             }
         });

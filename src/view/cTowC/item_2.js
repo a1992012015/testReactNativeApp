@@ -32,12 +32,11 @@ export default class Item_2 extends PureComponent {
     constructor(props){
         super(props);
         this.state = {
-            loadData:true,
-            coinCode:'',
-            buyMoney:'',
-            buyNum:'',
-            loading:true,
-            ctcMoney:0
+            loadData: true,
+            coinCode: '',
+            buyNum: '',
+            loading: true,
+            ctcMoney: 0,
         }
     }
     //实例渲染完成之后调用
@@ -108,7 +107,7 @@ export default class Item_2 extends PureComponent {
         request.post(url).then(responseText => {
             request.manyLogin(this.props, responseText);
 
-            if(response.ok){//判断接口是否请求成功
+            if(responseText.ok){//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
@@ -131,6 +130,8 @@ export default class Item_2 extends PureComponent {
             }else{
                 Toast.fail(msg);
             }
+        }).catch(error => {
+            console.log('进入失败函数 =>', error);
         });
     };
 

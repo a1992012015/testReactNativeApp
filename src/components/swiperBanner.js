@@ -34,7 +34,6 @@ class SwiperBanner extends PureComponent {
             images: [],
             height: p(200),
             loop: true,
-            //floor: '',
             isLoading: false
         }
     }

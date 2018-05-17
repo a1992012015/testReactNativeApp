@@ -20,6 +20,7 @@ import MySelf from './view/mySelf';
 import Login from './view/login';
 import ForgotPass from './view/login/forgotPass';
 import SignUp from './view/login/signUp';
+import MyNews from "./view/mySelf/myNews";
 
 const routeConfiguration = {
     /*入口*/
@@ -32,7 +33,9 @@ const routeConfiguration = {
     Assets: { screen: Assets },
     CTowC: { screen: CTowC },
     Notice: { screen: Notice },
+    /*个人中心*/
     MySelf: { screen: MySelf },
+    MyNews: { screen: MyNews },
     /*登陆*/
     Login: { screen: Login },
     ForgotPass: { screen: ForgotPass },

@@ -30,10 +30,10 @@ export default class ForgotPass extends PureComponent {
         super(props);
         // 初始状态
         this.state = {
-            email:'',
-            isOpen:false,
-            fotSent:true,
-            visible:false,
+            email: '',
+            isOpen: false,
+            fotSent: true,
+            visible: false,
         };
     }
 

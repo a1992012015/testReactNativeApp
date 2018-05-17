@@ -40,11 +40,11 @@ export default class CTwoC extends PureComponent {
         super(props);
         // 初始状态
         this.state = {
-            isLoading:true,
-            isOpen:false,
-            c2cBuySellList:[],
-            loading:false,
-            canBack:false
+            isLoading: true,
+            isOpen: false,
+            c2cBuySellList: [],
+            loading: false,
+            canBack: false,
         };
     }
     //真实的DOM被渲染出来后调用
@@ -58,16 +58,16 @@ export default class CTwoC extends PureComponent {
         //查询币
         let url = config.api.ctc.c2c;
         console.log('================C2C页面数据=================');
-        console.log(url);
         request.post(url).then(responseText => {
-            request.manyLogin(this.props, responseText);
             console.log('================C2C页面数据=================');
             console.log(responseText);
 
-            if(response.ok){//判断接口是否请求成功
+            if(responseText.ok){//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
+
+            request.manyLogin(this.props, responseText);
 
             if(responseText.success){
                 const { obj } = responseText;
@@ -80,6 +80,8 @@ export default class CTwoC extends PureComponent {
                 });
                 this.c2cBuySellFunction(coinList[0]);
             }
+        }).catch(error => {
+            console.log('进入失败函数=>', error);
         });
     }
     //默认查询第一个币的信息
@@ -89,7 +91,7 @@ export default class CTwoC extends PureComponent {
         request.post(url).then(responseText => {
             request.manyLogin(this.props, responseText);
 
-            if(response.ok){//判断接口是否请求成功
+            if(responseText.ok){//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
@@ -101,6 +103,8 @@ export default class CTwoC extends PureComponent {
                     loading: false
                 });
             }
+        }).catch(error => {
+            console.log('进入失败函数 =>', error);
         });
     };
 

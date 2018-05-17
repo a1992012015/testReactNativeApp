@@ -29,8 +29,7 @@ export default class PromptModal extends PureComponent {
         super(props);
         // 初始状态
         this.state = {
-            isOpen:false,
-            bankData:null
+            isOpen: false,
         };
     }
     //接收定时器

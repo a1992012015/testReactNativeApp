@@ -45,12 +45,12 @@ class SignUp extends PureComponent {
                 password: "",
                 registCode: "",
                 referralCode: "",
-                graCode:''
+                graCode: '',
             },
             GraphicCode: `${config.api.host}${config.api.login.graCode}?${Math.random()}`,
-            checked:true,
-            content:'无',
-            fotPassword:null,
+            checked: true,
+            content: '无',
+            fotPassword: null,
         }
     }
     //真实的DOM被渲染出来后调用

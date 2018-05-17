@@ -94,16 +94,16 @@ class myHome extends PureComponent {
             })
         }
     }
-    //列表的点击事件
+    //列表的点击事件跳转页面
     onClickChange = (route, member) => {
         this.props.navigation.navigate(route, {member: member, onClose:() => this.pageCloses()});
     };
-
+    //
     upState = () => {
         let url = config.api.person.isRealUrl;
         request.post(url).then(responseText => {
 
-            if(response.ok){//判断接口是否请求成功
+            if(responseText.ok){//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
@@ -120,15 +120,17 @@ class myHome extends PureComponent {
                 memberInfo: obj.user,
                 languageCode: obj.languageCode,
             })
+        }).catch(error => {
+            console.log('进入失败函数 =>', error);
         });
     };
-
+    //获取数据失败的提示窗
     pageCloses () {
         const { toast } = this.refs;
         console.log(toast);
         toast.show('获取数据失败', DURATION.LENGTH_SHORT);
     }
-
+    //打开新的下级页面
     jumpPage = page =>{
         const { memberInfo, userInfo } = this.state;
         const { isChongbi, isTibi } = userInfo;
@@ -403,7 +405,7 @@ let styles = StyleSheet.create({
 });
 
 export default connect((state) => {
-    const {HomeReducer} = state;
+    const { HomeReducer } = state;
     return {
         HomeReducer
     }

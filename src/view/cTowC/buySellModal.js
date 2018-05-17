@@ -28,19 +28,19 @@ export default class BuySellModal extends PureComponent {
         super(props);
         // 初始状态
         this.state = {
-            isOpen:false,
-            buySellData:null,
-            isGoBack:true,
-            isType:'buy'
+            isOpen: false,
+            buySellData: null,
+            isGoBack: true,
+            isType: 'buy',
         };
     }
     //组件接收到新的props时调用
     componentWillReceiveProps(nextProps) {
         this.setState({
-            isOpen:nextProps.isOpen,
-            buySellData:nextProps.buySellData,
-            isGoBack:nextProps.isGoBack,
-            isType:nextProps.isType
+            isOpen: nextProps.isOpen,
+            buySellData: nextProps.buySellData,
+            isGoBack: nextProps.isGoBack,
+            isType: nextProps.isType
         })
     }
 
@@ -60,9 +60,11 @@ export default class BuySellModal extends PureComponent {
 
     render() {
         const { buySellData } = this.state;
-        const { bankowner, bankname, bankcard, transactionMoney, randomNum, status2,  } = buySellData;
+        console.log(buySellData);
 
         if(buySellData !== null && buySellData !== undefined){
+            const { bankowner, bankname, bankcard, transactionMoney, randomNum, status2,  } = buySellData;
+            console.log('buySellData', buySellData);
             return (
                 <Modal
                     style={[styles.modal, styles.modal3]}
@@ -179,6 +181,7 @@ export default class BuySellModal extends PureComponent {
                 </Modal>
             );
         }else{
+            console.log('buySellData => null');
             return (
                 <View/>
             );

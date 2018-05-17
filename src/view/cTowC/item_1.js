@@ -31,13 +31,13 @@ export default class Item_1 extends PureComponent {
     constructor(props){
         super(props);
         this.state = {
-            loadData:true,
-            coinCode:'',
-            buyMoney:'',
-            buyNum:'',
-            loading:true,
-            ctcMoney:0,
-            isOpen:false,
+            loadData: true,
+            coinCode: '',
+            buyMoney: '',
+            buyNum: '',
+            loading: true,
+            ctcMoney: 0,
+            isOpen: false,
         }
     }
     //组件接收到新的props时调用
@@ -97,19 +97,21 @@ export default class Item_1 extends PureComponent {
         let url = `${config.api.ctc.appCreateTransaction}?transactionType=1&transactionPrice=${this.state.buyMoney}&transactionCount=${this.state.buyNum}&coinCode=${this.state.coinCode}`;
 
         request.post(url).then(responseText => {
-            request.manyLogin(this.props, responseText);
 
-            if(response.ok){//判断接口是否请求成功
+            if(responseText.ok){//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
+
+            request.manyLogin(this.props, responseText);
 
             this.setState({
                 loading:false
             });
 
             const { obj, msg } = responseText;
-
+            console.log('============================');
+            console.log(obj);
             if(responseText.success){
                 const { ref_buyNum } = this.refs;
                 this.setState({
@@ -123,9 +125,9 @@ export default class Item_1 extends PureComponent {
             }else{
                 Toast.fail(msg);
             }
+        }).catch(error => {
+            console.log('进入失败函数 =>', error);
         });
-
-
     };
 
     prompt = () => {
