@@ -10,18 +10,16 @@ import React, { PureComponent } from 'react';
 import {
     View,
     Image,
-    StyleSheet,
     WebView,
     Text,
     Dimensions,
-} from 'react-native'
-
-const { height } = Dimensions.get('window');
-
+} from 'react-native';
 
 import p from '../../utils/tranfrom';
 import Title from '../../components/title';
-import SModal from '../../components/SModal';
+import SModal from '../../components/sModal';
+
+const { height } = Dimensions.get('window');
 
 export default class ConsDetail extends PureComponent {
 
@@ -53,6 +51,7 @@ export default class ConsDetail extends PureComponent {
     render() {
         const { newsBody, isLoading, title } = this.state;
         const newsBodyContent = newsBody ? newsBody : '暂无资讯';
+        console.log(newsBodyContent);
 
         if (isLoading) {
             if (newsBodyContent === '暂无资讯') {
@@ -72,8 +71,8 @@ export default class ConsDetail extends PureComponent {
                 return(
                     <View style={{flex:1,backgroundColor: '#FFFFFF'}}>
                         <Title titleName="资讯详情" canBack={true} {...this.props}/>
-                        <WebView
-                            /*source={{
+                        {/*<WebView
+                            source={{
                                 html: `<!DOCTYPE html>
                             <html>
                             <head>
@@ -88,19 +87,20 @@ export default class ConsDetail extends PureComponent {
                             </head>
                             <body><div style="font-size: 16px;font-weight: bold;color:#7d7b7b;text-align: center;padding: 20px 0;overflow: hidden;border-bottom: 1px solid #EFEFEF;">
                             ${title}</div>${newsBodyContent}<script>window.onload=function(){window.location.hash = 1;document.title = document.body.clientHeight;}</script></body></html>`
-                            }}*/
-                            source={this.newsData(newsBody)}
+                            }}
+                            //source={this.newsData(newsBody)}
                             style={{flex: 1}}
                             contentInset={{top: 0, left: 0}}
                             onNavigationStateChange={title => {
                                 if(title.title !== undefined) {
                                     this.setState({
-                                        height:(parseInt(title.title)+20)
+                                        height: (parseInt(title.title) + 20)
                                     })
                                 }
                             }}
                         >
-                        </WebView>
+                        </WebView>*/}
+                        {this.newsData()}
                     </View>
                 )
             }
@@ -114,7 +114,7 @@ export default class ConsDetail extends PureComponent {
     /*新闻的显示的组件*/
     newsData = content => {
         return (
-            <View>{content}</View>
+            <Text>{content}</Text>
         )
     };
 }
