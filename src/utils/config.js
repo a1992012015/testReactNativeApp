@@ -43,7 +43,7 @@ const config = {
             city:'mobile/user/appbankcode/appcity/',//查询市
             saveBank:'mobile/user/appbankcode/saveBankCard',//保存银行卡
             myMsg:'mobile/user/appCenter/list',//我的消息-----------------add bug
-            kLine:'klinevtwo/con?'//k先数据
+            kLine:'klinevtwo/con'//k先数据 => 修改
         },
         login:{
             login:'mobile/nouser/applogin.do',//登录
@@ -103,13 +103,13 @@ const config = {
             getPublicKey:'mobile/user/appbtc/getPublicKey',//获取币地址
         },
         trades:{
-            trans:'mobile/nouser/trades/appadd.do?type=',//type 1 ：买 2 ：卖
+            trans:'mobile/nouser/trades/appadd.do',//type 1 ：买 2 ：卖 => 修改
             weituo:'mobile/nouser/trades/weituoquery.do?type=current&coinCode=',//查询委托
             query:'mobile/nouser/trades/queryCoin.do',//查询币的数量
             exEntrust:'mobile/nouser/trades/appcancelExEntrust',//撤销委托
             accountInfo:'mobile/nouser/trades/appgetAccountInfo',//获取个人账户资金
             appgetAccountInfo:'mobile/nouser/appgetAccountInfo',//获取个人账户资金
-            list:'mobile/nouser/trades/list.do?type=',//委托记录
+            list:'mobile/nouser/trades/list.do',//委托记录 => 修改
             cancelExEntrust:'mobile/nouser/trades/cancelExEntrust.do',//取消单个委托记录
             cancelAllExEntrust:'mobile/nouser/trades/cancelAllExEntrust.do',//取消全部委托记录
         },
