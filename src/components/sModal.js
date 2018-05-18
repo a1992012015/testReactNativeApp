@@ -7,11 +7,17 @@
 'use strict';
 
 import React, { PureComponent } from 'react';
-import {Dimensions, View, StyleSheet, ActivityIndicator} from 'react-native' ;
+import {
+    Dimensions,
+    View,
+    StyleSheet,
+    ActivityIndicator
+} from 'react-native';
 
 import p from '../utils/tranfrom'
 
 const {width, height} = Dimensions.get('window');
+
 class SModal extends PureComponent {
     // 渲染
     render() {
@@ -22,12 +28,13 @@ class SModal extends PureComponent {
                     backgroundColor: 'transparent',
                     position: 'absolute',
                     bottom: 0,
-                    height: height-p(110),
+                    height: height - p(110),
                     width: width,
                 }}>
-                    <ActivityIndicator animating={hasLoading}
-                                       style={[styles.centering, {transform: [{scale: 1}]}]}
-                                       size="small"
+                    <ActivityIndicator
+                        animating={hasLoading}
+                        style={[styles.centering, {transform: [{scale: 1}]}]}
+                        size="small"
                     />
                 </View>
                 :

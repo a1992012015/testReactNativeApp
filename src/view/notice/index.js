@@ -39,39 +39,35 @@ export default class NewsList  extends PureComponent {
             loadData: false,
             viewType: null,
             keyword: null,
-            hasLoading: null
+            hasLoading: null,
+            obj: [],
         };
     }
     //真实的DOM渲染完成之后调用
     componentDidMount() {
         this.pullDown()
     }
+    /*点击新闻的触发函数*/
+    newsDetail = index => {
+        console.log('点击俩表');
 
-    newsDetail = id => {
-        let url = `${config.api.index.articleContent}${id}`;
+        const { obj } = this.state;
 
-        request.post(url).then(response => {
-
-            if(response.ok){//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
-                return;
-            }
-
-            console.log(response);
-
-            const { obj } = response;
-
-            this.props.navigation.navigate('ConsDetail', {content: obj.content, title: obj.title, ...this.props})
-        }).catch(error => {
-            console.log('进入失败函数 =>', error);
-        })
+        this.props.navigation.navigate('ConsDetail', {content: obj[index].content, title: obj[index].title, ...this.props})
     };
-
+    /*获取全部的新闻信息*/
     pullDown = () => {
         //地址
-        let url = `${config.api.index.article}4&limit=10&offset=0&num=999999`;
+        let url = config.api.index.article;
+        //参数
+        const actions = {
+            type: 4,
+            limit: 10,
+            offset: 0,
+            num: 999999,
+        };
 
-        request.post(url).then((responseText) => {
+        request.post(url, actions).then((responseText) => {
 
             if(responseText.ok){//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
@@ -97,18 +93,20 @@ export default class NewsList  extends PureComponent {
                 if(dataBlob.length > 5){
                     this.setState({
                         loadData: true,
-                        data:dataBlob
+                        data: dataBlob,
+                        obj,
                     });
                     this.pageIndex = 2;
                 }else{
                     this.setState({
                         loadData: true,
-                        hasMore:true,
-                        data:dataBlob
+                        hasMore: true,
+                        data: dataBlob,
+                        obj,
                     });
                 }
 
-            }else{
+            } else {
                 this.setState({
                     loadData: true
                 });
@@ -117,13 +115,20 @@ export default class NewsList  extends PureComponent {
             console.log('进入失败函数 =>', error);
         })
     };
-
+    /*滑动的最后的触发函数*/
     pullUp = () => {
         if (this.pageIndex > 1) {
             //地址
-            let url= `${config.api.index.article}4&limit=5&num=999999&offset=${((this.pageIndex - 1) * 5)}`;
+            let url= config.api.index.article;
 
-            request.post(url).then(responseText => {
+            const actions = {
+                type: 4,
+                limit: 5,
+                offset: ((this.pageIndex - 1) * 5),
+                num: 999999,
+            };
+
+            request.post(url, actions).then(responseText => {
 
                 if(responseText.ok){//判断接口是否请求成功
                     console.log('接口请求失败进入失败函数');
@@ -165,14 +170,14 @@ export default class NewsList  extends PureComponent {
         }
     };
 
-    _renderFooter = () => {
+    /*_renderFooter = () => {
         if (!this.state.hasMore) {
             return (
                 <View style={[styles.loadingMore,{height:this.state.viewType === 0 ?p(50):p(50)}]}>
                     <Text style={styles.loadingText}> 没有更多数据了</Text>
                 </View> )
         }
-    };
+    };*/
 
     render() {
 
@@ -206,12 +211,12 @@ export default class NewsList  extends PureComponent {
         }
     }
 
-    _renderRow = ({item}) => {
-        console.log(item);
-        let { title, id, created } = item.value;
+    _renderRow = ({item, index}) => {
+        let { title, created } = item.value;
+
         return (
             <TouchableOpacity
-                onPress={() => this.newsDetail(id)}
+                onPress={() => this.newsDetail(index)}
                 activeOpacity={.8}
             >
                 <View style={styles.newsItems}>

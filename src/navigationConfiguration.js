@@ -42,18 +42,25 @@ import BankCard from "./view/mySelf/bankCard/bankCard";
 import AddBankCard from "./view/mySelf/bankCard/AddBankCard";
 import Recommend from "./view/mySelf/recommend";
 import ConsDetail from "./view/notice/consDetail";
+import CodeBillFlow from "./view/assets/codeBillFlow";
 
 const routeConfiguration = {
     /*入口*/
     App: { screen: App },
     /*底部标签*/
     TabBar: { screen: TabBar },
-    /*底部TAB对应的页面*/
+    //底部TAB对应的页面
+    /*首页*/
     Home: { screen: Home },
     Lobby: { screen: Lobby },
+    /*个人资产*/
     Assets: { screen: Assets },
+    CodeBillFlow: { screen: CodeBillFlow },
+    /*CTowC*/
     CTowC: { screen: CTowC },
+    /*新闻页面*/
     Notice: { screen: Notice },
+    ConsDetail: { screen: ConsDetail },
     /*个人中心*/
     MySelf: { screen: MySelf },
     MyNews: { screen: MyNews },
@@ -77,7 +84,6 @@ const routeConfiguration = {
     BankCard: { screen: BankCard },
     AddBankCard: { screen: AddBankCard },
     Recommend: { screen: Recommend },
-    ConsDetail: { screen: ConsDetail },
     /*登陆*/
     Login: { screen: Login },
     ForgotPass: { screen: ForgotPass },

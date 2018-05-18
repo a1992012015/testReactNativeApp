@@ -1,7 +1,7 @@
 /**
- * Created by 圆环之理 on 2018/5/11.
+ * Created by 圆环之理 on 2018/5/18.
  *
- * 功能：公告页面
+ * 功能：公告页面 => 详情页面
  *
  */
 'use strict';
@@ -22,7 +22,6 @@ import SModal from '../../components/sModal';
 const { height } = Dimensions.get('window');
 
 export default class ConsDetail extends PureComponent {
-
     // 构造
     constructor(props) {
         super(props);
@@ -49,7 +48,7 @@ export default class ConsDetail extends PureComponent {
     }
 
     render() {
-        const { newsBody, isLoading, title } = this.state;
+        const { newsBody, isLoading } = this.state;
         const newsBodyContent = newsBody ? newsBody : '暂无资讯';
         console.log(newsBodyContent);
 
@@ -71,24 +70,8 @@ export default class ConsDetail extends PureComponent {
                 return(
                     <View style={{flex:1,backgroundColor: '#FFFFFF'}}>
                         <Title titleName="资讯详情" canBack={true} {...this.props}/>
-                        {/*<WebView
-                            source={{
-                                html: `<!DOCTYPE html>
-                            <html>
-                            <head>
-                            <meta charset="utf-8">
-                             <meta name="viewport" content="width=device-width,maximum-scale=2.0,minimum-scale=1.0,initial-scale=1.0,user-scalable=1,target-densitydpi=high-dpi">
-                            <style type="text/css">
-                                 @media screen and (max-width:768px) {
-                                            img{max-width:100%;}
-                                            #content{width:100%}
-                                        }
-                            </style>
-                            </head>
-                            <body><div style="font-size: 16px;font-weight: bold;color:#7d7b7b;text-align: center;padding: 20px 0;overflow: hidden;border-bottom: 1px solid #EFEFEF;">
-                            ${title}</div>${newsBodyContent}<script>window.onload=function(){window.location.hash = 1;document.title = document.body.clientHeight;}</script></body></html>`
-                            }}
-                            //source={this.newsData(newsBody)}
+                        <WebView
+                            source={{html: newsBody}}
                             style={{flex: 1}}
                             contentInset={{top: 0, left: 0}}
                             onNavigationStateChange={title => {
@@ -99,24 +82,16 @@ export default class ConsDetail extends PureComponent {
                                 }
                             }}
                         >
-                        </WebView>*/}
-                        {this.newsData()}
+                        </WebView>
                     </View>
                 )
             }
-
         } else {
             return (
                 <SModal hasLoading={!isLoading}/>
             )
         }
     }
-    /*新闻的显示的组件*/
-    newsData = content => {
-        return (
-            <Text>{content}</Text>
-        )
-    };
 }
 
 

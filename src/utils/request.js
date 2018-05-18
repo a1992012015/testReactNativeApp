@@ -54,11 +54,59 @@ const joinParamsPost = async function (params) {
     }
     return params;
 };
+/*POST参数拼接函数*/
+const joinActionsPost = async function(url, actions) {
+
+    let token = await store.get('member').then(member => member && member.token);//获取token
+    console.log('token=>',token);
+
+    let languages = await getLanguages().then(languages => languages);//获取语言
+
+    if(languages[0].indexOf("zh") > -1){
+        actions.languages = 'zh_CN';
+    }else if(languages[0].indexOf("en") > -1){
+        actions.languages = 'en';
+    }else{
+        actions.languages = 'en';
+    }
+
+    if (token) {
+        actions.tokenId = token;
+    }
+
+    for (let name in actions) {
+        if (actions.hasOwnProperty(name)) {
+            if (url.indexOf("?") >= 0) {
+
+                url += `&${name}=${actions[name]}`;
+
+            }else{
+
+                url += `?${name}=${actions[name]}`;
+
+            }
+        } else {
+            console.log('没有包含的属性 =>',name);
+        }
+    }
+
+    return url;
+};
 /*post请求*/
-request.post = async function (url) {
-    url = await joinParamsPost(`${config.api.host}${url}`);
+request.post = async function (url, actions) {
+
+    if (actions) {
+        console.log('进入参数拼接函数');
+        url = await joinActionsPost(`${config.api.host}${url}`, actions);
+
+    } else {
+
+        url = await joinParamsPost(`${config.api.host}${url}`);
+
+    }
+
     console.dir('POST请求地址=>');
-    console.dir(url);
+    console.log(url);
     return fetch(url,{
         method: 'POST',
         headers: {

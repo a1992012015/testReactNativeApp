@@ -28,8 +28,8 @@ const config = {
         index: {
             indexList:'mobile/nouser/appmarketlist.do',//首页List数据
             banner:'mobile/nouser/appbanner.do',
-            article:'mobile/nouser/apparticle.do?type=',//最新公告
-            articleContent:'mobile/nouser/getContent.do?id=',//最新公告详情
+            article:'mobile/nouser/apparticle.do',//最新公告 => 修改
+            articleContent:'mobile/nouser/getContent.do',//最新公告详情 => 修改
             articleCat:'mobile/nouser/appindex/'//最新咨询
         },
         main:{

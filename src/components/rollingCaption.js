@@ -37,9 +37,17 @@ export default class RollingCaption extends PureComponent {
     }
     //真实的DOM被渲染出来后调用
     componentDidMount() {
-        let url = `${config.api.index.article}4&limit=10&offset=0&num=10`;
+        //地址
+        let url = config.api.index.article;
+        //参数
+        const actions = {
+            type: 4,
+            limit: 10,
+            offset: 0,
+            num: 10,
+        };
 
-        request.post(url).then(response => {
+        request.post(url, actions).then(response => {
 
             if(response.ok){//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
