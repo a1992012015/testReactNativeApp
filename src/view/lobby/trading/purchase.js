@@ -1,7 +1,7 @@
 /**
  * Created by 圆环之理 on 2018/5/18.
  *
- * 功能：交易大厅页面 => 存疑
+ * 功能：交易大厅页面 => 买入界面
  *
  */
 'use strict';
@@ -118,6 +118,7 @@ class Purchase extends PureComponent {
         let { isLogin ,coinCode } = this.state;
         if(isLogin){
             const currName = coinCode ? coinCode.split("_") : 'CNY';
+            /*登陆之后的样式*/
             return (
                 <View style={{marginTop: p(20)}}>
                     <View style={{marginLeft: p(10)}}>
@@ -133,6 +134,7 @@ class Purchase extends PureComponent {
                 </View>
             )
         }else{
+            /*没登录的样式*/
             return (
                 <TouchableOpacity
                     style={{alignItems: 'center', justifyContent: 'center', width: width * .45, height: height * .33}}

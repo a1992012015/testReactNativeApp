@@ -1,8 +1,12 @@
 /**
- * Created by ${USER} on ${DATE}.
+ * Created by 圆环之理 on 2018/5/18.
+ *
+ * 功能：交易大厅页面 => 历史委托组件
+ *
  */
 'use strict';
-import React, {PureComponent } from 'react'
+
+import React, { PureComponent } from 'react'
 import {
     View,
     Text,

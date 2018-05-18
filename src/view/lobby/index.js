@@ -22,7 +22,6 @@ import {
 } from 'react-native';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import Icon from 'react-native-vector-icons/Ionicons';
-//import io from 'socket.io-client/dist/socket.io';
 import io from 'socket.io-client/dist/socket.io';
 import store from 'react-native-simple-store';
 import { connect } from 'react-redux';
@@ -41,8 +40,7 @@ import { InitUserInfo } from '../../store/actions/HomeAction';
 import { homeLoop } from '../../store/actions/IndexLoopAction';
 
 const { height } = Dimensions.get('window');
-
-let Push = NativeModules.PushCandlestickChart;
+const { PushCandlestickChart } = NativeModules;
 
 class Business extends PureComponent {
 
@@ -122,7 +120,8 @@ class Business extends PureComponent {
     }
     //组件被销毁的时候调用
     componentWillUnmount() {
-        this.socket && this.socket.close();
+        const { close } = this.socket;
+        this.socket && close();
         this.timeName && this.timeName.remove();
     }
     //接受到一个新的props调用
@@ -159,33 +158,38 @@ class Business extends PureComponent {
         let trans = this.state.coinCode;
 
         if (trans && !TradingReducer.tradingLoading && TradingReducer.tradingData) {
-            let marketDetail = TradingReducer.tradingData.marketDetail;
+            const { marketDetail } = TradingReducer.tradingData;
+
             if (marketDetail && marketDetail[trans]) {
                 let coinData = marketDetail[trans][0].payload;
-                let asks = coinData.asks.price;
-                let amount = coinData.asks.amount;
-                let bids = coinData.bids.price;
-                let bidsAM = coinData.bids.amount;
+                const { asks, bids } = coinData;
+
+                //let asks = coinData.asks.price;
+                let amount = asks.amount;
+                //let bids = coinData.bids.price;
+                let bidsAM = bids.amount;
                 let sell = [];
                 let buy = [];
-                if (asks) {
-                    let sellLength = asks.length < 5 ? asks.length : 7;
+
+                if (asks.price) {
+                    let sellLength = asks.price.length < 5 ? asks.price.length : 7;
                     for (let i = sellLength; i >= 0; i--) {
                         sell.push({
                             key: i,
-                            value: {price: asks[i], amount: amount[i]}
+                            value: {price: asks.price[i], amount: amount[i]}
                         });
                     }
                 }
-                if (bids) {
-                    let buyLength = bids.length < 5 ? bids.length : 7;
+                if (bids.price) {
+                    let buyLength = bids.price.length < 5 ? bids.price.length : 7;
                     for (let j = 0; j <= buyLength; j++) {
                         buy.push({
                             key: j,
-                            value: {price: bids[j], amount: bidsAM[j]}
+                            value: {price: bids.price[j], amount: bidsAM[j]}
                         });
                     }
                 }
+
                 this.setState({
                     tradingData: coinData,
                     sellData: sell,
@@ -194,12 +198,18 @@ class Business extends PureComponent {
                     priceLast: coinData.priceLast,
                     priceLow: coinData.priceLow,
                     priceNew: coinData.priceNew,
-                    totalAmount: this.state.businessData && parseFloat(this.state.businessData.transactionSum),
-                    priceHigh: coinData.priceHigh//最高
+                    totalAmount: this.state.businessData && parseFloat(this.splitData(this.state.businessData)),
+                    priceHigh: coinData.priceHigh,//最高
                 });
             }
         }
     }
+    //结构赋值 => 强迫症复发
+    splitData = data => {
+        const { transactionSum } = data;
+        console.log('解构赋值 =>', transactionSum);
+        return transactionSum;
+    };
 
     queryCoin = () => {
         //地址
@@ -295,6 +305,7 @@ class Business extends PureComponent {
 
     getSocket = () => {
         const { dispatch } = this.props;
+        //const { emit, on, connect } = this.socket;
         // 告诉服务器端有用户登录
         this.socket.emit('login', {
             userid: "1",
@@ -352,10 +363,12 @@ class Business extends PureComponent {
                 return;
             }
 
-            const {businessData, priceLow, priceNew, priceHigh, totalAmount} = this.state;
+            const { businessData, priceLow, priceNew, priceHigh, totalAmount } = this.state;
+            const { RiseAndFall, currentExchangPrice, lastExchangPrice } = businessData;
+            const { setkchart } = PushCandlestickChart;
 
-            Push.setkchart(responseText,parseFloat(businessData.RiseAndFall),parseFloat(businessData.currentExchangPrice),
-                parseFloat(businessData.lastExchangPrice),parseFloat(priceNew),
+            setkchart(responseText,parseFloat(RiseAndFall),parseFloat(currentExchangPrice),
+                parseFloat(lastExchangPrice),parseFloat(priceNew),
                 parseFloat(priceLow),parseFloat(priceHigh),parseFloat(totalAmount));
         });
     };
@@ -375,7 +388,7 @@ class Business extends PureComponent {
             }else{
                 that.getKlineData();
             }
-        }) : new NativeEventEmitter(Push).addListener('EventReminder', reminder => {
+        }) : new NativeEventEmitter(PushCandlestickChart).addListener('EventReminder', reminder => {
                 if(reminder.name){
                     that.setState({
                         time: reminder.name,
@@ -429,19 +442,22 @@ class Business extends PureComponent {
                     Kline += commonTime + ",";
                 }
             });
-            const { businessData, priceLow, priceNew, priceHigh, totalAmount } = this.state;
-            const { price_keepDecimalFor } = businessData;
-            let keepDecimal = price_keepDecimalFor === null ? 4 : price_keepDecimalFor;
 
             if(period !== this.state.time){
                 return;
             }
 
-            NativeModules.KCharts.setkchart(
+            const { businessData, priceLow, priceNew, priceHigh, totalAmount } = this.state;
+            const { price_keepDecimalFor, RiseAndFall, currentExchangPrice, lastExchangPrice } = businessData;
+            const { KCharts } = NativeModules;
+            const { setkchart } = KCharts;
+            let keepDecimal = price_keepDecimalFor === null ? 4 : price_keepDecimalFor;
+
+            setkchart(
                 Kline,
-                parseFloat(businessData.RiseAndFall.toFixed(keepDecimal)),
-                parseFloat(businessData.currentExchangPrice.toFixed(keepDecimal)),
-                parseFloat(businessData.lastExchangPrice.toFixed(keepDecimal)),
+                parseFloat(RiseAndFall.toFixed(keepDecimal)),
+                parseFloat(currentExchangPrice.toFixed(keepDecimal)),
+                parseFloat(lastExchangPrice.toFixed(keepDecimal)),
                 parseFloat(priceNew.toFixed(keepDecimal)),
                 parseFloat(priceLow.toFixed(keepDecimal)),
                 parseFloat(priceHigh.toFixed(keepDecimal)),
@@ -458,6 +474,7 @@ class Business extends PureComponent {
     };
 
     transQuo = () => {
+        console.log('===============================================================')
         this.props.navigation.navigate('TransQuotation', {
             rowDate: this.state.businessData,
             coinCode: this.state.coinCode
@@ -468,20 +485,30 @@ class Business extends PureComponent {
         if (this.state.isLoading) {
             return (
                 <View style={styles.container}>
+                    {/*顶部标签组件*/}
                     <View style={styles.header}>
+                        {/*查看K线图*/}
                         <TouchableOpacity
                             onPress={() => {
-                                Platform.OS === 'android' ? NativeModules.KCharts.kchart(this.state.coinCode, page => {
-                                        this.setState({
-                                            page: page,
+                                Platform.OS === 'android' ?
+                                    (() => {
+                                        const { KCharts } = NativeModules;
+                                        const { kchart } = KCharts;
+                                        kchart(this.state.coinCode, page => {
+                                            this.setState({
+                                                page: page,
+                                            })
                                         })
-                                    })
+                                    })()
                                     :
-                                    Push.RNOpenOneVC(this.state.coinCode, page => {
-                                        this.setState({
-                                            page: page,
-                                        })
-                                    });
+                                    (() => {
+                                        const { RNOpenOneVC } = PushCandlestickChart;
+                                        RNOpenOneVC(this.state.coinCode, page => {
+                                            this.setState({
+                                                page: page,
+                                            })
+                                        });
+                                    })();
                             }}
                         >
                             <Image
@@ -489,7 +516,7 @@ class Business extends PureComponent {
                                 source={require('../../static/lobby/trend.png')}
                             />
                         </TouchableOpacity>
-
+                        {/*中间切换币种*/}
                         <TouchableOpacity
                             style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}
                             onPress={() => this.setOpen(true)}>
@@ -502,19 +529,21 @@ class Business extends PureComponent {
                                     require('../../static/cTowC/lower.png')}
                             />
                         </TouchableOpacity>
-
+                        {/*查看交易详情*/}
                         <TouchableOpacity
                             onPress={() => {
                                 this.transQuo()
                             }}
                         >
-                            <Icon name="ios-list-outline"
-                                  size={35}
-                                  color='#fff'
-                                  style={{paddingHorizontal: p(20)}}
+                            <Icon
+                                name="ios-list-outline"
+                                size={35}
+                                color='#fff'
+                                style={{paddingHorizontal: p(20)}}
                             />
                         </TouchableOpacity>
                     </View>
+                    {/*顶部切换币种组件*/}
                     <BuessModal
                         isOpen={this.state.isOpen}
                         {...this.props}
@@ -523,20 +552,21 @@ class Business extends PureComponent {
                         setOpen={this.setOpen}
                         setItemText={this.setItemText}
                     />
+                    {/*选项卡组件*/}
                     <ScrollableTabView
                         locked={false}
+                        page={this.state.page}
+                        tabBarUnderlineStyle={{backgroundColor: '#EA2000', height: 3}}
+                        tabBarBackgroundColor='#FFF'
+                        tabBarActiveTextColor='#EA2000'
+                        tabBarInactiveTextColor='#686868'
+                        tabBarTextStyle={{fontSize: p(28), fontWeight: '400', paddingTop: p(10)}}
                         onChangeTab={(obj) => {
                             this.setState({
                                 numIndex: obj.i,
                                 page: obj.i,
                             })
                         }}
-                        page = {this.state.page}
-                        tabBarUnderlineStyle={{backgroundColor: '#EA2000', height: 3}}
-                        tabBarBackgroundColor='#FFF'
-                        tabBarActiveTextColor='#EA2000'
-                        tabBarInactiveTextColor='#686868'
-                        tabBarTextStyle={{fontSize: p(28), fontWeight: '400', paddingTop: p(10)}}
                     >
                         {/*买入*/}
                         <Purchase

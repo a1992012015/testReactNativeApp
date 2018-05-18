@@ -43,6 +43,7 @@ import AddBankCard from "./view/mySelf/bankCard/AddBankCard";
 import Recommend from "./view/mySelf/recommend";
 import ConsDetail from "./view/notice/consDetail";
 import CodeBillFlow from "./view/assets/codeBillFlow";
+import TransQuotation from "./view/lobby/transQuotation";
 
 const routeConfiguration = {
     /*入口*/
@@ -52,7 +53,9 @@ const routeConfiguration = {
     //底部TAB对应的页面
     /*首页*/
     Home: { screen: Home },
+    /*交易大厅*/
     Lobby: { screen: Lobby },
+    TransQuotation: { screen: TransQuotation },
     /*个人资产*/
     Assets: { screen: Assets },
     CodeBillFlow: { screen: CodeBillFlow },

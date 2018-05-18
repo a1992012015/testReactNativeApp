@@ -1,7 +1,7 @@
 /**
  * Created by 圆环之理 on 2018/5/18.
  *
- * 功能：交易大厅页面 => 存疑
+ * 功能：交易大厅页面 => 顶部切换币种下拉组件
  *
  */
 'use strict';
@@ -60,9 +60,10 @@ export default class BuessModal extends PureComponent {
                     tabBarActiveTextColor='#EA2000'
                     tabBarInactiveTextColor='#686868'
                     tabBarTextStyle={{fontSize: p(24),fontWeight: '400', paddingTop:p(10)}}
-                    style={{flex:1,height: p(350),width: width}}>
+                    style={{flex: 1, height: p(350), width: width}}
+                >
                     {
-                        headList && headList.map((item, index)=>{
+                        headList && headList.map((item, index) => {
                             return(
                                 <Currency
                                     tabLabel={item}

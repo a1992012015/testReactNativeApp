@@ -1,7 +1,7 @@
 /**
  * Created by 圆环之理 on 2018/5/18.
  *
- * 功能：交易大厅页面 => 存疑
+ * 功能：交易大厅页面 => 顶部切换币种下拉组件 => 下拉组件的每个选项组件
  *
  */
 'use strict';
@@ -64,7 +64,6 @@ export default class Currency extends PureComponent {
 
     renderCurrency = ({item}) => {
         let value = item.value;
-
         return(
             <TouchableOpacity
                 onPress={() => {this.ListClick(value.coinCode)}}
