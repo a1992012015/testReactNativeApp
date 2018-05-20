@@ -428,7 +428,7 @@ class Index extends PureComponent {
     };
     //点击跳转交易大厅
     transDetail = (row) => {
-        this.props.tabPage('Business', row.coinCode);
+        this.props.tabPage('Lobby', row.coinCode);
     };
     //每一行数据的显示方式
     _renderRow = ({item}) => {

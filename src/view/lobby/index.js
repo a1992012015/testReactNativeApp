@@ -120,8 +120,8 @@ class Business extends PureComponent {
     }
     //组件被销毁的时候调用
     componentWillUnmount() {
-        const { close } = this.socket;
-        this.socket && close();
+
+        this.socket && this.socket.close();
         this.timeName && this.timeName.remove();
     }
     //接受到一个新的props调用
@@ -207,7 +207,6 @@ class Business extends PureComponent {
     //结构赋值 => 强迫症复发
     splitData = data => {
         const { transactionSum } = data;
-        console.log('解构赋值 =>', transactionSum);
         return transactionSum;
     };
 
@@ -305,7 +304,7 @@ class Business extends PureComponent {
 
     getSocket = () => {
         const { dispatch } = this.props;
-        //const { emit, on, connect } = this.socket;
+
         // 告诉服务器端有用户登录
         this.socket.emit('login', {
             userid: "1",
@@ -367,9 +366,16 @@ class Business extends PureComponent {
             const { RiseAndFall, currentExchangPrice, lastExchangPrice } = businessData;
             const { setkchart } = PushCandlestickChart;
 
-            setkchart(responseText,parseFloat(RiseAndFall),parseFloat(currentExchangPrice),
-                parseFloat(lastExchangPrice),parseFloat(priceNew),
-                parseFloat(priceLow),parseFloat(priceHigh),parseFloat(totalAmount));
+            setkchart(
+                responseText,
+                parseFloat(RiseAndFall),
+                parseFloat(currentExchangPrice),
+                parseFloat(lastExchangPrice),
+                parseFloat(priceNew),
+                parseFloat(priceLow),
+                parseFloat(priceHigh),
+                parseFloat(totalAmount)
+            );
         });
     };
 
@@ -474,7 +480,6 @@ class Business extends PureComponent {
     };
 
     transQuo = () => {
-        console.log('===============================================================')
         this.props.navigation.navigate('TransQuotation', {
             rowDate: this.state.businessData,
             coinCode: this.state.coinCode
@@ -494,6 +499,7 @@ class Business extends PureComponent {
                                     (() => {
                                         const { KCharts } = NativeModules;
                                         const { kchart } = KCharts;
+                                        console.log(this.state.coinCode);
                                         kchart(this.state.coinCode, page => {
                                             this.setState({
                                                 page: page,
