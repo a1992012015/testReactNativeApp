@@ -19,18 +19,18 @@ const config = {
     api: {
         host: appUrl.api.host,//阿里云服务器地址
         socketIOUrl: appUrl.api.socketIOUrl,
-        appReleaseApk:appUrl.api.appReleaseApk,
-        isRMB:appUrl.api.isRMB,//是否显示人民币
-        isTabView:appUrl.api.isTabView,//首页tab排版
-        isPhone:appUrl.api.isPhone,//是否有手机注册
-        dEnvironment:false,//开发环境   false 本地   true 正式
+        appReleaseApk: appUrl.api.appReleaseApk,
+        isRMB: appUrl.api.isRMB,//是否显示人民币
+        isTabView: appUrl.api.isTabView,//首页tab排版
+        isPhone: appUrl.api.isPhone,//是否有手机注册
+        dEnvironment: true,//开发环境   false 本地   true 正式
 
         index: {
             indexList:'mobile/nouser/appmarketlist.do',//首页List数据
-            banner:'mobile/nouser/appbanner.do',
+            banner:'mobile/nouser/appbanner.do',//首页轮播图数据
             article:'mobile/nouser/apparticle.do',//最新公告 => 修改
             articleContent:'mobile/nouser/getContent.do',//最新公告详情 => 修改
-            articleCat:'mobile/nouser/appindex/'//最新咨询
+            articleCat:'mobile/nouser/appindex/'//最新咨询 => 暂无作用
         },
         main:{
             entrust:'mobile/user/appCenter/appentrustlist?type=',// history历史委托  current当前委托

@@ -27,6 +27,7 @@ request.get = async function (url) {
 };
 /*拼接post接口的参数*/
 const joinParamsPost = async function (params) {
+
     let token = await store.get('member').then(member => member && member.token);
     console.log('token=>',token);
 
@@ -52,13 +53,13 @@ const joinParamsPost = async function (params) {
     }else{
         params += `?languages=${languages}`;
     }
+
     return params;
 };
 /*POST参数拼接函数*/
 const joinActionsPost = async function(url, actions) {
 
     let token = await store.get('member').then(member => member && member.token);//获取token
-    console.log('token=>',token);
 
     let languages = await getLanguages().then(languages => languages);//获取语言
 
@@ -89,7 +90,6 @@ const joinActionsPost = async function(url, actions) {
             console.log('没有包含的属性 =>',name);
         }
     }
-
     return url;
 };
 /*post请求*/
@@ -98,16 +98,12 @@ request.post = async function (url, actions) {
     if (actions) {
         console.log('进入参数拼接函数');
         url = await joinActionsPost(`${config.api.host}${url}`, actions);
-
     } else {
 
         url = await joinParamsPost(`${config.api.host}${url}`);
-
     }
-
-    console.dir('POST请求地址=>');
     console.log(url);
-    return fetch(url,{
+    return fetch(url, {
         method: 'POST',
         headers: {
             'Accept': 'application/json;charset=utf-8',
@@ -121,8 +117,6 @@ request.post = async function (url, actions) {
 /*存疑，和上面的POST函数一模一样，不知道具体含义在那里*/
 request.setPost = async function (url) {
     url = await joinParamsPost(`${config.api.host}${url}`);
-    console.dir('SET POST=>');
-    console.dir(url);
     return fetch(url,{
         method: 'POST',
         headers: {

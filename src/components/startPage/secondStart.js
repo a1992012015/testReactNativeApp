@@ -9,7 +9,6 @@
 import React,{ PureComponent } from 'react';
 import {
     Dimensions,
-    InteractionManager,
     View,
     StyleSheet,
     Image

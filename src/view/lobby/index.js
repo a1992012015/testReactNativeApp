@@ -495,7 +495,7 @@ class Business extends PureComponent {
                         {/*查看K线图*/}
                         <TouchableOpacity
                             onPress={() => {
-                                Platform.OS === 'android' ?
+                                /*Platform.OS === 'android' ?
                                     (() => {
                                         const { KCharts } = NativeModules;
                                         const { kchart } = KCharts;
@@ -514,7 +514,7 @@ class Business extends PureComponent {
                                                 page: page,
                                             })
                                         });
-                                    })();
+                                    })();*/
                             }}
                         >
                             <Image

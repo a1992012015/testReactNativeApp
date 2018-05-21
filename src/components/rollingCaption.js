@@ -65,9 +65,13 @@ export default class RollingCaption extends PureComponent {
     }
     //点击信息函数跳转到具体的公告
     newsDetail = id => {
-        let url = `${config.api.index.articleContent}${id}`;
+        let url = config.api.index.articleContent;
+        //参数
+        const actions = {
+            type : id,
+        };
 
-        request.post(url).then(response => {
+        request.post(url, actions).then(response => {
 
             if(response.ok){//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');

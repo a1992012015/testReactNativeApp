@@ -8,6 +8,7 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+
 import cn.reactnative.modules.update.UpdateContext;//热更新添加
 import com.AlexanderZaytsev.RNI18n.RNI18nPackage; // <-- Add to ReactNativeI18n to the imports
 import com.oblador.vectoricons.VectorIconsPackage;//ioc

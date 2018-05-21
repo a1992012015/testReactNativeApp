@@ -85,7 +85,7 @@ class Index extends PureComponent {
             this.handleData(IndexLoopReducer.homeData);
         }
 
-        //this.pollingData();
+        this.pollingData();
     }
     //组件接收到新的props时调用，并将其作为参数nextProps使用
     componentWillReceiveProps(nextProps) {
@@ -106,7 +106,8 @@ class Index extends PureComponent {
         //开启计时器循环拿取首页显示数据
         this.dexInter = setTimeout(() => {
             let URL = config.api.index.indexList;
-            request.post(URL).then(responseText => {
+
+            request.post(URL, {}).then(responseText => {
 
                 if(responseText.ok){//判断接口是否请求成功
                     console.log('接口请求失败进入失败函数');
@@ -135,7 +136,7 @@ class Index extends PureComponent {
                 this.showPop('zoomOut', true,'更新提示','检查到新的版本'+info.name+',是否现在更新?',1,'')
             }
         }).catch(err => {
-            console.dir('更新失败错误=>',err);
+            console.log('更新失败错误=>',err);
             this.showPop('zoomOut', true,'温馨提示','更新失败',0,'')
         });
     };
@@ -146,7 +147,7 @@ class Index extends PureComponent {
         downloadUpdate(info).then(hash => {
             this.showPop('zoomOut', true,'温馨提示','已更新完毕,请重启您的应用!',3,hash)
         }).catch(err => {
-            console.dir('更新错误=>',err);
+            console.log('更新错误=>',err);
             overlayPopView.close();
             this.showPop('zoomOut', true,'温馨提示','更新失败',0,'')
         });
@@ -319,7 +320,7 @@ class Index extends PureComponent {
     queryIndex = () =>{
         const { dispatch } = this.props;
         let URL = config.api.index.indexList;
-        request.post(URL).then(responseText => {
+        request.post(URL, {}).then(responseText => {
 
             if(response.ok){//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
