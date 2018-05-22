@@ -8,9 +8,9 @@
  */
 'use strict';
 
-import { applyMiddleware, createStore } from 'redux';
-import { persistStore, persistReducer } from 'redux-persist';
-import { AsyncStorage } from 'react-native';
+import {applyMiddleware, createStore} from 'redux';
+import {persistStore, persistReducer} from 'redux-persist';
+import {AsyncStorage} from 'react-native';
 import thunk from "redux-thunk";
 
 import reducers from './reducers';
@@ -27,9 +27,5 @@ const persistedReducer = persistReducer(persistConfig, reducers);
 export default () => {
     let store = createStore(persistedReducer, applyMiddleware(...middleWares));
     let durable = persistStore(store);
-    return { store, durable }
+    return {store, durable}
 }
-
-
-
-

@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     StyleSheet,
     View,
@@ -17,19 +17,19 @@ import {
     TextInput,
     TouchableOpacity,
 } from 'react-native';
-import { Toast } from 'teaset'
+import {Toast} from 'teaset'
 
 import config from '../../utils/config';
 import p from '../../utils/tranfrom';
-import  request from '../../utils/request';
+import request from '../../utils/request';
 import Loading from '../../components/loading';
 import BuySellModal from './buySellModal';
 
-const {width, height}=Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 export default class Item_2 extends PureComponent {
     //构建
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             loadData: true,
@@ -39,20 +39,22 @@ export default class Item_2 extends PureComponent {
             ctcMoney: 0,
         }
     }
+
     //实例渲染完成之后调用
     componentDidMount() {
-        const { c2cSellPrice } = this.props.c2cBuySellList;
+        const {c2cSellPrice} = this.props.c2cBuySellList;
         this.setState({
             sellMoney: c2cSellPrice,
             coinCode: this.props.coinCode,
             loading: false,
         })
     }
+
     //接收到新的props调用
     componentWillReceiveProps(props) {
-        const { coinCode, c2cBuySellList } = props;
-        const { c2cSellPrice } = c2cBuySellList;
-        const { ref_buyNum } = this.refs;
+        const {coinCode, c2cBuySellList} = props;
+        const {c2cSellPrice} = c2cBuySellList;
+        const {ref_buyNum} = this.refs;
 
         this.setState({
             coinCode: coinCode,
@@ -66,7 +68,7 @@ export default class Item_2 extends PureComponent {
 
     buyMoney = money => {
         this.setState({
-            sellMoney:money
+            sellMoney: money
         })
     };
 
@@ -82,24 +84,24 @@ export default class Item_2 extends PureComponent {
         })
     };
 
-    appCreateTransaction=()=>{
-        if(this.state.sellMoney === '' || this.state.sellMoney === undefined){
+    appCreateTransaction = () => {
+        if (this.state.sellMoney === '' || this.state.sellMoney === undefined) {
             Toast.fail("请填写卖出价");
             return;
         }
 
-        if(this.state.buyNum === '' || this.state.buyNum === undefined){
+        if (this.state.buyNum === '' || this.state.buyNum === undefined) {
             Toast.fail("请填写卖出量");
             return;
         }
 
-        if(isNaN(this.state.buyNum) || this.state.buyNum < 0){
+        if (isNaN(this.state.buyNum) || this.state.buyNum < 0) {
             Toast.fail('请输入正确的数量');
             return;
         }
 
         this.setState({
-            loading:true
+            loading: true
         });
 
         let url = `${config.api.ctc.appCreateTransaction}?transactionType=2&transactionPrice=${this.state.sellMoney}&transactionCount=${this.state.buyNum}&coinCode=${this.state.coinCode}`;
@@ -107,18 +109,18 @@ export default class Item_2 extends PureComponent {
         request.post(url).then(responseText => {
             request.manyLogin(this.props, responseText);
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
             this.setState({
-                loading:false
+                loading: false
             });
 
-            const { obj, msg } = responseText;
-            const { ref_buyNum } = this.refs;
-            if(responseText.success){
+            const {obj, msg} = responseText;
+            const {ref_buyNum} = this.refs;
+            if (responseText.success) {
                 Toast.success("卖出成功");
                 this.setState({
                     buySellData: obj,
@@ -127,7 +129,7 @@ export default class Item_2 extends PureComponent {
 
                 this.props.c2cBuySellFunction(this.state.coinCode);
                 ref_buyNum.clear();
-            }else{
+            } else {
                 Toast.fail(msg);
             }
         }).catch(error => {
@@ -136,8 +138,8 @@ export default class Item_2 extends PureComponent {
     };
 
     prompt = () => {
-        return(
-            <View style={{marginLeft:p(10)}}>
+        return (
+            <View style={{marginLeft: p(10)}}>
                 <Text style={styles.promptText}>1.C2C交易为用户之间点对点的交易，直接转账打币，平台不接受充值汇款;</Text>
                 <Text style={styles.promptText}>2.买卖商户均为实名认证商户，并提供保证金，可放心兑换;</Text>
                 <Text style={styles.promptText}>3.如需申请成为商户请发邮件到{this.mail()};</Text>
@@ -147,16 +149,16 @@ export default class Item_2 extends PureComponent {
         )
     };
 
-    mail = () =>{
+    mail = () => {
         return "develop@hurong.com";
     };
 
-    render(){
+    render() {
         if (this.state.loadData) {
             return (
                 <View style={{flex: 1, marginBottom: config.api.isTabView ? p(100) : 0}}>
                     <ScrollView
-                        style={{ flex:1, backgroundColor: '#fafafa'}}
+                        style={{flex: 1, backgroundColor: '#fafafa'}}
                     >
                         <View style={styles.ViewFlex}>
                             <View style={{marginTop: p(50)}}>
@@ -176,15 +178,17 @@ export default class Item_2 extends PureComponent {
                                     placeholderTextColor={'#565A5D'}
                                     selectionColor={"#018F67"}
                                     style={styles.inputTextView}
-                                    value= {this.state.sellMoney}
-                                    onChangeText={(text) => {this.buyMoney(text)}}
+                                    value={this.state.sellMoney}
+                                    onChangeText={(text) => {
+                                        this.buyMoney(text)
+                                    }}
                                 />
-                                <Text style={{color:'#EA2000'}}>{this.state.sellMoney}</Text>
+                                <Text style={{color: '#EA2000'}}>{this.state.sellMoney}</Text>
                             </View>
                         </View>
                         <View style={styles.ViewFlex}>
                             <View style={styles.inputTextStyle}>
-                                <Text style={{color:'#565A5D'}}>卖出量({this.state.coinCode})：</Text>
+                                <Text style={{color: '#565A5D'}}>卖出量({this.state.coinCode})：</Text>
                                 <TextInput
                                     ref="ref_buyNum"
                                     underlineColorAndroid='transparent'
@@ -193,8 +197,10 @@ export default class Item_2 extends PureComponent {
                                     placeholderTextColor={'#565A5D'}
                                     selectionColor={"#018F67"}
                                     style={styles.inputTextView}
-                                    value= {this.state.buyNum}
-                                    onChangeText={(text) => {this.buyNum(text)}}
+                                    value={this.state.buyNum}
+                                    onChangeText={(text) => {
+                                        this.buyNum(text)
+                                    }}
                                 />
                             </View>
                         </View>
@@ -205,12 +211,12 @@ export default class Item_2 extends PureComponent {
                             </Text>
                             <Text style={styles.textStyle}>CNY</Text>
                         </View>
-                        <View style={[styles.ViewFlex,{marginTop:p(40)}]}>
+                        <View style={[styles.ViewFlex, {marginTop: p(40)}]}>
                             <TouchableOpacity
-                                onPress={()=>this.appCreateTransaction()}
+                                onPress={() => this.appCreateTransaction()}
                                 style={styles.touchableStyle}
                             >
-                                <Text style={{color:'#FFF'}}>立即卖出</Text>
+                                <Text style={{color: '#FFF'}}>立即卖出</Text>
                             </TouchableOpacity>
                         </View>
 
@@ -229,11 +235,11 @@ export default class Item_2 extends PureComponent {
                     />
                 </View>
             )
-        }else{
+        } else {
             return (
                 <ActivityIndicator
                     animating={true}
-                    style={{height: height/2}}
+                    style={{height: height / 2}}
                     size="large"
                 />
             )
@@ -243,13 +249,13 @@ export default class Item_2 extends PureComponent {
 }
 
 let styles = StyleSheet.create({
-    promptText:{
+    promptText: {
         color: '#2b2b2b',
         fontSize: p(26),
         lineHeight: p(40),
         marginTop: p(20),
     },
-    touchableStyle:{
+    touchableStyle: {
         height: p(70),
         width: width - p(120),
         backgroundColor: '#f8671b',
@@ -257,7 +263,7 @@ let styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    inputTextStyle:{
+    inputTextStyle: {
         flexDirection: 'row',
         height: p(80),
         alignItems: 'center',
@@ -268,13 +274,13 @@ let styles = StyleSheet.create({
         borderWidth: p(2),
         borderColor: '#e6e6e6',
     },
-    inputTextView:{
+    inputTextView: {
         flex: 1,
         height: p(80),
         fontSize: p(26),
         color: '#018F67',
     },
-    inputView:{
+    inputView: {
         flexDirection: 'row',
         height: p(80),
         alignItems: 'center',
@@ -284,11 +290,11 @@ let styles = StyleSheet.create({
         marginTop: p(20),
         width: width - p(120),
     },
-    textStyle:{
+    textStyle: {
         color: '#646464',
         fontSize: p(28),
     },
-    ViewFlex:{
+    ViewFlex: {
         width: width - p(20),
         alignItems: 'center',
         justifyContent: 'center',

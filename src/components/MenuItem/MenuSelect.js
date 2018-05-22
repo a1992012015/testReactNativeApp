@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     Animated,
     Dimensions,
@@ -47,10 +47,11 @@ class MenuSelect extends PureComponent {
             buttonWidth: 0,
             buttonHeight: 0,
 
-            menuSizeAnimation: new Animated.ValueXY({ x: 0, y: 0 }),
+            menuSizeAnimation: new Animated.ValueXY({x: 0, y: 0}),
             opacityAnimation: new Animated.Value(0),
         };
     }
+
     //类型验证
     static propTypes = {
         /*button: PropTypes.node.isRequired,*/
@@ -65,7 +66,7 @@ class MenuSelect extends PureComponent {
             return;
         }
 
-        const { width, height } = e.nativeEvent.layout;
+        const {width, height} = e.nativeEvent.layout;
         const menuHeightWithPadding = height - MENU_PADDING_VERTICAL * 2;
 
         this.setState({
@@ -75,7 +76,7 @@ class MenuSelect extends PureComponent {
         }, () => {
             Animated.parallel([
                 Animated.timing(this.state.menuSizeAnimation, {
-                    toValue: { x: width, y: menuHeightWithPadding },
+                    toValue: {x: width, y: menuHeightWithPadding},
                     duration: ANIMATION_DURATION,
                     easing: EASING,
                 }),
@@ -94,7 +95,7 @@ class MenuSelect extends PureComponent {
     //显示
     show = () => {
         this._container.measureInWindow((x, y) => {
-            this.setState({ menuState: STATES.SHOWN, top: y, left: x });
+            this.setState({menuState: STATES.SHOWN, top: y, left: x});
         });
     };
     //隐藏
@@ -107,7 +108,7 @@ class MenuSelect extends PureComponent {
             // Reset state
             this.setState({
                 menuState: STATES.HIDDEN,
-                menuSizeAnimation: new Animated.ValueXY({ x: 0, y: 0 }),
+                menuSizeAnimation: new Animated.ValueXY({x: 0, y: 0}),
                 opacityAnimation: new Animated.Value(0),
             }),
         );
@@ -116,14 +117,14 @@ class MenuSelect extends PureComponent {
     render() {
         const dimensions = Dimensions.get('screen');
 
-        const { menuSizeAnimation } = this.state;
+        const {menuSizeAnimation} = this.state;
         const menuSize = {
             width: menuSizeAnimation.x,
             height: menuSizeAnimation.y,
         };
 
         // 调整菜单位置
-        let { left, top } = this.state;
+        let {left, top} = this.state;
         const transforms = [];
 
         // 如果菜单点击正确
@@ -151,7 +152,7 @@ class MenuSelect extends PureComponent {
             top,
         };
 
-        const { menuState } = this.state;
+        const {menuState} = this.state;
         const animationStarted = menuState === STATES.ANIMATING;
         const modalVisible = menuState === STATES.SHOWN || animationStarted;
 
@@ -195,7 +196,7 @@ const styles = StyleSheet.create({
         ...Platform.select({
             ios: {
                 shadowColor: 'black',
-                shadowOffset: { width: 0, height: 2 },
+                shadowOffset: {width: 0, height: 2},
                 shadowOpacity: 0.14,
                 shadowRadius: 2,
             },

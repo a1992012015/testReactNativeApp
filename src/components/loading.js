@@ -6,11 +6,11 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
-import { Dimensions, View, StyleSheet, ActivityIndicator } from 'react-native' ;
+import {Dimensions, View, StyleSheet, ActivityIndicator} from 'react-native' ;
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 class Loading extends PureComponent {
     // 默认属性

@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     View,
     Text,
@@ -15,13 +15,13 @@ import {
     TextInput,
     Alert
 } from 'react-native';
-import Toast, { DURATION } from 'react-native-easy-toast';
+import Toast, {DURATION} from 'react-native-easy-toast';
 
-import p from '../../utils/tranfrom';
-import config from '../../utils/config';
-import request from '../../utils/request';
-import md5 from '../../utils/hrymd5';
-import Title from '../../components/title';
+import p from '../../../utils/tranfrom';
+import config from '../../../utils/config';
+import request from '../../../utils/request';
+import md5 from '../../../utils/hrymd5';
+import Title from '../../../components/title';
 
 export default class TransPassword extends PureComponent {
     // 构造
@@ -41,20 +41,22 @@ export default class TransPassword extends PureComponent {
             timeId: '',
         };
     }
+
     //真实结构渲染出来之后调用
     componentDidMount() {
         const {params} = this.props.navigation.state;
         this.setState({
-            username:params.username
+            username: params.username
         });
     }
+
     //组件被移除之前被调用
     componentWillUnmount() {
         clearInterval(this.state.timeId);
     }
 
     getTransCode = () => {
-        const { toast } = this.refs;
+        const {toast} = this.refs;
 
         if (null == this.state.accountPassWord || '' === this.state.accountPassWord) {
             toast.show('请输入交易密码', DURATION.LENGTH_SHORT);
@@ -83,19 +85,19 @@ export default class TransPassword extends PureComponent {
 
         let url = `${config.api.person.transCode}?accountPassWord=${md5.md5(this.state.accountPassWord)}&reaccountPassWord=${md5.md5(this.state.reaccountPassWord)}`;
 
-        console.log('获取验证码URL',url);
+        console.log('获取验证码URL', url);
 
-        request.post(url).then((responseText)=>{
+        request.post(url).then((responseText) => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            request.manyLogin(this.props,responseText);
-            console.log("responseText",responseText);
+            request.manyLogin(this.props, responseText);
+            console.log("responseText", responseText);
 
-            const { msg } = responseText;
+            const {msg} = responseText;
 
             if (responseText) {
                 if (responseText.success) {
@@ -108,7 +110,7 @@ export default class TransPassword extends PureComponent {
                     let num = 60;
                     this.setState({
                         codeSent: false,
-                        isCheckCode:true
+                        isCheckCode: true
                     });
                     this.timer1 = setInterval(() => {
 
@@ -136,10 +138,10 @@ export default class TransPassword extends PureComponent {
         });
     };
 
-    getTransPass =() =>{
-        const { toast } = this.refs;
+    getTransPass = () => {
+        const {toast} = this.refs;
 
-        if(!this.state.isCheckCode){
+        if (!this.state.isCheckCode) {
             toast.show('请先获取短信验证码', DURATION.LENGTH_SHORT);
             return;
         }
@@ -153,31 +155,33 @@ export default class TransPassword extends PureComponent {
 
         request.post(url).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            request.manyLogin(this.props,responseText);
-            console.log('responseText',responseText);
-            const { msg } = responseText;
+            request.manyLogin(this.props, responseText);
+            console.log('responseText', responseText);
+            const {msg} = responseText;
 
-            if(responseText.success){
+            if (responseText.success) {
                 Alert.alert(
                     '提示',
                     '交易密码修改成功',
-                    [{text: '确认', onPress: () => {
+                    [{
+                        text: '确认', onPress: () => {
                             const {params} = this.props.navigation.state;
                             params.infoAction();
                             this.props.navigation.goBack();
                         }
                     }]
                 );
-            }else{
+            } else {
                 toast.show(msg, DURATION.LENGTH_SHORT);
             }
         })
     };
+
     // 渲染
     render() {
         return (
@@ -233,7 +237,9 @@ export default class TransPassword extends PureComponent {
                             onChangeText={text => this.setState({accountpwSmsCode: text})}
                         />
                         <TouchableOpacity
-                            onPress={() => {this.getTransCode()}}
+                            onPress={() => {
+                                this.getTransCode()
+                            }}
                             activeOpacity={.8}
                         >
                             <Text style={this.state.codeStyle}>{this.state.checkCodeText}</Text>
@@ -255,7 +261,8 @@ export default class TransPassword extends PureComponent {
                 <TouchableOpacity
                     onPress={this.getTransPass}
                     activeOpacity={.8}
-                    style={{height: p(80),
+                    style={{
+                        height: p(80),
                         backgroundColor: '#D95411',
                         borderWidth: 1,
                         margin: p(20),
@@ -264,13 +271,13 @@ export default class TransPassword extends PureComponent {
                         borderRadius: p(10),
                     }}
                 >
-                    <Text style={{color:'#fff',fontSize:p(26)}}>保存</Text>
+                    <Text style={{color: '#fff', fontSize: p(26)}}>保存</Text>
                 </TouchableOpacity>
                 <Toast
                     ref="toast"
-                    style={{backgroundColor:'rgba(0,0,0,.6)'}}
+                    style={{backgroundColor: 'rgba(0,0,0,.6)'}}
                     position='top'
-                    textStyle={{color:'white'}}
+                    textStyle={{color: 'white'}}
                 />
             </View>
         );
@@ -292,31 +299,31 @@ let styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#1F2228'
     },
-    inputText:{
+    inputText: {
         color: 'white',
         paddingLeft: p(20),
         width: p(180)
     },
-    inputTextView:{
+    inputTextView: {
         alignItems: 'center',
         justifyContent: 'center',
         marginLeft: p(6),
-        height:  p(70),
+        height: p(70),
         flex: 1,
         padding: 0,
         paddingLeft: p(10),
         color: '#FFF'
     },
-    reWithView:{
+    reWithView: {
         flexDirection: 'row',
         alignItems: 'center',
         height: p(80)
     },
-    promptText:{
+    promptText: {
         color: '#B0B0B0',
         fontSize: p(22)
     },
-    codeObtain:{
+    codeObtain: {
         backgroundColor: "#D95411",
         color: 'white',
         marginRight: p(20),
@@ -324,7 +331,7 @@ let styles = StyleSheet.create({
         textAlign: 'center',
         paddingHorizontal: p(12)
     },
-    codeFalse:{
+    codeFalse: {
         backgroundColor: "#929BA1",
         color: 'white',
         marginRight: p(20),

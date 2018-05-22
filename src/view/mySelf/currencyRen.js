@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     StyleSheet,
     View,
@@ -21,20 +21,21 @@ import p from '../../utils/tranfrom';
 import request from '../../utils/request';
 import Title from '../../components/title';
 
-const {width, height}=Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 export default class CurrencyRen extends PureComponent {
-    constructor(props){
+    constructor(props) {
         super(props);
         this._dataSource = new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2});
         this.state = {
-            loadData:false,
-            dataSource:this._dataSource.cloneWithRows([]),
-            data:[],
+            loadData: false,
+            dataSource: this._dataSource.cloneWithRows([]),
+            data: [],
             refreshing: false,
             hasMore: true,
         }
     }
+
     //真实的DOM被渲染出来后调用
     componentDidMount() {
         this.getCurrencyRen()
@@ -42,19 +43,19 @@ export default class CurrencyRen extends PureComponent {
 
     getCurrencyRen = () => {
         let url = `${config.api.currency.cunList}?transactionType=1&offset=0&limit=10`;
-        console.log('entrusURL',url);
+        console.log('entrusURL', url);
 
         request.post(url).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            request.manyLogin(this.props,responseText);
-            console.log("responseText",responseText);
+            request.manyLogin(this.props, responseText);
+            console.log("responseText", responseText);
 
-            const { obj } = responseText;
+            const {obj} = responseText;
             let data = obj.rows;
             let listLength = obj.rows.length;
 
@@ -63,11 +64,11 @@ export default class CurrencyRen extends PureComponent {
                 dataSource: this.state.dataSource.cloneWithRows(data),
                 data: data
             });
-            if(listLength < 10 || this.pageIndex * 10 >= obj.total){
+            if (listLength < 10 || this.pageIndex * 10 >= obj.total) {
                 this.setState({
                     hasMore: false,
                 })
-            }else{
+            } else {
                 this.pageIndex = 2;
             }
         });
@@ -75,19 +76,19 @@ export default class CurrencyRen extends PureComponent {
 
     pullUP = () => {
         if (this.pageIndex > 1) {
-            let url = `${config.api.currency.cunList}?transactionType=1&offset=${(this.pageIndex-1) * 10}&limit=10`;
-            console.log('ClosingURL',url);
+            let url = `${config.api.currency.cunList}?transactionType=1&offset=${(this.pageIndex - 1) * 10}&limit=10`;
+            console.log('ClosingURL', url);
 
             request.post(url).then(responseText => {
 
-                if(responseText.ok){//判断接口是否请求成功
+                if (responseText.ok) {//判断接口是否请求成功
                     console.log('接口请求失败进入失败函数');
                     return;
                 }
 
-                request.manyLogin(this.props,responseText);
+                request.manyLogin(this.props, responseText);
 
-                const { obj } = responseText;
+                const {obj} = responseText;
                 let listLength = obj.rows.length;
 
                 if (listLength > 0) {
@@ -100,15 +101,15 @@ export default class CurrencyRen extends PureComponent {
                         data: arr
                     });
 
-                    if(listLength < 10 || this.pageIndex * 10 >= obj.total){
+                    if (listLength < 10 || this.pageIndex * 10 >= obj.total) {
                         this.setState({
                             hasMore: false
                         });
                         this.pageIndex = 1;
-                    }else{
+                    } else {
                         this.pageIndex++;
                     }
-                }else{
+                } else {
                     this.setState({
                         hasMore: false
                     });
@@ -125,11 +126,11 @@ export default class CurrencyRen extends PureComponent {
             return (
                 <View style={[styles.loadingMore, {height: this.state.viewType === 0 ? p(50) : p(50)}]}>
                     <Text style={styles.loadingText}> 没有更多数据了</Text>
-                </View> )
+                </View>)
         }
     };
 
-    render(){
+    render() {
         if (this.state.loadData) {
             return (
                 <View style={{flex: 1, backgroundColor: '#1F2229'}}>
@@ -147,7 +148,7 @@ export default class CurrencyRen extends PureComponent {
                         <Text style={[styles.textRecord, {width: '15%'}]}>状态</Text>
                     </View>
                     <ListView
-                        horizontal={false }
+                        horizontal={false}
                         dataSource={this.state.dataSource}
                         renderRow={this._quotRow}
                         renderFooter={this._renderFooter}
@@ -161,11 +162,11 @@ export default class CurrencyRen extends PureComponent {
                     />
                 </View>
             )
-        }else{
+        } else {
             return (
                 <ActivityIndicator
                     animating={true}
-                    style={{height: height/2}}
+                    style={{height: height / 2}}
                     size="large"
                 />
             )
@@ -173,49 +174,51 @@ export default class CurrencyRen extends PureComponent {
     }
 
     feeType = fee => {
-        if(fee !== null && fee !== ""){
-            return(
-                <Text style={[styles.textRecord,{width:'22%'}]}>{fee}</Text>
+        if (fee !== null && fee !== "") {
+            return (
+                <Text style={[styles.textRecord, {width: '22%'}]}>{fee}</Text>
             )
-        }else{
-            return(
-                <Text style={[styles.textRecord,{width:'22%'}]}>0.00</Text>
+        } else {
+            return (
+                <Text style={[styles.textRecord, {width: '22%'}]}>0.00</Text>
             )
         }
     };
 
     statusType = status => {
-        if(status !== "" || status !== null){
-            if(status === 1){
-                return(
-                    <Text style={[styles.textRecord,{width:'15%'}]}>等待</Text>
+        if (status !== "" || status !== null) {
+            if (status === 1) {
+                return (
+                    <Text style={[styles.textRecord, {width: '15%'}]}>等待</Text>
                 )
-            }else if(status === 2){
-                return(
-                    <Text style={[styles.textRecord,{width:'15%'}]}>成功</Text>
+            } else if (status === 2) {
+                return (
+                    <Text style={[styles.textRecord, {width: '15%'}]}>成功</Text>
                 )
-            }else if(status === 3){
-                return(
-                    <Text style={[styles.textRecord,{width:'15%'}]}>失败</Text>
+            } else if (status === 3) {
+                return (
+                    <Text style={[styles.textRecord, {width: '15%'}]}>失败</Text>
                 )
             }
-        }else{
-            return(
-                <Text style={[styles.textRecord,{width:'15%'}]}>审核中</Text>
+        } else {
+            return (
+                <Text style={[styles.textRecord, {width: '15%'}]}>审核中</Text>
             )
         }
     };
 
-    _quotRow = row =>{
-        const { coinCode, created, transactionMoney, fee, status } = row;
-        return(
-            <View style={{flexDirection:'row',padding:p(10),borderBottomWidth: StyleSheet.hairlineWidth,
-                borderBottomColor: '#41484F', alignItems:'center'}}>
-                <View style={{width:'41%', alignItems:'center',justifyContent:'center'}}>
-                    <Text style={[styles.textRecord,{color:"#D95411"}]}>{coinCode}</Text>
-                    <Text style={{color:"#D95411",textAlign:'center'}}>{created}</Text>
+    _quotRow = row => {
+        const {coinCode, created, transactionMoney, fee, status} = row;
+        return (
+            <View style={{
+                flexDirection: 'row', padding: p(10), borderBottomWidth: StyleSheet.hairlineWidth,
+                borderBottomColor: '#41484F', alignItems: 'center'
+            }}>
+                <View style={{width: '41%', alignItems: 'center', justifyContent: 'center'}}>
+                    <Text style={[styles.textRecord, {color: "#D95411"}]}>{coinCode}</Text>
+                    <Text style={{color: "#D95411", textAlign: 'center'}}>{created}</Text>
                 </View>
-                <Text style={[styles.textRecord,{width:'22%'}]}>{transactionMoney}</Text>
+                <Text style={[styles.textRecord, {width: '22%'}]}>{transactionMoney}</Text>
                 {this.feeType(fee)}
                 {this.statusType(status)}
             </View>
@@ -224,21 +227,21 @@ export default class CurrencyRen extends PureComponent {
 }
 
 let styles = StyleSheet.create({
-    textViewTop:{
+    textViewTop: {
         color: '#ACB3B9',
         fontSize: p(24),
         marginLeft: p(8),
     },
-    quotView:{
+    quotView: {
         padding: p(20),
         borderWidth: StyleSheet.hairlineWidth,
         borderColor: '#313840',
     },
-    textFont:{
+    textFont: {
         color: '#FFFFFF',
         fontSize: p(24),
     },
-    textRecord:{
+    textRecord: {
         color: '#ACB3B9',
         fontSize: p(24),
         textAlign: 'center',

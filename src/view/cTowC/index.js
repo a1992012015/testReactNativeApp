@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react'
+import React, {PureComponent} from 'react'
 import {
     View,
     Text,
@@ -30,11 +30,12 @@ import Item_3 from './item_3';
 import Item_4 from './item_4';
 import CTowModal from './cTowModal';
 
-const { height } = Dimensions.get('window');
+const {height} = Dimensions.get('window');
 
 export default class CTwoC extends PureComponent {
 
     static defaultProps = {};
+
     // 构造
     constructor(props) {
         super(props);
@@ -47,12 +48,13 @@ export default class CTwoC extends PureComponent {
             canBack: false,
         };
     }
+
     //真实的DOM被渲染出来后调用
     componentDidMount() {
-        let { params } = this.props.navigation.state;
-        if(params){
+        let {params} = this.props.navigation.state;
+        if (params) {
             this.setState({
-                canBack:params.canBack
+                canBack: params.canBack
             })
         }
         //查询币
@@ -62,16 +64,16 @@ export default class CTwoC extends PureComponent {
             console.log('================C2C页面数据=================');
             console.log(responseText);
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
             request.manyLogin(this.props, responseText);
 
-            if(responseText.success){
-                const { obj } = responseText;
-                const { coinList } = obj;
+            if (responseText.success) {
+                const {obj} = responseText;
+                const {coinList} = obj;
                 this.setState({
                     coinAccount: coinList,
                     loadData: true,
@@ -84,20 +86,21 @@ export default class CTwoC extends PureComponent {
             console.log('进入失败函数=>', error);
         });
     }
+
     //默认查询第一个币的信息
-    c2cBuySellFunction = (coinCode)=>{
+    c2cBuySellFunction = (coinCode) => {
         let url = `${config.api.ctc.c2c}?coinCode=${coinCode}`;
 
         request.post(url).then(responseText => {
             request.manyLogin(this.props, responseText);
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            if(responseText.success){
-                const { obj } = responseText;
+            if (responseText.success) {
+                const {obj} = responseText;
                 this.setState({
                     c2cBuySellList: obj,
                     loading: false
@@ -114,7 +117,7 @@ export default class CTwoC extends PureComponent {
         })
     };
 
-    setItemText = (coinCode,picturePath) => {
+    setItemText = (coinCode, picturePath) => {
         this.setState({
             busTitle: coinCode,
             picturePath: picturePath,
@@ -130,34 +133,34 @@ export default class CTwoC extends PureComponent {
                     <View style={[styles.header, {
                         flexDirection: 'row',
                         backgroundColor: '#252932',
-                        borderBottomWidth:StyleSheet.hairlineWidth,
-                        borderBottomColor:'#1F2229'
+                        borderBottomWidth: StyleSheet.hairlineWidth,
+                        borderBottomColor: '#1F2229'
                     }]}>
                         {
-                            this.state.canBack?
-                                <TouchableOpacity onPress={() => this.props.navigation.goBack() }>
+                            this.state.canBack ?
+                                <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
                                     <Icon name="ios-arrow-back-outline" size={25}
                                           color={'#fff'}
-                                          style={{paddingHorizontal:p(20)}}/>
+                                          style={{paddingHorizontal: p(20)}}/>
                                 </TouchableOpacity>
 
-                                :null
+                                : null
                         }
 
                         <TouchableOpacity
-                            style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center',flex:1}}
+                            style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', flex: 1}}
                             onPress={() => this.setOpen(true)}>
                             {
-                                this.state.picturePath?
+                                this.state.picturePath ?
                                     <Image
                                         resizeMode='stretch'
-                                        style={{width:p(40),height:p(40),marginRight:p(10)}}
+                                        style={{width: p(40), height: p(40), marginRight: p(10)}}
                                         source={{uri: config.api.host + this.state.picturePath}}/>
 
-                                    :null
+                                    : null
                             }
                             {
-                                this.state.busTitle?
+                                this.state.busTitle ?
                                     <Text style={styles.headerTitle}>
                                         {this.state.busTitle}
                                     </Text>
@@ -184,9 +187,9 @@ export default class CTwoC extends PureComponent {
                     {/*四个选项界面*/}
                     <ScrollableTabView
                         locked={false}
-                        onChangeTab={(item)=>{
-                            console.log("item",item.i);
-                            if(item.i > 1){
+                        onChangeTab={(item) => {
+                            console.log("item", item.i);
+                            if (item.i > 1) {
                                 this.c2cBuySellFunction(this.state.busTitle);
                             }
                         }}

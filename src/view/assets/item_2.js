@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     StyleSheet,
     View,
@@ -18,13 +18,13 @@ import {
 
 import config from '../../utils/config';
 import p from '../../utils/tranfrom';
-import  request from '../../utils/request';
+import request from '../../utils/request';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 export default class Item_2 extends PureComponent {
     //构建
-    constructor(props){
+    constructor(props) {
         super(props);
         this._dataSource = new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2});
         this.state = {
@@ -35,20 +35,21 @@ export default class Item_2 extends PureComponent {
             hasMore: true,
         }
     }
+
     //真实的DOM渲染出来后调用
     componentDidMount() {
         this.setState({
             coinCode: this.props.coinCode
         }, () => {
-            if(this.props.coinCode === 'CNY'){
+            if (this.props.coinCode === 'CNY') {
                 this.whRMBList();
-            }else{
+            } else {
                 this.getCurrencyWith();
             }
         })
     }
 
-    whRMBList = () =>{
+    whRMBList = () => {
         //地址
         let url = config.api.rmb.rmbFlowing;
         //参数
@@ -58,17 +59,17 @@ export default class Item_2 extends PureComponent {
             offset: 0,
             limit: 10,
         };
-        console.log('entrusURL',url);
+        console.log('entrusURL', url);
         request.post(url, actions).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            request.manyLogin(this.props,responseText);
+            request.manyLogin(this.props, responseText);
 
-            console.log("responseText",responseText);
+            console.log("responseText", responseText);
 
             let data = responseText.obj.rows;
             let listLength = responseText.obj.rows.length;
@@ -79,11 +80,11 @@ export default class Item_2 extends PureComponent {
                 data: data,
             });
 
-            if(listLength < 10 || this.pageIndex * 10 >= responseText.obj.total){
+            if (listLength < 10 || this.pageIndex * 10 >= responseText.obj.total) {
                 this.setState({
                     hasMore: false
                 })
-            }else{
+            } else {
                 this.pageIndex = 2;
             }
         });
@@ -100,15 +101,15 @@ export default class Item_2 extends PureComponent {
                 offset: (this.pageIndex - 1) * 10,
                 limit: 10,
             };
-            console.log('ClosingURL',url);
+            console.log('ClosingURL', url);
             request.post(url, actions).then(responseText => {
 
-                if(responseText.ok){//判断接口是否请求成功
+                if (responseText.ok) {//判断接口是否请求成功
                     console.log('接口请求失败进入失败函数');
                     return;
                 }
 
-                request.manyLogin(this.props,responseText);
+                request.manyLogin(this.props, responseText);
 
                 let listLength = responseText.obj.rows.length;
 
@@ -122,15 +123,15 @@ export default class Item_2 extends PureComponent {
                         data: arr,
                     });
 
-                    if(listLength < 10 || this.pageIndex * 10 >= responseText.obj.total){
+                    if (listLength < 10 || this.pageIndex * 10 >= responseText.obj.total) {
                         this.setState({
                             hasMore: false
                         });
                         this.pageIndex = 1;
-                    }else{
+                    } else {
                         this.pageIndex++;
                     }
-                }else{
+                } else {
                     this.setState({
                         hasMore: false
                     });
@@ -153,12 +154,12 @@ export default class Item_2 extends PureComponent {
 
         request.post(url, actions).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            request.manyLogin(this.props,responseText);
+            request.manyLogin(this.props, responseText);
 
             let data = responseText.obj.rows;
             let listLength = responseText.obj.rows.length;
@@ -169,11 +170,11 @@ export default class Item_2 extends PureComponent {
                 data: data,
             });
 
-            if(listLength < 10 || this.pageIndex * 10 >= responseText.obj.total){
+            if (listLength < 10 || this.pageIndex * 10 >= responseText.obj.total) {
                 this.setState({
                     hasMore: false
                 })
-            }else{
+            } else {
                 this.pageIndex = 2;
             }
         });
@@ -193,12 +194,12 @@ export default class Item_2 extends PureComponent {
 
             request.post(url, actions).then(responseText => {
 
-                if(responseText.ok){//判断接口是否请求成功
+                if (responseText.ok) {//判断接口是否请求成功
                     console.log('接口请求失败进入失败函数');
                     return;
                 }
 
-                request.manyLogin(this.props,responseText);
+                request.manyLogin(this.props, responseText);
 
                 let listLength = responseText.obj.rows.length;
 
@@ -212,16 +213,16 @@ export default class Item_2 extends PureComponent {
                         data: arr,
                     });
 
-                    if(listLength < 10 || this.pageIndex * 10 >= responseText.obj.total){
+                    if (listLength < 10 || this.pageIndex * 10 >= responseText.obj.total) {
                         this.setState({
                             hasMore: false
                         });
 
                         this.pageIndex = 1;
-                    }else{
+                    } else {
                         this.pageIndex++;
                     }
-                }else{
+                } else {
                     this.setState({
                         hasMore: false
                     });
@@ -234,14 +235,14 @@ export default class Item_2 extends PureComponent {
     _renderFooter = () => {
         if (!this.state.hasMore) {
             return (
-                <View style={[styles.loadingMore,{height:this.state.viewType === 0 ? p(50) : p(50)}]}>
+                <View style={[styles.loadingMore, {height: this.state.viewType === 0 ? p(50) : p(50)}]}>
                     <Text style={styles.loadingText}>没有更多数据了</Text>
                 </View>
             )
         }
     };
 
-    render(){
+    render() {
         if (this.state.loadData) {
             return (
                 <View style={{flex: 1, backgroundColor: '#1F2229'}}>
@@ -258,7 +259,7 @@ export default class Item_2 extends PureComponent {
                         <Text style={[styles.textRecord, {width: '22%'}]}>状态</Text>
                     </View>
                     <ListView
-                        horizontal={false }
+                        horizontal={false}
                         dataSource={this.state.dataSource}
                         renderFooter={this._renderFooter}
                         renderRow={this._quotRow}
@@ -272,7 +273,7 @@ export default class Item_2 extends PureComponent {
                     />
                 </View>
             )
-        }else{
+        } else {
             return (
                 <ActivityIndicator
                     animating={true}
@@ -284,43 +285,43 @@ export default class Item_2 extends PureComponent {
     }
 
     feeType = fee => {
-        if(fee !== null && fee !== ""){
-            return(
+        if (fee !== null && fee !== "") {
+            return (
                 <Text style={[styles.textRecord, {width: '22%'}]}>{fee}</Text>
             )
-        }else{
-            return(
+        } else {
+            return (
                 <Text style={[styles.textRecord, {width: '22%'}]}>0.00</Text>
             )
         }
     };
 
     statusType = status => {
-        if(status !== "" || status !== null){
-            if(status === 1){
-                return(
+        if (status !== "" || status !== null) {
+            if (status === 1) {
+                return (
                     <Text style={[styles.textRecord, {width: '22%'}]}>等待</Text>
                 )
-            }else if(status === 2){
-                return(
+            } else if (status === 2) {
+                return (
                     <Text style={[styles.textRecord, {width: '22%'}]}>成功</Text>
                 )
-            }else if(status === 3){
-                return(
+            } else if (status === 3) {
+                return (
                     <Text style={[styles.textRecord, {width: '22%'}]}>失败</Text>
                 )
             }
-        }else{
-            return(
+        } else {
+            return (
                 <Text style={[styles.textRecord, {width: '22%'}]}>审核中</Text>
             )
         }
     };
 
     _quotRow = row => {
-        const { created, transactionMoney, fee, status } = row;
+        const {created, transactionMoney, fee, status} = row;
 
-        return(
+        return (
             <View style={{
                 flexDirection: 'row',
                 padding: p(10),
@@ -328,10 +329,10 @@ export default class Item_2 extends PureComponent {
                 borderBottomColor: '#41484F',
                 alignItems: 'center',
             }}>
-                <View style={{width:'34%', alignItems: 'center'}}>
-                    <Text style={{color:"#D95411"}}>{created}</Text>
+                <View style={{width: '34%', alignItems: 'center'}}>
+                    <Text style={{color: "#D95411"}}>{created}</Text>
                 </View>
-                <Text style={[styles.textRecord,{width:'22%'}]}>{transactionMoney}</Text>
+                <Text style={[styles.textRecord, {width: '22%'}]}>{transactionMoney}</Text>
                 {this.feeType(fee)}
                 {this.statusType(status)}
             </View>
@@ -340,19 +341,19 @@ export default class Item_2 extends PureComponent {
 }
 
 const styles = StyleSheet.create({
-    textViewTop:{
+    textViewTop: {
         color: '#ACB3B9',
         marginLeft: p(8),
     },
-    quotView:{
+    quotView: {
         padding: p(20),
         borderWidth: StyleSheet.hairlineWidth,
         borderColor: '#313840',
     },
-    textFont:{
+    textFont: {
         color: '#FFFFFF',
     },
-    textRecord:{
+    textRecord: {
         color: '#ACB3B9',
         textAlign: 'center',
     },

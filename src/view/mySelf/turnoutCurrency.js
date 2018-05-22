@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     View,
     Text,
@@ -18,13 +18,13 @@ import {
     Image
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import Toast, { DURATION } from 'react-native-easy-toast';
-import { connect } from 'react-redux';
+import Toast, {DURATION} from 'react-native-easy-toast';
+import {connect} from 'react-redux';
 
 import p from '../../utils/tranfrom';
 import config from '../../utils/config';
 import request from '../../utils/request';
-import { InitUserInfo } from '../../store/actions/HomeAction';
+import {InitUserInfo} from '../../store/actions/HomeAction';
 import CheckModal from '../../components/checkModal';
 import Loading from '../../components/loading';
 import SelectApp from '../../components/selectApp';
@@ -35,36 +35,37 @@ class TurnoutCurrency extends PureComponent {
         super(props);
         // 初始状态
         this.state = {
-            intoData:'',
+            intoData: '',
             addressList: [],
-            btcKey:null,
-            telephone:'133****9449',
-            coinType:null,
-            accountpwSmsCode:null,
-            accountPassWord:null,
-            btcNum:null,
+            btcKey: null,
+            telephone: '133****9449',
+            coinType: null,
+            accountpwSmsCode: null,
+            accountPassWord: null,
+            btcNum: null,
             checkCodeText: "获取验证码",
             codeStyle: styles.codeObtain,
             codeSent: true,
-            timeId:'',
-            isCheckCode:false,
-            turFee:0,
-            minTur:1,
-            maxTur:1000000,
-            feeTur:0,
-            actualTur:0,
-            guDingTur:0,
-            rateType:1,
-            checkOpen:false,
-            type:0,
-            valicode:null,
-            user:null,
-            visible:false
+            timeId: '',
+            isCheckCode: false,
+            turFee: 0,
+            minTur: 1,
+            maxTur: 1000000,
+            feeTur: 0,
+            actualTur: 0,
+            guDingTur: 0,
+            rateType: 1,
+            checkOpen: false,
+            type: 0,
+            valicode: null,
+            user: null,
+            visible: false
         };
     }
+
     //真实的结构渲染出来后调用
     componentDidMount() {
-        const { params } = this.props.navigation.state;
+        const {params} = this.props.navigation.state;
 
         this.setState({
             intoData: params.intoData,
@@ -75,6 +76,7 @@ class TurnoutCurrency extends PureComponent {
         this.getJumCode();
         this.getTurCost(params.intoData.coinCode);
     }
+
     //组件被移除之后调用
     componentWillUnmount() {
         clearInterval(this.state.timeId);
@@ -82,27 +84,27 @@ class TurnoutCurrency extends PureComponent {
 
     getJumCode = () => {
         this.setState({
-            visible:true
+            visible: true
         });
 
         let url = config.api.currency.jumpCoin;
 
         request.post(url).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            request.manyLogin(this.props,responseText);
-            const { obj } = responseText;
-            const { list2 } = obj;
+            request.manyLogin(this.props, responseText);
+            const {obj} = responseText;
+            const {list2} = obj;
             let data = list2;
             let addressList = [];
 
-            for(let i=0;i<data.length;i++){
-                const { currencyType } = data[i];
-                if(this.state.coinType === currencyType){
+            for (let i = 0; i < data.length; i++) {
+                const {currencyType} = data[i];
+                if (this.state.coinType === currencyType) {
                     let item = {
                         text: data[i].publicKey,
                         value: data[i].publicKey,
@@ -126,14 +128,14 @@ class TurnoutCurrency extends PureComponent {
 
         request.post(url).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            request.manyLogin(this.props,responseText);
-            const { obj } = responseText;
-            const { paceFeeRate, leastPaceNum, oneDayPaceNum } = obj;
+            request.manyLogin(this.props, responseText);
+            const {obj} = responseText;
+            const {paceFeeRate, leastPaceNum, oneDayPaceNum} = obj;
 
             let fee = obj[1] ? obj[1].split(",")[0] : 0;
 
@@ -147,60 +149,61 @@ class TurnoutCurrency extends PureComponent {
         })
     };
 
-    currencyOut =() =>{
-        const { toast } = this.refs;
+    currencyOut = () => {
+        const {toast} = this.refs;
 
         if (null === this.state.btcKey || '' === this.state.btcKey) {
             toast.show('请选择钱包地址', DURATION.LENGTH_SHORT);
             return;
         }
 
-        if(isNaN(this.state.btcNum)){
+        if (isNaN(this.state.btcNum)) {
             toast.show('转出数量只能是数字', DURATION.LENGTH_SHORT);
             return;
         }
 
-        if(this.state.btcNum <= 0){
+        if (this.state.btcNum <= 0) {
             toast.show('转出数量必须大于0', DURATION.LENGTH_SHORT);
             return;
         }
 
-        if(parseFloat(this.state.btcNum) > parseFloat(this.state.intoData.hotMoney)){
+        if (parseFloat(this.state.btcNum) > parseFloat(this.state.intoData.hotMoney)) {
             toast.show('提现币不能大于可用币', DURATION.LENGTH_SHORT);
             return;
         }
-        if(this.state.btcNum < this.state.minTur){
-            toast.show('单笔下单的数量小于最小下单数量'+this.state.minTur, DURATION.LENGTH_SHORT);
+        if (this.state.btcNum < this.state.minTur) {
+            toast.show('单笔下单的数量小于最小下单数量' + this.state.minTur, DURATION.LENGTH_SHORT);
             return;
         }
-        if(this.state.btcNum > this.state.maxTur){
-            toast.show('单日转出最大限额'+this.state.maxTur+'个币', DURATION.LENGTH_SHORT);
+        if (this.state.btcNum > this.state.maxTur) {
+            toast.show('单日转出最大限额' + this.state.maxTur + '个币', DURATION.LENGTH_SHORT);
             return;
         }
 
         let url = `${config.api.currency.getbtc}?coinType=${this.state.coinType}&btcNum=${this.state.btcNum}&btcKey=${this.state.btcKey}&pacecurrecy=${this.state.feeTur}`;
 
-        if(this.state.valicode != null){
+        if (this.state.valicode != null) {
             url += `&valicode=${this.state.valicode}`;
         }
 
         request.post(url).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 toast.show('接口请求失败', DURATION.LENGTH_SHORT);
                 return;
             }
 
-            request.manyLogin(this.props,responseText);
-            const { obj, msg, success } = responseText;
+            request.manyLogin(this.props, responseText);
+            const {obj, msg, success} = responseText;
 
-            if(success){
+            if (success) {
                 Alert.alert(
                     '提示',
                     '转出申请成功',
-                    [{text: '确认', onPress: () => {
-                            const { dispatch } = this.props;
+                    [{
+                        text: '确认', onPress: () => {
+                            const {dispatch} = this.props;
                             dispatch(InitUserInfo(this.props));
                             const {params} = this.props.navigation.state;
                             params.pullTurnout();
@@ -208,10 +211,10 @@ class TurnoutCurrency extends PureComponent {
                         }
                     }]
                 );
-            }else{
-                if(obj){
+            } else {
+                if (obj) {
                     this.toCheck(responseText);
-                }else{
+                } else {
                     this.setState({
                         valicode: null,
                         checkOpen: false,
@@ -223,61 +226,64 @@ class TurnoutCurrency extends PureComponent {
         })
     };
 
-    withdrawCurrency = code =>{
+    withdrawCurrency = code => {
         this.setState({
             valicode: code,
             checkOpen: false,
-        },() => {
+        }, () => {
             this.currencyOut();
         });
     };
 
     toCheck = responseText => {
-        const { obj } = responseText;
-        const { phone_googleState, phoneState, googleState } = obj;
+        const {obj} = responseText;
+        const {phone_googleState, phoneState, googleState} = obj;
 
-        if(phone_googleState === 1){
+        if (phone_googleState === 1) {
             this.setState({
                 checkOpen: true,
                 type: 2,
                 user: obj,
             })
-        }else if(phoneState === 1 && googleState === 0){
+        } else if (phoneState === 1 && googleState === 0) {
             //手机认证
             this.setState({
                 checkOpen: true,
                 type: 0,
                 user: obj
             })
-        }else if(phoneState === 0 && googleState === 1){
+        } else if (phoneState === 0 && googleState === 1) {
             //谷歌认证
             this.setState({
                 checkOpen: true,
                 type: 1,
                 user: obj
             })
-        }else{
+        } else {
             this.withdrawCurrency();
         }
     };
 
     _click = () => {
         this.setState({
-            checkOpen:false,
+            checkOpen: false,
         });
     };
+
     // 渲染
     render() {
-        const { numInput } = this.refs;
+        const {numInput} = this.refs;
         return (
             <View style={styles.defaultView}>
                 {/*标题组件*/}
                 <View style={styles.header}>
-                    <TouchableOpacity onPress={() =>{this.props.navigation.goBack()}}>
+                    <TouchableOpacity onPress={() => {
+                        this.props.navigation.goBack()
+                    }}>
                         <Icon
                             name="ios-arrow-back-outline" size={25}
                             color='#fff'
-                            style={{paddingHorizontal:p(20)}}
+                            style={{paddingHorizontal: p(20)}}
                         />
                     </TouchableOpacity>
                     <Text style={styles.headerTitle}>转出{this.state.coinType}</Text>
@@ -287,18 +293,18 @@ class TurnoutCurrency extends PureComponent {
                 </View>
 
                 <View style={styles.blockSty}>
-                    <View style={{marginLeft:p(20)}}>
+                    <View style={{marginLeft: p(20)}}>
                         {/*可用的币*/}
                         <Text style={styles.textPrice}>
                             可用{this.state.coinType}：
-                            <Text style={{color:'#018F67'}}>
+                            <Text style={{color: '#018F67'}}>
                                 {this.state.intoData.hotMoney}
                             </Text>
                         </Text>
                         {/*冻结的币*/}
                         <Text style={styles.textPrice}>
                             冻结{this.state.coinType}：
-                            <Text style={{color:'#F6574D'}}>
+                            <Text style={{color: '#F6574D'}}>
                                 {this.state.intoData.coldMoney}
                             </Text>
                         </Text>
@@ -325,7 +331,10 @@ class TurnoutCurrency extends PureComponent {
                     </View>
                     {/*币账户管理*/}
                     <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate("Address", {getJumCode: this.getJumCode, jumType: 1})}
+                        onPress={() => this.props.navigation.navigate("Address", {
+                            getJumCode: this.getJumCode,
+                            jumType: 1
+                        })}
                         style={{flexDirection: 'row', alignItems: 'center', marginLeft: p(2)}}
                     >
                         <Text style={styles.inputText}/>
@@ -348,8 +357,8 @@ class TurnoutCurrency extends PureComponent {
                             selectionColor={"#D95411"}
                             value={this.state.btcNum}
                             style={styles.inputTextView}
-                            onChangeText={text =>{
-                                if(text === "" || text == null || /\s/.exec(text) != null || isNaN(text)){
+                            onChangeText={text => {
+                                if (text === "" || text == null || /\s/.exec(text) != null || isNaN(text)) {
                                     text = 0;
                                 }
                                 let turNum = parseFloat(text);
@@ -375,7 +384,7 @@ class TurnoutCurrency extends PureComponent {
                     }
                 </View>
                 {/*确认转账*/}
-                <View style={{marginHorizontal:p(20)}}>
+                <View style={{marginHorizontal: p(20)}}>
                     <TouchableOpacity
                         onPress={this.currencyOut}
                         activeOpacity={.8}
@@ -386,9 +395,10 @@ class TurnoutCurrency extends PureComponent {
                             margin: p(10),
                             alignItems: 'center',
                             justifyContent: 'center',
-                            borderRadius: p(10)}}
+                            borderRadius: p(10)
+                        }}
                     >
-                        <Text style={{color:'#fff',fontSize:p(28)}}>确认转出</Text>
+                        <Text style={{color: '#fff', fontSize: p(28)}}>确认转出</Text>
                     </TouchableOpacity>
                     {/*说明*/}
                     <View style={{
@@ -396,7 +406,8 @@ class TurnoutCurrency extends PureComponent {
                         borderColor: 'transparent',
                         borderRadius: p(5),
                         backgroundColor: 'transparent',
-                        margin: p(10)}}
+                        margin: p(10)
+                    }}
                     >
                         <Text style={styles.promptText}>转出说明：</Text>
                         <Text style={styles.promptText}>
@@ -410,9 +421,9 @@ class TurnoutCurrency extends PureComponent {
                 {/*弹出窗*/}
                 <Toast
                     ref="toast"
-                    style={{backgroundColor:'rgba(0,0,0,.6)'}}
+                    style={{backgroundColor: 'rgba(0,0,0,.6)'}}
                     position='top'
-                    textStyle={{color:'white'}}
+                    textStyle={{color: 'white'}}
                 />
                 {/*加载特效组件*/}
                 <Loading visible={this.state.visible}/>
@@ -470,12 +481,12 @@ let styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#1F2228'
     },
-    inputText:{
+    inputText: {
         color: 'white',
         paddingLeft: p(20),
         width: p(180),
     },
-    inputTextView:{
+    inputTextView: {
         alignItems: 'center',
         justifyContent: 'center',
         marginLeft: p(6),
@@ -485,20 +496,20 @@ let styles = StyleSheet.create({
         paddingLeft: p(10),
         color: '#FFF',
     },
-    reWithView:{
+    reWithView: {
         flexDirection: 'row',
         alignItems: 'center',
         height: p(80)
     },
-    promptText:{
+    promptText: {
         color: '#B0B0B0',
         fontSize: p(22),
     },
-    textPrice:{
+    textPrice: {
         color: '#FFFFFF',
         marginVertical: p(10)
     },
-    codeObtain:{
+    codeObtain: {
         backgroundColor: "#D95411",
         color: 'white',
         marginRight: p(20),
@@ -506,7 +517,7 @@ let styles = StyleSheet.create({
         textAlign: 'center',
         paddingHorizontal: p(12),
     },
-    codeFalse:{
+    codeFalse: {
         backgroundColor: "#929BA1",
         color: 'white',
         marginRight: p(20),
@@ -517,7 +528,7 @@ let styles = StyleSheet.create({
 });
 
 export default connect((state) => {
-    const { HomeReducer } = state;
+    const {HomeReducer} = state;
     return {
         HomeReducer
     }

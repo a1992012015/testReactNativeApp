@@ -7,7 +7,7 @@
 'use strict';
 
 import React from 'react'
-import { StackNavigator } from 'react-navigation';
+import {StackNavigator} from 'react-navigation';
 
 import App from './view/main/app';
 import TabBar from './view/main/tabBar';
@@ -21,11 +21,11 @@ import Login from './view/login';
 import ForgotPass from './view/login/forgotPass';
 import SignUp from './view/login/signUp';
 import MyNews from './view/mySelf/myNews';
-import MySetUp from './view/mySelf/mySetUp';
-import RealAuthentications_1 from './view/mySelf/realAuthentication_1';
-import RealAuthentications_2 from './view/mySelf/realAuthentication_2';
-import LoginPass from "./view/mySelf/loginPass";
-import TransPassword from "./view/mySelf/transPassword";
+import MySetUp from './view/mySelf/settings/mySetUp';
+import RealAuthentications_1 from './view/mySelf/settings/realAuthentication_1';
+import RealAuthentications_2 from './view/mySelf/settings/realAuthentication_2';
+import LoginPass from "./view/mySelf/settings/loginPass";
+import TransPassword from "./view/mySelf/settings/transPassword";
 import IntoCurrencyList from "./view/mySelf/intoCurrencyList";
 import IntoCurrency from "./view/mySelf/intoCurrency";
 import TurnoutCurrencyList from "./view/mySelf/turnoutCurrencyList";
@@ -47,50 +47,49 @@ import TransQuotation from "./view/lobby/transQuotation";
 
 const routeConfiguration = {
     /*入口*/
-    App: { screen: App },
+    App: {screen: App},
     /*底部标签*/
-    TabBar: { screen: TabBar },
-    //底部TAB对应的页面
+    TabBar: {screen: TabBar},
     /*首页*/
-    Home: { screen: Home },
+    Home: {screen: Home},
     /*交易大厅*/
-    Lobby: { screen: Lobby },
-    TransQuotation: { screen: TransQuotation },
+    Lobby: {screen: Lobby},
+    TransQuotation: {screen: TransQuotation},//交易详情页面
     /*个人资产*/
-    Assets: { screen: Assets },
-    CodeBillFlow: { screen: CodeBillFlow },
+    Assets: {screen: Assets},
+    CodeBillFlow: {screen: CodeBillFlow},//账单页面
     /*CTowC*/
-    CTowC: { screen: CTowC },
+    CTowC: {screen: CTowC},
     /*新闻页面*/
-    Notice: { screen: Notice },
-    ConsDetail: { screen: ConsDetail },
+    Notice: {screen: Notice},
+    ConsDetail: {screen: ConsDetail},//公告详细信息
     /*个人中心*/
-    MySelf: { screen: MySelf },
-    MyNews: { screen: MyNews },
-    MySetUp: { screen: MySetUp },
-    RealAuthentications_1: { screen: RealAuthentications_1 },//实名制填写页面
-    RealAuthentications_2: { screen: RealAuthentications_2 },//实名制反馈页面
-    LoginPass: { screen: LoginPass },
-    TransPassword: { screen: TransPassword },
-    IntoCurrencyList: { screen: IntoCurrencyList },
-    IntoCurrency: { screen: IntoCurrency },
-    TurnoutCurrencyList: { screen: TurnoutCurrencyList },
-    TurnoutCurrency: { screen: TurnoutCurrency },
-    TurnoutCurrencyQRList: { screen: TurnoutCurrencyQRList },
-    TurnoutCurrencyQR: { screen: TurnoutCurrencyQR },
-    Entrusted: { screen: Entrusted },
-    ClosingRecord: { screen: ClosingRecord },
-    CurrencyRen: { screen: CurrencyRen },
-    CurrencyWith: { screen: CurrencyWith },
-    Address: { screen: Address },
-    AddAddress: { screen: AddAddress },
-    BankCard: { screen: BankCard },
-    AddBankCard: { screen: AddBankCard },
-    Recommend: { screen: Recommend },
+    MySelf: {screen: MySelf},
+    MyNews: {screen: MyNews},//个人消息
+    MySetUp: {screen: MySetUp},//个人设置
+    RealAuthentications_1: {screen: RealAuthentications_1},//实名制填写页面
+    RealAuthentications_2: {screen: RealAuthentications_2},//实名制反馈页面
+    LoginPass: {screen: LoginPass},
+    TransPassword: {screen: TransPassword},
+    IntoCurrencyList: {screen: IntoCurrencyList},
+    IntoCurrency: {screen: IntoCurrency},
+    TurnoutCurrencyList: {screen: TurnoutCurrencyList},
+    TurnoutCurrency: {screen: TurnoutCurrency},
+    TurnoutCurrencyQRList: {screen: TurnoutCurrencyQRList},
+    TurnoutCurrencyQR: {screen: TurnoutCurrencyQR},
+    Entrusted: {screen: Entrusted},
+    ClosingRecord: {screen: ClosingRecord},
+    CurrencyRen: {screen: CurrencyRen},
+    CurrencyWith: {screen: CurrencyWith},
+    Address: {screen: Address},
+    AddAddress: {screen: AddAddress},
+    BankCard: {screen: BankCard},
+    AddBankCard: {screen: AddBankCard},
+    Recommend: {screen: Recommend},
     /*登陆*/
-    Login: { screen: Login },
-    ForgotPass: { screen: ForgotPass },
-    SignUp: { screen: SignUp },
+    Login: {screen: Login},
+    ForgotPass: {screen: ForgotPass},
+    SignUp: {screen: SignUp},
 };
 
 const stackNavigatorConfiguration = {

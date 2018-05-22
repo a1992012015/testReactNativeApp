@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react'
+import React, {PureComponent} from 'react'
 import {
     View,
     Text,
@@ -21,11 +21,12 @@ import p from '../utils/tranfrom';
 import config from '../utils/config';
 import request from '../utils/request';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 export default class RollingCaption extends PureComponent {
 
     static defaultProps = {};
+
     // 构造
     constructor(props) {
         super(props);
@@ -35,6 +36,7 @@ export default class RollingCaption extends PureComponent {
             isLoading: false,
         };
     }
+
     //真实的DOM被渲染出来后调用
     componentDidMount() {
         //地址
@@ -49,12 +51,12 @@ export default class RollingCaption extends PureComponent {
 
         request.post(url, actions).then(response => {
 
-            if(response.ok){//判断接口是否请求成功
+            if (response.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
-            //console.log('获取公告信息=>', response);
-            const { obj } = response;
+            console.log('获取公告信息=>', response);
+            const {obj} = response;
             this.setState({
                 articleList: obj,
                 isLoading: true,
@@ -63,9 +65,10 @@ export default class RollingCaption extends PureComponent {
             console.log('进入失败函数=>', error)
         });
     }
+
     //点击信息函数跳转到具体的公告
     newsDetail = id => {
-        let url = config.api.index.articleContent;
+        /*let url = config.api.index.articleContent;
         //参数
         const actions = {
             type : id,
@@ -79,20 +82,25 @@ export default class RollingCaption extends PureComponent {
             }
 
             const { obj } = response;
-            this.props.navigation.navigate('consDetail', {content: obj.content,title: obj.title, ...this.props})
-        }).catch(error => {
+            console.log(this.state.articleList);*/
+
+        const obj = this.state.articleList[id];
+        console.log(obj);
+
+        this.props.navigation.navigate('ConsDetail', {content: obj.content, title: obj.title, ...this.props})
+        /*}).catch(error => {
             console.log('进入失败函数=>', error)
-        });
+        });*/
     };
 
     render() {
-        const { articleList, isLoading } = this.state;
+        const {articleList, isLoading} = this.state;
 
         if (isLoading) {
             return (
                 <View style={styles.allViewStyle}>
                     <View style={{flexDirection: 'row', justifyContent: 'center', paddingHorizontal: 10}}>
-                        <View style={{justifyContent: 'center',paddingVertical:p(20),paddingRight:p(20)}}>
+                        <View style={{justifyContent: 'center', paddingVertical: p(20), paddingRight: p(20)}}>
                             <Image
                                 source={require('../static/home/lg.png')}
                                 style={{width: 20, height: 20, resizeMode: 'stretch'}}
@@ -106,7 +114,7 @@ export default class RollingCaption extends PureComponent {
                                 articleList.map((item, index) => {
                                     return (
                                         <TouchableOpacity
-                                            onPress={()=>this.newsDetail(item.id)}
+                                            onPress={() => this.newsDetail(index)}
                                             key={index}
                                             style={{justifyContent: 'center', height: 39}}
                                         >
@@ -120,7 +128,7 @@ export default class RollingCaption extends PureComponent {
                 </View>
             )
         } else {
-            return <View />
+            return <View/>
         }
 
     }

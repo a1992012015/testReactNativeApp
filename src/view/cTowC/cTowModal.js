@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react'
+import React, {PureComponent} from 'react'
 import {
     Dimensions,
     StyleSheet,
@@ -20,11 +20,12 @@ import Modal from 'react-native-modalbox';
 import p from '../../utils/tranfrom';
 import config from '../../utils/config';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 export default class CTowModal extends PureComponent {
 
     static defaultProps = {};
+
     // 构造
     constructor(props) {
         super(props);
@@ -36,26 +37,29 @@ export default class CTowModal extends PureComponent {
             coinLength: 5,
         };
     }
+
     //组件接收到新的props时调用
     componentWillReceiveProps(props) {
-        let { isOpen, coinAccount, coinAccountList } = props;
+        let {isOpen, coinAccount, coinAccountList} = props;
         this.setState({
             isOpen: isOpen,
             coinAccount: coinAccount,
             coinAccountList: coinAccountList,
         });
     }
+
     /*选择币种*/
-    ListClick = (item)=>{
+    ListClick = (item) => {
         this.props.setOpen(false);
-        this.props.setItemText(item,'');
+        this.props.setItemText(item, '');
     };
 
     render() {
         let {isOpen} = this.state;
 
         return (
-            <Modal style={[styles.modal, styles.modal3, {height:this.state.coinAccount ?
+            <Modal style={[styles.modal, styles.modal3, {
+                height: this.state.coinAccount ?
                     p(200 * Math.ceil(this.state.coinAccount.length / 4))
                     :
                     p(200)
@@ -64,7 +68,7 @@ export default class CTowModal extends PureComponent {
                    entry="top"
                    swipeToClose={false}
                    animationDuration={0}
-                   onClosed={()=>this.props.setOpen(false)}
+                   onClosed={() => this.props.setOpen(false)}
                    isOpen={isOpen}>
                 <View style={styles.ViewStyle}>
                     {
@@ -92,19 +96,19 @@ export default class CTowModal extends PureComponent {
 }
 
 const styles = StyleSheet.create({
-    touchableOpacity:{
-        width:width/4,
-        alignItems:'center',
-        marginTop:p(30)
+    touchableOpacity: {
+        width: width / 4,
+        alignItems: 'center',
+        marginTop: p(30)
     },
-    ViewStyle:{
-        alignItems:'center',
-        width:width,
+    ViewStyle: {
+        alignItems: 'center',
+        width: width,
         flexDirection: 'row',
         flexWrap: 'wrap'
     },
     modal: {
-        marginTop:p(120)
+        marginTop: p(120)
     },
     modal3: {
         width: width

@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     Dimensions,
     StyleSheet,
@@ -15,14 +15,14 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import Swiper from 'react-native-swiper';
-import { connect } from 'react-redux';
-import { StackActions, NavigationActions } from 'react-navigation';
+import {connect} from 'react-redux';
+import {StackActions, NavigationActions} from 'react-navigation';
 
-import { START_PAGE_DATA } from '../../store/actions/ActionTypes';
+import {START_PAGE_DATA} from '../../store/actions/ActionTypes';
 import appUrl from '../../utils/urlConfig';
 import p from '../../utils/tranfrom';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 class FirstStart extends PureComponent {
     // 构造
@@ -30,26 +30,28 @@ class FirstStart extends PureComponent {
         super(props);
         // 初始状态
     }
+
     //首次启动app点击最后一张图片的操作函数
     _toLogin = () => {
         console.log('进入函数');
 
-        const { dispatch, navigation } = this.props;
+        const {dispatch, navigation} = this.props;
 
-        dispatch({ type: START_PAGE_DATA });
+        dispatch({type: START_PAGE_DATA});
 
         const resetAction = StackActions.reset({
             index: 0,
-            actions: [NavigationActions.navigate({ routeName: 'TabBar' })],
+            actions: [NavigationActions.navigate({routeName: 'TabBar'})],
         });
 
         navigation.dispatch(resetAction);
     };
+
     // 渲染
     render() {
-        const { wrapper, dot, activeDot, btnStyle, page } = styles;
+        const {wrapper, dot, activeDot, btnStyle, page} = styles;
         return (
-            <View style={{flex:1}}>
+            <View style={{flex: 1}}>
                 <Swiper autoplay={false}
                         style={wrapper}
                         height={height}
@@ -59,11 +61,11 @@ class FirstStart extends PureComponent {
                         loop={false}
                 >
                     {
-                        appUrl.api.guideImage.map((item,index)=>{
-                            return(
+                        appUrl.api.guideImage.map((item, index) => {
+                            return (
                                 <View key={index}>
                                     {
-                                        appUrl.api.guideImage.length-1 === index?//当是最后一张图片的时候则添加点击事件
+                                        appUrl.api.guideImage.length - 1 === index ?//当是最后一张图片的时候则添加点击事件
                                             <TouchableOpacity
                                                 activeOpacity={1}
                                                 onPress={this._toLogin}
@@ -109,7 +111,7 @@ const styles = StyleSheet.create({
 });
 
 export default connect((state) => {
-    const { StartPage } = state;
+    const {StartPage} = state;
     return {
         StartPage,
     }

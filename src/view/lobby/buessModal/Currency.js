@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react'
+import React, {PureComponent} from 'react'
 import {
     Text,
     Image,
@@ -18,26 +18,28 @@ import {
 import p from '../../../utils/tranfrom';
 import config from '../../../utils/config';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 export default class Currency extends PureComponent {
 
     static defaultProps = {};
+
     // 构造
     constructor(props) {
         super(props);
         // 初始状态
         this.state = {
-            currDate:[]
+            currDate: []
         };
 
     }
+
     //接收到一个新的props之后调用
     componentWillReceiveProps(props) {
-        let { currList } = props;
+        let {currList} = props;
 
         this.setState({
-            currDate:currList
+            currDate: currList
         })
     }
 
@@ -64,14 +66,16 @@ export default class Currency extends PureComponent {
 
     renderCurrency = ({item}) => {
         let value = item.value;
-        return(
+        return (
             <TouchableOpacity
-                onPress={() => {this.ListClick(value.coinCode)}}
-                style={{justifyContent:'center',alignItems:'center',width:width*.24, paddingTop:p(20)}}
+                onPress={() => {
+                    this.ListClick(value.coinCode)
+                }}
+                style={{justifyContent: 'center', alignItems: 'center', width: width * .24, paddingTop: p(20)}}
             >
                 <Image
-                    style={{width:p(60),height:p(60)}}
-                    source={{uri:config.api.host+value.picturePath}}
+                    style={{width: p(60), height: p(60)}}
+                    source={{uri: config.api.host + value.picturePath}}
                 />
                 <Text numberOfLines={1}>{value.name}</Text>
             </TouchableOpacity>

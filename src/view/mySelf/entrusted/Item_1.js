@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     StyleSheet,
     View,
@@ -16,7 +16,7 @@ import {
     FlatList,
     Alert
 } from 'react-native';
-import Toast, { DURATION } from 'react-native-easy-toast';
+import Toast, {DURATION} from 'react-native-easy-toast';
 
 import config from '../../../utils/config';
 import p from '../../../utils/tranfrom';
@@ -24,25 +24,26 @@ import request from '../../../utils/request';
 import I18n from '../../../utils/i18n';
 import Loading from '../../../components/loading';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 export default class Item_1 extends PureComponent {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
-            initItem:'',
-            initId:'0',
-            data:true,
-            isLogin:false,
-            member:null,
-            tranDate:null,
-            killData:[],
-            balance:true,
-            visible:true,
-            offset:0,
-            total:10
+            initItem: '',
+            initId: '0',
+            data: true,
+            isLogin: false,
+            member: null,
+            tranDate: null,
+            killData: [],
+            balance: true,
+            visible: true,
+            offset: 0,
+            total: 10
         }
     }
+
     //真实结构被渲染出来后调用
     componentDidMount() {
 
@@ -52,32 +53,32 @@ export default class Item_1 extends PureComponent {
     entrustList = () => {
         this.setState({
             visible: true,
-            killData:[],
-            offset:0
+            killData: [],
+            offset: 0
         }, () => {
             let url = `${config.api.trades.list}current&limit=10&offset=0&typeone=0&sortOrder=asc&querypath=enter`;
-            const { toast } = this.refs;
+            const {toast} = this.refs;
 
             request.post(url).then(responseText => {
 
-                if(responseText.ok){//判断接口是否请求成功
+                if (responseText.ok) {//判断接口是否请求成功
                     console.log('接口请求失败进入失败函数');
                     toast.show('接口请求失败', DURATION.LENGTH_SHORT);
                     return;
                 }
 
                 this.setState({
-                    visible:false
+                    visible: false
                 });
 
-                request.manyLogin(this.props,responseText);
+                request.manyLogin(this.props, responseText);
 
-                const { obj } = responseText;
+                const {obj} = responseText;
 
                 let kill = [];
 
-                if(obj.rows.length > 0){
-                    obj.rows.map((item,index)=>{
+                if (obj.rows.length > 0) {
+                    obj.rows.map((item, index) => {
                         kill.push({
                             key: index,
                             value: item
@@ -93,9 +94,9 @@ export default class Item_1 extends PureComponent {
                         total: obj.total,
                         offset: offsets,
                     })
-                }else{
+                } else {
                     this.setState({
-                        balance:false
+                        balance: false
                     })
                 }
 
@@ -109,38 +110,38 @@ export default class Item_1 extends PureComponent {
         });
     };
 
-    reachedKill = () =>{
+    reachedKill = () => {
         let offsetValue = this.state.offset * 10;
-        if(offsetValue > this.state.total){
+        if (offsetValue > this.state.total) {
             return;
         }
 
-        const { toast } = this.refs;
+        const {toast} = this.refs;
 
         let url = `${config.api.trades.list}current&limit=10&offset=${offsetValue}&typeone=0&sortOrder=asc&querypath=enter`;
 
         request.post(url).then(responseText => {
 
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 toast.show('接口请求失败', DURATION.LENGTH_SHORT);
                 return;
             }
 
-            request.manyLogin(this.props,responseText);
+            request.manyLogin(this.props, responseText);
 
             this.setState({
-                visible:false,
+                visible: false,
             });
 
-            const { obj } = responseText;
+            const {obj} = responseText;
 
-            if(obj){
+            if (obj) {
                 let rows = obj.rows;
                 let kill = [];
-                if(rows.length > 0){
-                    rows.map((item,index)=>{
+                if (rows.length > 0) {
+                    rows.map((item, index) => {
                         kill.push({
                             key: offsetValue + index,
                             value: item
@@ -157,7 +158,7 @@ export default class Item_1 extends PureComponent {
                         killData: arr,
                         offset: offsets
                     })
-                }else{
+                } else {
                     this.setState({
                         balance: false
                     })
@@ -174,7 +175,7 @@ export default class Item_1 extends PureComponent {
     };
 
     renderEmpty = () => {
-        return(
+        return (
             <View style={styles.viewStyle3}>
                 {
                     !this.state.visible ?
@@ -188,8 +189,8 @@ export default class Item_1 extends PureComponent {
         )
     };
 
-    render(){
-        return(
+    render() {
+        return (
             <View style={{minHeight: height * .8, backgroundColor: '#1F2229'}}>
                 <View style={{
                     flexDirection: 'row',
@@ -207,7 +208,7 @@ export default class Item_1 extends PureComponent {
                     <Text style={[styles.textRecord, {flex: 1}]}>操作</Text>
                 </View>
                 <FlatList
-                    style={{marginBottom:  p(10)}}
+                    style={{marginBottom: p(10)}}
                     horizontal={false}
                     data={this.state.killData}
                     renderItem={this.renderKillRow}
@@ -221,7 +222,7 @@ export default class Item_1 extends PureComponent {
                     ref="toast"
                     style={{backgroundColor: 'rgba(0,0,0,.6)'}}
                     position='top'
-                    textStyle={{color:'white'}}
+                    textStyle={{color: 'white'}}
                 />
                 <Loading visible={this.state.visible}/>
             </View>
@@ -231,34 +232,34 @@ export default class Item_1 extends PureComponent {
     /**
      * 刷新数据
      */
-    refreshKill = () =>{
+    refreshKill = () => {
         let offsetValue = this.state.offset * 10;
 
         let url = `${config.api.trades.list}current&limit=${offsetValue}&offset=0&typeone=${this.state.initId}&sortOrder=asc&querypath=enter`;
-        const { toast } = this.refs;
+        const {toast} = this.refs;
 
         request.post(url).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 toast.show('接口请求失败', DURATION.LENGTH_SHORT);
                 return;
             }
 
 
-            request.manyLogin(this.props,responseText);
+            request.manyLogin(this.props, responseText);
 
             this.setState({
                 visible: false,
             });
 
-            const { obj } = responseText;
+            const {obj} = responseText;
 
-            if(obj){
+            if (obj) {
                 let rows = obj.rows;
                 let kill = [];
-                if(rows.length > 0){
-                    rows.map((item,index)=>{
+                if (rows.length > 0) {
+                    rows.map((item, index) => {
                         kill.push({
                             key: index,
                             value: item,
@@ -269,7 +270,7 @@ export default class Item_1 extends PureComponent {
                         killData: kill,
                         total: obj.total,
                     })
-                }else{
+                } else {
                     this.setState({
                         balance: false,
                         killData: []
@@ -287,79 +288,83 @@ export default class Item_1 extends PureComponent {
 
 
     //撤销委托
-    revokeKill=(item)=>{
+    revokeKill = (item) => {
         Alert.alert('温馨提醒', '是否撤销委托', [
-            {text: '取消', onPress: () => {}},
-            {text: '确定', onPress: () => {
-                this.setState({
-                    visible:true
-                });
-
-                const { type, fixPriceCoinCode, coinCode, entrustPrice, entrustNum } = item;
-                const { toast } = this.refs;
-
-                let url = `${config.api.trades.cancelExEntrust}?type=${type}&fixPriceCoinCode=${fixPriceCoinCode}&coinCode=${coinCode}&entrustPrice=${entrustPrice}&entrustNums=${entrustNum}`;
-
-                request.post(url).then(responseText => {
-
-                    if(responseText.ok){//判断接口是否请求成功
-                        console.log('接口请求失败进入失败函数');
-                        toast.show('接口请求失败', DURATION.LENGTH_SHORT);
-                        return;
-                    }
-
-                    const { msg, success } = responseText;
-
-                    request.manyLogin(this.props,responseText);
-                    toast.show(msg, DURATION.LENGTH_SHORT);
-                    if(success){
-                        this.refreshKill();
-                    }
-                }).catch((error) => {
-                    console.log('进入失败函数 =>', error);
-                    toast.show(I18n.t("exception"), DURATION.LENGTH_SHORT);
+            {
+                text: '取消', onPress: () => {
+                }
+            },
+            {
+                text: '确定', onPress: () => {
                     this.setState({
-                        visible: false,
-                    })
-                });
-            }
+                        visible: true
+                    });
+
+                    const {type, fixPriceCoinCode, coinCode, entrustPrice, entrustNum} = item;
+                    const {toast} = this.refs;
+
+                    let url = `${config.api.trades.cancelExEntrust}?type=${type}&fixPriceCoinCode=${fixPriceCoinCode}&coinCode=${coinCode}&entrustPrice=${entrustPrice}&entrustNums=${entrustNum}`;
+
+                    request.post(url).then(responseText => {
+
+                        if (responseText.ok) {//判断接口是否请求成功
+                            console.log('接口请求失败进入失败函数');
+                            toast.show('接口请求失败', DURATION.LENGTH_SHORT);
+                            return;
+                        }
+
+                        const {msg, success} = responseText;
+
+                        request.manyLogin(this.props, responseText);
+                        toast.show(msg, DURATION.LENGTH_SHORT);
+                        if (success) {
+                            this.refreshKill();
+                        }
+                    }).catch((error) => {
+                        console.log('进入失败函数 =>', error);
+                        toast.show(I18n.t("exception"), DURATION.LENGTH_SHORT);
+                        this.setState({
+                            visible: false,
+                        })
+                    });
+                }
             }
         ])
 
     };
 
     killType = type => {
-        if(type === 1){
-            return(
-                <Text style={[styles.textRecord, {width: '15%',color: '#F6574D'}]}>买</Text>
+        if (type === 1) {
+            return (
+                <Text style={[styles.textRecord, {width: '15%', color: '#F6574D'}]}>买</Text>
             )
-        }else{
-            return(
+        } else {
+            return (
                 <Text style={[styles.textRecord, {width: '15%', color: '#28D74E'}]}>卖</Text>
             )
         }
     };
 
     killStatus = status => {
-        if(status === 0){
-            return(
+        if (status === 0) {
+            return (
                 <Text style={[styles.textRecord, {width: '15%'}]}>未成交</Text>
             )
-        }else{
-            return(
+        } else {
+            return (
                 <Text style={[styles.textRecord, {width: '15%'}]}>部分成交</Text>
             )
         }
     };
 
-    renderKillRow=({item})=>{
-        let { entrustTime, entrustPrice, entrustCount, coinCode } = item.value;
+    renderKillRow = ({item}) => {
+        let {entrustTime, entrustPrice, entrustCount, coinCode} = item.value;
         let time = entrustTime.substring(5);
 
         let num = new Number(entrustPrice);
         num = parseFloat(num).toFixed(8);
 
-        return(
+        return (
             <View style={{
                 flexDirection: 'row',
                 alignItems: 'center',
@@ -384,21 +389,21 @@ export default class Item_1 extends PureComponent {
 }
 
 let styles = StyleSheet.create({
-    textViewTop:{
+    textViewTop: {
         color: '#ACB3B9',
         fontSize: p(24),
         marginLeft: p(8),
     },
-    quotView:{
+    quotView: {
         padding: p(20),
         borderWidth: StyleSheet.hairlineWidth,
         borderColor: '#313840',
     },
-    textFont:{
+    textFont: {
         color: '#FFFFFF',
         fontSize: p(24),
     },
-    textRecord:{
+    textRecord: {
         color: '#ACB3B9',
         textAlign: 'center'
     },
@@ -412,12 +417,12 @@ let styles = StyleSheet.create({
         fontSize: p(25),
         color: '#ACB3B9'
     },
-    viewStyle4:{
+    viewStyle4: {
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: p(200),
     },
-    viewStyle3:{
+    viewStyle3: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',

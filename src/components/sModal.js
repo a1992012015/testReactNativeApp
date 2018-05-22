@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     Dimensions,
     View,
@@ -21,7 +21,7 @@ const {width, height} = Dimensions.get('window');
 class SModal extends PureComponent {
     // 渲染
     render() {
-        const { hasLoading } = this.props;
+        const {hasLoading} = this.props;
         return (
             hasLoading ?
                 <View style={{
@@ -38,7 +38,7 @@ class SModal extends PureComponent {
                     />
                 </View>
                 :
-                <View />
+                <View/>
         );
     }
 }

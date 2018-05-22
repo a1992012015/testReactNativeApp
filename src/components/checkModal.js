@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     View,
     Text,
@@ -18,7 +18,7 @@ import {
     Keyboard
 } from 'react-native';
 import Modal from 'react-native-modalbox';
-import Toast, { DURATION } from 'react-native-easy-toast';
+import Toast, {DURATION} from 'react-native-easy-toast';
 import SegmentedControlTab from 'react-native-segmented-control-tab';
 
 import p from '../utils/tranfrom';
@@ -26,7 +26,7 @@ import request from '../utils/request';
 import config from '../utils/config';
 import I18n from '../utils/i18n';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 export default class CheckModal extends PureComponent {
     //构建
@@ -54,7 +54,7 @@ export default class CheckModal extends PureComponent {
         };
         //监听输入键盘显示事件
         Keyboard.addListener('keyboardDidShow', (frames) => {
-            console.log('键盘显示=>',frames);
+            console.log('键盘显示=>', frames);
             if (!frames.endCoordinates) {
                 return
             }
@@ -66,13 +66,14 @@ export default class CheckModal extends PureComponent {
         Keyboard.addListener('keyboardDidHide', () => {
             console.log('键盘消失');
             this.setState({
-                keyboardSpace:0
+                keyboardSpace: 0
             });
         });
     }
+
     //组件接收到新的props时调用
     componentWillReceiveProps(nextProps) {
-        if(nextProps.user){
+        if (nextProps.user) {
             this.setState({
                 isOpen: nextProps.checkOpen,
                 telephone: nextProps.user.phone,
@@ -84,60 +85,73 @@ export default class CheckModal extends PureComponent {
             })
         }
     }
+
     //组件被移除之前被调用
     componentWillUnmount() {
         Keyboard.removeAllListeners('keyboardDidShow');
         Keyboard.removeAllListeners('keyboardDidHide');
         clearInterval(this.timer1);
     }
+
     //谷歌的密钥
-    googleKey=()=>{
-        const { withdraw } = this.props;
-        const { toast } = this.refs;
-        if(withdraw){
+    googleKey = () => {
+        const {withdraw} = this.props;
+        const {toast} = this.refs;
+
+        if (withdraw) {
             withdraw(this.state.googleCode);
             return;
         }
+
         if (null === this.state.username || '' === this.state.username) {
             toast.show('请输入用户名', DURATION.LENGTH_SHORT);
             return;
         }
+
         if (null === this.state.googleCode || '' === this.state.googleCode) {
             toast.show('请输入谷歌验证码', DURATION.LENGTH_SHORT);
             return;
         }
+        //地址
+        let url = config.api.login.googleAuth;
+        //参数
+        const actions = {
+            verifyCode: this.state.googleCode,
+            username: this.state.username,
+            password: this.state.password,
+        };
+        console.log(actions);
 
-        let url = `${config.api.login.googleAuth}?verifyCode=${this.state.googleCode}&username=${this.state.username}&password=${this.state.password}`;
+        request.post(url, actions).then((responseText) => {
+            console.log("responseText", responseText);
 
-        request.post(url).then((responseText) => {
-            console.log("responseText",responseText);
-
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 toast.show('登陆失败', 5000);
                 return;
             }
 
             request.manyLogin(this.props, responseText);
+
             if (responseText.success) {
                 this.setState({
-                    isOpen:false
+                    isOpen: false
                 });
                 this.props.saveUser(responseText);
             } else {
-                const { msg } = responseText;
+                const {msg} = responseText;
                 toast.show(msg, DURATION.LENGTH_SHORT);
             }
         });
     };
     //获取手机验证码
     getCurrencyCode = () => {
-        if(!this.state.flag){
+        if (!this.state.flag) {
             //为true则是还没发送的状态
             return;
         }
 
-        const { toast } = this.refs;
+        const {toast} = this.refs;
         console.log(DURATION);
         if (null === this.state.telephone || '' === this.state.telephone) {
             toast.show('请输入手机号码', DURATION.LENGTH_SHORT);
@@ -157,7 +171,7 @@ export default class CheckModal extends PureComponent {
 
             request.manyLogin(this.props, responseText);
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 toast.show('登陆失败', 5000);
                 return;
@@ -192,7 +206,7 @@ export default class CheckModal extends PureComponent {
                     }, 1000);
                     this.setState({timeId: this.timer1});
                 } else {
-                    const { msg } = responseText;
+                    const {msg} = responseText;
                     toast.show(msg, DURATION.LENGTH_SHORT)
                 }
             } else {
@@ -212,19 +226,19 @@ export default class CheckModal extends PureComponent {
     };
     //验证码提交函数
     savePhone = () => {
-        const { toast } = this.refs;
+        const {toast} = this.refs;
         if (null === this.state.telephone || '' === this.state.telephone) {
             toast.show('请输入手机号码', DURATION.LENGTH_SHORT);
             return;
         }
-        if (null === this.state.smsCode  || '' === this.state.smsCode) {
+        if (null === this.state.smsCode || '' === this.state.smsCode) {
             toast.show('请输入手机验证码', DURATION.LENGTH_SHORT);
             return;
         }
         let url = "";
-        if(this.state.transPassURL){
+        if (this.state.transPassURL) {
             url = `${this.state.transPassURL}&valicode=${this.state.smsCode}`;
-        }else {
+        } else {
             url = `${config.api.login.phoneAuth}?username=${this.state.username}&verifyCode=${this.state.smsCode}&password=${this.state.password}`;
         }
 
@@ -232,7 +246,7 @@ export default class CheckModal extends PureComponent {
 
             request.manyLogin(this.props, responseText);//验证登陆函数
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 toast.show('登陆失败', 5000);
                 return;
@@ -243,11 +257,11 @@ export default class CheckModal extends PureComponent {
                 this.countDown();
 
                 this.setState({
-                    isOpen:false
+                    isOpen: false
                 });
                 this.props.saveUser(responseText);
             } else {
-                const { msg } = responseText;
+                const {msg} = responseText;
                 toast.show(msg, DURATION.LENGTH_SHORT);
             }
         });
@@ -260,10 +274,10 @@ export default class CheckModal extends PureComponent {
     };
 
     render() {
-        const { type, keyboardSpace } = this.state;
-        console.log("keyboardSpace",keyboardSpace);
+        const {type, keyboardSpace} = this.state;
+        console.log("keyboardSpace", keyboardSpace);
         return (
-            <Modal style={[styles.modal, styles.modal3,{
+            <Modal style={[styles.modal, styles.modal3, {
                 position: 'absolute',
                 bottom: 0,
                 top: keyboardSpace ? keyboardSpace - p(450) : -10,
@@ -283,21 +297,22 @@ export default class CheckModal extends PureComponent {
                 {this.checkType(type)}
                 <Toast
                     ref="toast"
-                    style={{backgroundColor:'rgba(0,0,0,.6)'}}
+                    style={{backgroundColor: 'rgba(0,0,0,.6)'}}
                     position='top'
-                    textStyle={{color:'white'}}
+                    textStyle={{color: 'white'}}
                 />
             </Modal>
         );
 
     }
+
     //生成不同验证规则下的UI界面
-    checkType = (state) =>{
-        let { customStyleIndex } = this.state;
-        if(state === 0){//短信验证
-            return(
-                <View style={{flex:1,alignItems:'center'}}>
-                    <Text style={{fontSize:p(30),marginVertical:p(60)}}>手机认证</Text>
+    checkType = (state) => {
+        let {customStyleIndex} = this.state;
+        if (state === 0) {//短信验证
+            return (
+                <View style={{flex: 1, alignItems: 'center'}}>
+                    <Text style={{fontSize: p(30), marginVertical: p(60)}}>手机认证</Text>
                     <View style={styles.reWithView}>
                         {/*验证码输入框*/}
                         <TextInput
@@ -308,30 +323,34 @@ export default class CheckModal extends PureComponent {
                             placeholderTextColor={'#B0B0B0'}
                             value={this.state.smsCode}
                             style={styles.inputTextView}
-                            onChangeText={(text) => this.setState({smsCode:text})}
+                            onChangeText={(text) => this.setState({smsCode: text})}
                         />
                         {/*获取验证码*/}
                         <TouchableOpacity
-                            onPress={()=>{this.getCurrencyCode()}}
+                            onPress={() => {
+                                this.getCurrencyCode()
+                            }}
                             style={this.state.codeStyle}
                             activeOpacity={.8}>
-                            <Text style={{color:'#FFF'}}>{this.state.checkCodeText}</Text>
+                            <Text style={{color: '#FFF'}}>{this.state.checkCodeText}</Text>
                         </TouchableOpacity>
                     </View>
                     {/*提交验证码*/}
                     <TouchableOpacity
                         onPress={this.savePhone}
                         activeOpacity={.8}
-                        style={{ height:p(80),backgroundColor:'#D95411',marginTop:p(40),width:width-p(180),
-                            alignItems: 'center',justifyContent:'center',borderRadius:p(10)}}>
-                        <Text style={{color:'#fff',fontSize:p(26)}}>{I18n.t("baocun")}</Text>
+                        style={{
+                            height: p(80), backgroundColor: '#D95411', marginTop: p(40), width: width - p(180),
+                            alignItems: 'center', justifyContent: 'center', borderRadius: p(10)
+                        }}>
+                        <Text style={{color: '#fff', fontSize: p(26)}}>{I18n.t("baocun")}</Text>
                     </TouchableOpacity>
                 </View>
             )
-        }else if(state === 1){
-            return(
-                <View style={{flex:1,alignItems:'center'}}>
-                    <Text style={{fontSize:p(30),marginVertical:p(60)}}>谷歌认证</Text>
+        } else if (state === 1) {
+            return (
+                <View style={{flex: 1, alignItems: 'center'}}>
+                    <Text style={{fontSize: p(30), marginVertical: p(60)}}>谷歌认证</Text>
                     <View style={styles.reWithView}>
                         <TextInput
                             underlineColorAndroid='transparent'
@@ -340,19 +359,21 @@ export default class CheckModal extends PureComponent {
                             placeholderTextColor={'#B0B0B0'}
                             value={this.state.googleCode}
                             style={styles.inputTextView}
-                            onChangeText={(text) => this.setState({googleCode:text})}
+                            onChangeText={(text) => this.setState({googleCode: text})}
                         />
                     </View>
                     <TouchableOpacity
                         onPress={this.googleKey}
                         activeOpacity={.8}
-                        style={{ height:p(80),backgroundColor:'#D95411',marginTop:p(40),width:width-p(180),
-                            alignItems: 'center',justifyContent:'center',borderRadius:p(10)}}>
-                        <Text style={{color:'#fff',fontSize:p(26)}}>{I18n.t("baocun")}</Text>
+                        style={{
+                            height: p(80), backgroundColor: '#D95411', marginTop: p(40), width: width - p(180),
+                            alignItems: 'center', justifyContent: 'center', borderRadius: p(10)
+                        }}>
+                        <Text style={{color: '#fff', fontSize: p(26)}}>{I18n.t("baocun")}</Text>
                     </TouchableOpacity>
                 </View>
             )
-        }else {
+        } else {
             return (
                 <View style={{flex: 1, alignItems: 'center'}}>
                     <Text style={{fontSize: p(30), marginVertical: p(40)}}>二次验证</Text>
@@ -438,47 +459,47 @@ const styles = StyleSheet.create({
     modal: {
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius:p(20)
+        borderRadius: p(20)
     },
     modal3: {
         height: p(450),
-        width: width-p(100)
+        width: width - p(100)
     },
-    imageType:{
-        width:p(45),
-        height:p(45)
+    imageType: {
+        width: p(45),
+        height: p(45)
     },
-    imageView:{
+    imageView: {
         position: 'absolute',
         top: 0,
-        right:0,
-        zIndex:999
+        right: 0,
+        zIndex: 999
     },
-    reWithView:{
-        flexDirection:'row',
-        height:p(80),
-        alignItems:'center',
-        paddingHorizontal:p(40)
-    },
-    inputTextView:{
+    reWithView: {
+        flexDirection: 'row',
+        height: p(80),
         alignItems: 'center',
-        justifyContent:'center',
-        height:p(80),
-        flex:1,
-        backgroundColor:'#EFF0F2'
+        paddingHorizontal: p(40)
     },
-    codeObtain:{
-        backgroundColor:"#D95411",
-        paddingHorizontal:p(20),
-        height:p(80),
-        alignItems:'center',
-        justifyContent:'center'
+    inputTextView: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: p(80),
+        flex: 1,
+        backgroundColor: '#EFF0F2'
     },
-    codeFalse:{
-        backgroundColor:"#929BA1",
-        paddingHorizontal:p(20),
-        height:p(80),
-        alignItems:'center',
-        justifyContent:'center'
+    codeObtain: {
+        backgroundColor: "#D95411",
+        paddingHorizontal: p(20),
+        height: p(80),
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    codeFalse: {
+        backgroundColor: "#929BA1",
+        paddingHorizontal: p(20),
+        height: p(80),
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 });

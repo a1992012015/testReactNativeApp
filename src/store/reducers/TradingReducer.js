@@ -8,8 +8,8 @@
 import * as types from '../actions/ActionTypes';
 
 const initialState = {
-    tradingData:{},
-    tradingLoading:false
+    tradingData: {},
+    tradingLoading: false
 };
 
 let TradingReducer = (state = initialState, action) => {

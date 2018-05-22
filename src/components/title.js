@@ -5,7 +5,7 @@
  *
  */
 'use strict';
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     View,
     Text,
@@ -22,18 +22,19 @@ export default class Title extends PureComponent {
     constructor(props) {
         super(props);
     }
+
     //渲染
     render() {
-        const { canBack, backColor, titleNameColor, titleName, rightBtn, backgroundColor } = this.props;
-        const { goBack } = this.props.navigation;
+        const {canBack, backColor, titleNameColor, titleName, rightBtn, backgroundColor} = this.props;
+        const {goBack} = this.props.navigation;
         return (
             <View style={[styles.header, {
                 flexDirection: 'row',
                 backgroundColor: backgroundColor ? backgroundColor : '#252932',
                 borderBottomWidth: StyleSheet.hairlineWidth,
-                borderBottomColor:'#1F2229',
+                borderBottomColor: '#1F2229',
             }]}>
-                <TouchableOpacity style={{flex:1}} onPress={() => goBack(null)}>
+                <TouchableOpacity style={{flex: 1}} onPress={() => goBack(null)}>
                     {canBack === true ?
                         <Icon name="ios-arrow-back-outline" size={25}
                               color={backColor ? backColor : '#fff'}
@@ -46,7 +47,7 @@ export default class Title extends PureComponent {
                     textAlign: 'center',
                     color: titleNameColor ? titleNameColor : '#fff'
                 }]}>{titleName}</Text>
-                {rightBtn ? rightBtn : <View style={{flex:1}}/>}
+                {rightBtn ? rightBtn : <View style={{flex: 1}}/>}
             </View>
         );
     }

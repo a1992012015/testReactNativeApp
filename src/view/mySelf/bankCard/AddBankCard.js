@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     View,
     Text,
@@ -33,23 +33,24 @@ export default class AddBankCard extends PureComponent {
         // 初始状态
         this.state = {
             name: '',
-            provinceList:[],
-            cityList:[],
-            bankList:[],
-            province:null,
-            city:null,
-            cardSurName:null,
-            cardName:null,
-            bankName:null,
-            subBank:null,
-            subBankNum:null,
-            account:null,
-            visible:false
+            provinceList: [],
+            cityList: [],
+            bankList: [],
+            province: null,
+            city: null,
+            cardSurName: null,
+            cardName: null,
+            bankName: null,
+            subBank: null,
+            subBankNum: null,
+            account: null,
+            visible: false
         };
     }
+
     //真实DOM渲染出来之后调用
     componentDidMount() {
-        const { trueName, surname } = this.props.navigation.state.params;
+        const {trueName, surname} = this.props.navigation.state.params;
 
         this.setState({
             cardName: trueName,
@@ -61,27 +62,27 @@ export default class AddBankCard extends PureComponent {
         this.getBankList();
     }
 
-    getProvince = () =>{
+    getProvince = () => {
         this.setState({
-            cityList:[],
+            cityList: [],
             city: null
         });
         let url = config.api.main.province;
         request.post(url).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            request.manyLogin(this.props,responseText);
-            console.log('responseText',responseText);
+            request.manyLogin(this.props, responseText);
+            console.log('responseText', responseText);
 
-            const { obj } = responseText;
+            const {obj} = responseText;
             let data = JSON.parse(obj);
-            console.log('data',data);
+            console.log('data', data);
             let provinceList = [];
-            for(let i = 0; i < data.length; i++){
+            for (let i = 0; i < data.length; i++) {
                 let item = {
                     text: data[i].province,
                     value: data[i].key,
@@ -94,8 +95,8 @@ export default class AddBankCard extends PureComponent {
         })
     };
 
-    getCity = key =>{
-        const { toast } = this.refs;
+    getCity = key => {
+        const {toast} = this.refs;
         if (null === key || '' === key) {
             toast.show('请选择省', DURATION.LENGTH_SHORT);
             return;
@@ -104,20 +105,20 @@ export default class AddBankCard extends PureComponent {
         let url = `${config.api.main.city}${key}`;
         request.post(url).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            request.manyLogin(this.props,responseText);
-            console.log('responseText',responseText);
+            request.manyLogin(this.props, responseText);
+            console.log('responseText', responseText);
 
-            const { obj } = responseText;
-            let data = JSON.parse("["+obj+"]");
+            const {obj} = responseText;
+            let data = JSON.parse("[" + obj + "]");
             let cityList = [];
-            console.log('data',data);
+            console.log('data', data);
 
-            for(let i = 0; i < data.length; i++){
+            for (let i = 0; i < data.length; i++) {
                 let item = {
                     text: data[i].city,
                     value: data[i].city,
@@ -132,26 +133,26 @@ export default class AddBankCard extends PureComponent {
 
     getBankList = () => {
         this.setState({
-            visible:true
+            visible: true
         });
         let url = config.api.rmb.redisBank;
 
         request.post(url).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            request.manyLogin(this.props,responseText);
-            console.log('responseTextBank',responseText);
+            request.manyLogin(this.props, responseText);
+            console.log('responseTextBank', responseText);
 
-            const { obj } = responseText;
+            const {obj} = responseText;
             let data = JSON.parse(obj.key);
             let bankList = [];
 
-            for(let i = 0; i < data.length; i++){
-                let { itemName } = data[i];
+            for (let i = 0; i < data.length; i++) {
+                let {itemName} = data[i];
                 bankList.push(itemName);
             }
 
@@ -162,9 +163,9 @@ export default class AddBankCard extends PureComponent {
         })
     };
 
-    saveBank = () =>{
+    saveBank = () => {
 
-        const { toast } = this.refs;
+        const {toast} = this.refs;
         const regEn = /[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im;
         const regCn = /[·！#￥（——）：；“”‘、，|《。》？、【】[\]]/im;
 
@@ -188,12 +189,12 @@ export default class AddBankCard extends PureComponent {
             return;
         }
 
-        if(/\s/.exec(this.state.account) != null){
+        if (/\s/.exec(this.state.account) != null) {
             toast.show('银行卡号不能包含空格', DURATION.LENGTH_SHORT);
             return;
         }
 
-        if(isNaN(this.state.account) || this.state.account.length < 16){
+        if (isNaN(this.state.account) || this.state.account.length < 16) {
             toast.show('请输入正确的银行卡号', DURATION.LENGTH_SHORT);
             return;
         }
@@ -203,45 +204,46 @@ export default class AddBankCard extends PureComponent {
             return;
         }
 
-        if(regEn.test(this.state.subBank) || regCn.test(this.state.subBank)) {
+        if (regEn.test(this.state.subBank) || regCn.test(this.state.subBank)) {
             toast.show("开户支行不能包含特殊字符.", DURATION.LENGTH_SHORT);
             return false;
         }
 
         this.setState({
-            visible:true
+            visible: true
         });
 
         let url = `${config.api.main.saveBank}?bankname=${this.state.bankName}&subBankNum=${this.state.subBank}&p1=${this.state.province}&c1=${this.state.city}&subBank=${this.state.subBank}&cardName=${this.state.cardName}&account=${this.state.account}&surName=${this.state.cardSurName}&trueName=${this.state.cardName}`;
 
         request.post(url).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            request.manyLogin(this.props,responseText);
-            console.log('responseText',responseText);
+            request.manyLogin(this.props, responseText);
+            console.log('responseText', responseText);
             this.setState({
-                visible:false
+                visible: false
             });
 
-            const { msg } = responseText;
+            const {msg} = responseText;
 
-            if(responseText.success){
+            if (responseText.success) {
                 Alert.alert(
                     '提示',
                     '银行卡添加成功',
-                    [{text: '确认', onPress: () => {
-                            const { params } = this.props.navigation.state;
+                    [{
+                        text: '确认', onPress: () => {
+                            const {params} = this.props.navigation.state;
                             params.getBankCard();
                             this.props.navigation.goBack()
                         }
                     }],
-                    { cancelable: false }
+                    {cancelable: false}
                 );
-            }else{
+            } else {
                 toast.show(msg, DURATION.LENGTH_SHORT);
             }
         })
@@ -249,7 +251,7 @@ export default class AddBankCard extends PureComponent {
 
     // 渲染
     render() {
-        const { inputSubBank, inputAccount } = this.refs;
+        const {inputSubBank, inputAccount} = this.refs;
         return (
             <View style={styles.defaultView}>
                 <Title titleName="添加银行卡" canBack={true} {...this.props}/>
@@ -297,9 +299,9 @@ export default class AddBankCard extends PureComponent {
                     <View style={styles.reWithView}>
                         <Text style={styles.inputText}>开户省:</Text>
                         <SelectApp
-                            style={{flex:1,borderColor:'transparent',backgroundColor:"transparent"}}
+                            style={{flex: 1, borderColor: 'transparent', backgroundColor: "transparent"}}
                             size='md'
-                            valueStyle={{color:'#fff',padding:0}}
+                            valueStyle={{color: '#fff', padding: 0}}
                             value={this.state.province}
                             getItemValue={item => item.value}
                             getItemText={item => item.text}
@@ -319,13 +321,13 @@ export default class AddBankCard extends PureComponent {
                     <View style={styles.reWithView}>
                         <Text style={styles.inputText}>开户市:</Text>
                         <SelectApp
-                            style={{flex:1,borderColor:'transparent',backgroundColor:"transparent"}}
+                            style={{flex: 1, borderColor: 'transparent', backgroundColor: "transparent"}}
                             size='md'
-                            valueStyle={{color:'#fff',padding:0}}
+                            valueStyle={{color: '#fff', padding: 0}}
                             value={this.state.city}
                             getItemValue={item => item.value}
                             getItemText={item => item.text}
-                            onPress={()=>{
+                            onPress={() => {
                                 inputSubBank.blur();
                                 inputAccount.blur();
                             }}
@@ -345,7 +347,7 @@ export default class AddBankCard extends PureComponent {
                             placeholderTextColor={'#B0B0B0'}
                             value={this.state.subBank}
                             style={styles.inputTextView}
-                            onChangeText={text => this.setState({subBank:text})}
+                            onChangeText={text => this.setState({subBank: text})}
                         />
                     </View>
 
@@ -359,7 +361,7 @@ export default class AddBankCard extends PureComponent {
                             placeholderTextColor={'#B0B0B0'}
                             value={this.state.account}
                             style={styles.inputTextView}
-                            onChangeText={text => this.setState({account:text})}
+                            onChangeText={text => this.setState({account: text})}
                         />
                     </View>
 
@@ -368,16 +370,18 @@ export default class AddBankCard extends PureComponent {
                 <TouchableOpacity
                     onPress={this.saveBank}
                     activeOpacity={.8}
-                    style={{ height:p(80),backgroundColor:'#D95411',borderWidth:1,margin:p(20),
-                    alignItems: 'center',justifyContent:'center',borderRadius:p(10)}}>
-                    <Text style={{color:'#fff',fontSize:p(26)}}>确认添加</Text>
+                    style={{
+                        height: p(80), backgroundColor: '#D95411', borderWidth: 1, margin: p(20),
+                        alignItems: 'center', justifyContent: 'center', borderRadius: p(10)
+                    }}>
+                    <Text style={{color: '#fff', fontSize: p(26)}}>确认添加</Text>
                 </TouchableOpacity>
                 <Loading visible={this.state.visible}/>
                 <Toast
                     ref="toast"
-                    style={{backgroundColor:'rgba(0,0,0,.6)'}}
+                    style={{backgroundColor: 'rgba(0,0,0,.6)'}}
                     position='top'
-                    textStyle={{color:'white'}}
+                    textStyle={{color: 'white'}}
                 />
             </View>
         );
@@ -424,13 +428,13 @@ let styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#1F2228',
     },
-    inputText:{
+    inputText: {
         color: 'white',
         paddingLeft: p(20),
         width: p(180),
         fontSize: p(24),
     },
-    inputTextView:{
+    inputTextView: {
         alignItems: 'center',
         justifyContent: 'center',
         marginLeft: p(6),
@@ -441,12 +445,12 @@ let styles = StyleSheet.create({
         paddingLeft: p(10),
         color: '#FFF',
     },
-    reWithView:{
+    reWithView: {
         flexDirection: 'row',
         alignItems: 'center',
         height: p(70),
     },
-    promptText:{
+    promptText: {
         color: '#B0B0B0',
         fontSize: p(22),
         padding: p(10),

@@ -11,5 +11,5 @@ import MenuItem from './MenuItem';
 
 import MenuSelect from './MenuSelect';
 
-export { MenuDivider, MenuItem };
+export {MenuDivider, MenuItem};
 export default MenuSelect;

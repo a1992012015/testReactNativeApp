@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     View,
     Text,
@@ -16,7 +16,7 @@ import {
     Clipboard
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import Toast, { DURATION } from 'react-native-easy-toast';
+import Toast, {DURATION} from 'react-native-easy-toast';
 import QRCode from 'react-native-qrcode';
 
 import p from '../../utils/tranfrom';
@@ -32,53 +32,55 @@ export default class IntoCurrency extends PureComponent {
         console.log('获取地址页面');
         this.state = {
             coinName: '',
-            intoData:''
+            intoData: ''
         };
     }
+
     //真实的结构渲染出来以后调用
     componentDidMount() {
-        const { params } = this.props.navigation.state;
+        const {params} = this.props.navigation.state;
         console.log(params);
         this.setState({
             intoData: params.intoData,
             publicKey: params.intoData.publicKey
-        },() => {
+        }, () => {
             this._getpublicKey();
         });
     }
+
     //生成币地址
     _createPublicKey = () => {
         let url = `${config.api.currency.createPublicKey}?accountId=${this.state.intoData.id}`;
-        const { toast } = this.refs;
+        const {toast} = this.refs;
 
         request.post(url).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 toast.show('接口请求失败', DURATION.LENGTH_SHORT);
                 return;
             }
 
-            request.manyLogin(this.props,responseText);
-            const { msg, obj, success } = responseText;
+            request.manyLogin(this.props, responseText);
+            const {msg, obj, success} = responseText;
 
-            if(success){
+            if (success) {
                 this.setState({
                     publicKey: obj
                 })
-            }else{
+            } else {
                 toast.show(msg, DURATION.LENGTH_SHORT);
             }
         });
     };
     //获取币地址
-    _getpublicKey =()=>{
+    _getpublicKey = () => {
         let url = `${config.api.currency.getPublicKey}?accountId=${this.state.intoData.id}`;
-        const { toast } = this.refs;
+        const {toast} = this.refs;
 
         request.post(url).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 toast.show('接口请求失败', DURATION.LENGTH_SHORT);
                 return;
@@ -87,15 +89,18 @@ export default class IntoCurrency extends PureComponent {
             request.manyLogin(this.props, responseText);
         });
     };
+
     // 渲染
     render() {
-        const { toast } = this.refs;
+        const {toast} = this.refs;
 
         return (
             <View style={styles.defaultView}>
                 {/*标题组件*/}
                 <View style={styles.header}>
-                    <TouchableOpacity onPress={() => {this.props.navigation.goBack()}}>
+                    <TouchableOpacity onPress={() => {
+                        this.props.navigation.goBack()
+                    }}>
                         <Icon
                             name="ios-arrow-back-outline" size={25}
                             color='#fff'
@@ -110,19 +115,24 @@ export default class IntoCurrency extends PureComponent {
                     <View style={{marginLeft: p(20)}}>
                         <Text style={styles.textPrice}>
                             可用{this.state.intoData.coinCode}：
-                            <Text style={{color:'#018F67'}}>
+                            <Text style={{color: '#018F67'}}>
                                 {this.state.intoData.hotMoney}
                             </Text>
                         </Text>
                         <Text style={styles.textPrice}>
                             冻结{this.state.intoData.coinCode}：
-                            <Text style={{color:'#F6574D'}}>
+                            <Text style={{color: '#F6574D'}}>
                                 {this.state.intoData.coldMoney}
-                                </Text>
+                            </Text>
                         </Text>
                     </View>
                     {/*显示币地址信息*/}
-                    <View style={{borderWidth: StyleSheet.hairlineWidth, borderColor: '#565A5D', padding: p(20), backgroundColor: '#313840'}}>
+                    <View style={{
+                        borderWidth: StyleSheet.hairlineWidth,
+                        borderColor: '#565A5D',
+                        padding: p(20),
+                        backgroundColor: '#313840'
+                    }}>
                         <Text style={styles.textPrice}>钱包地址:</Text>
 
                         {
@@ -135,11 +145,14 @@ export default class IntoCurrency extends PureComponent {
                                         backgroundColor: '#D95411',
                                         margin: p(10),
                                         alignItems: 'center',
-                                        justifyContent:'center',
+                                        justifyContent: 'center',
                                         borderRadius: p(10)
                                     }}
                                 >
-                                    <Text style={{color:'#fff', fontSize: p(26)}}>获取地址({this.state.intoData.coinCode})</Text>
+                                    <Text style={{
+                                        color: '#fff',
+                                        fontSize: p(26)
+                                    }}>获取地址({this.state.intoData.coinCode})</Text>
                                 </TouchableOpacity>
                                 :
                                 <View>
@@ -185,9 +198,9 @@ export default class IntoCurrency extends PureComponent {
                 {/*提示窗*/}
                 <Toast
                     ref="toast"
-                    style={{backgroundColor:'rgba(0,0,0,.6)'}}
+                    style={{backgroundColor: 'rgba(0,0,0,.6)'}}
                     position='top'
-                    textStyle={{color:'white'}}
+                    textStyle={{color: 'white'}}
                 />
             </View>
         );
@@ -225,16 +238,16 @@ let styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#1F2228',
     },
-    promptText:{
+    promptText: {
         color: '#B0B0B0',
         fontSize: p(22),
         marginTop: p(10),
     },
-    textPrice:{
+    textPrice: {
         color: '#FFFFFF',
         marginVertical: p(10),
     },
-    touView:{
+    touView: {
         backgroundColor: '#D95411',
         width: p(100),
         alignItems: 'center',

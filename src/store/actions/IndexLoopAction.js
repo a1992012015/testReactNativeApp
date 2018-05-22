@@ -8,7 +8,7 @@
 
 import * as types from './ActionTypes';
 //首页
-export let homeLoop = (homeData) =>{
+export let homeLoop = (homeData) => {
     return {
         type: types.FETCH_HOME_DATA,
         homeData: homeData,
@@ -16,7 +16,7 @@ export let homeLoop = (homeData) =>{
     }
 };
 
-export let homeFloor = () =>{
+export let homeFloor = () => {
     return {
         type: types.FETCHING_HOME_DATA
     }

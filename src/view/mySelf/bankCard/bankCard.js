@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     StyleSheet,
     View,
@@ -18,29 +18,30 @@ import {
     Dimensions,
     Alert
 } from 'react-native';
-import Toast, { DURATION } from 'react-native-easy-toast';
+import Toast, {DURATION} from 'react-native-easy-toast';
 
 import config from '../../../utils/config';
 import p from '../../../utils/tranfrom';
 import request from '../../../utils/request';
 import Title from '../../../components/title';
 
-const { height } = Dimensions.get('window');
+const {height} = Dimensions.get('window');
 
 export default class BankCard extends PureComponent {
     //构建
-    constructor(props){
+    constructor(props) {
         super(props);
         this._dataClosing = new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2});
         this.state = {
-            trueName:null,
-            surname:null,
-            dataClosing:this._dataClosing.cloneWithRows([])
+            trueName: null,
+            surname: null,
+            dataClosing: this._dataClosing.cloneWithRows([])
         }
     }
+
     //真实的DOM被渲染出来后调用
     componentDidMount() {
-        const { truename, surname } = this.props.navigation.state.params.member;
+        const {truename, surname} = this.props.navigation.state.params.member;
 
         this.setState({
             trueName: truename,
@@ -55,34 +56,34 @@ export default class BankCard extends PureComponent {
 
         request.post(url).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            request.manyLogin(this.props,responseText);
-            console.log("responseText",responseText);
+            request.manyLogin(this.props, responseText);
+            console.log("responseText", responseText);
 
-            const { obj } = responseText;
+            const {obj} = responseText;
 
             this.setState({
                 loadData: true,
                 dataClosing: this.state.dataClosing.cloneWithRows(obj),
             });
         });
-        const { params } = this.props.navigation.state;
-        if(params.getBankCard){
+        const {params} = this.props.navigation.state;
+        if (params.getBankCard) {
             params.getBankCard();
         }
     };
 
-    render(){
+    render() {
         if (this.state.loadData) {
             return (
                 <View style={{flex: 1, backgroundColor: '#1F2229', paddingBottom: p(80)}}>
                     <Title titleName="银行卡管理" canBack={true} {...this.props}/>
                     <ListView
-                        horizontal={false }
+                        horizontal={false}
                         dataSource={this.state.dataClosing}
                         renderRow={this._quotRow}
                         onEndReachedThreshold={20}
@@ -96,10 +97,10 @@ export default class BankCard extends PureComponent {
                     <TouchableOpacity
                         activeOpacity={.8}
                         onPress={() => {
-                            this.props.navigation.navigate('AddBankCard',{
-                                trueName:this.state.trueName,
-                                getBankCard:this.getBankList,
-                                surname:this.state.surname,
+                            this.props.navigation.navigate('AddBankCard', {
+                                trueName: this.state.trueName,
+                                getBankCard: this.getBankList,
+                                surname: this.state.surname,
                             });
                         }}
                         style={styles.footerAll}>
@@ -111,13 +112,13 @@ export default class BankCard extends PureComponent {
 
                     <Toast
                         ref="toast"
-                        style={{backgroundColor:'rgba(0,0,0,.6)'}}
+                        style={{backgroundColor: 'rgba(0,0,0,.6)'}}
                         position='top'
-                        textStyle={{color:'white'}}
+                        textStyle={{color: 'white'}}
                     />
                 </View>
             )
-        }else{
+        } else {
             return (
                 <ActivityIndicator
                     animating={true}
@@ -129,7 +130,7 @@ export default class BankCard extends PureComponent {
     }
 
     deleteBank = id => {
-        const { toast } = this.refs;
+        const {toast} = this.refs;
 
         Alert.alert(
             '提示',
@@ -137,33 +138,37 @@ export default class BankCard extends PureComponent {
             [{
                 text: '确认',
                 onPress: () => {
-                    let URL = config.api.host+config.api.main.removeBank+id;
+                    let URL = config.api.host + config.api.main.removeBank + id;
                     request.post(URL).then(responseText => {
 
-                        if(responseText.ok){//判断接口是否请求成功
+                        if (responseText.ok) {//判断接口是否请求成功
                             console.log('接口请求失败进入失败函数');
                             return;
                         }
 
-                        const { msg } = responseText;
-                        request.manyLogin(this.props,responseText);
+                        const {msg} = responseText;
+                        request.manyLogin(this.props, responseText);
 
-                        if(!responseText.success){
-                           toast.show(msg, DURATION.LENGTH_SHORT);
-                        }else{
+                        if (!responseText.success) {
+                            toast.show(msg, DURATION.LENGTH_SHORT);
+                        } else {
                             toast.show("删除成功", DURATION.LENGTH_SHORT);
                             this.getBankList();
                         }
                     });
-                }},
-                {text: '取消', onPress: () => {}}
+                }
+            },
+                {
+                    text: '取消', onPress: () => {
+                    }
+                }
             ]
         );
     };
 
-    _quotRow = row =>{
-        const { cardBank, id, cardNumber, surName, cardName, trueName, bankProvince, bankAddress, subBank } = row;
-        return(
+    _quotRow = row => {
+        const {cardBank, id, cardNumber, surName, cardName, trueName, bankProvince, bankAddress, subBank} = row;
+        return (
             <View style={{
                 backgroundColor: '#323840',
                 padding: p(20),
@@ -171,12 +176,14 @@ export default class BankCard extends PureComponent {
                 marginHorizontal: p(20),
             }}>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text style={{color:'#ACB3B9',fontSize:p(26)}}>{cardBank}</Text>
+                    <Text style={{color: '#ACB3B9', fontSize: p(26)}}>{cardBank}</Text>
                     <TouchableOpacity
-                        onPress={()=>{this.deleteBank(id)}}
+                        onPress={() => {
+                            this.deleteBank(id)
+                        }}
                         activeOpacity={.8}>
                         <Image
-                            style={{width:p(40),height:p(40)}}
+                            style={{width: p(40), height: p(40)}}
                             source={require('../../../static/mySelf/delete.png')}/>
                     </TouchableOpacity>
                 </View>
@@ -191,15 +198,15 @@ export default class BankCard extends PureComponent {
 }
 
 let styles = StyleSheet.create({
-    textViewTop:{
-        color:'#ACB3B9',
+    textViewTop: {
+        color: '#ACB3B9',
     },
-    quotView:{
-        padding:p(20),
+    quotView: {
+        padding: p(20),
         borderWidth: StyleSheet.hairlineWidth,
         borderColor: '#313840',
     },
-    textRecord:{
+    textRecord: {
         color: '#ACB3B9',
         textAlign: 'center'
     },

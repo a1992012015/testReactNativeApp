@@ -1,12 +1,12 @@
 /**
  * Created by 圆环之理 on 2018/5/17.
  *
- * 功能：个人信息设置页面 => 实名认证
+ * 功能：个人信息设置页面 => 修改密码
  *
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     View,
     Text,
@@ -17,15 +17,15 @@ import {
 } from 'react-native' ;
 import store from 'react-native-simple-store';
 import {NavigationActions, StackActions} from 'react-navigation';
-import Toast, { DURATION } from 'react-native-easy-toast';
+import Toast, {DURATION} from 'react-native-easy-toast';
 
-import p from '../../utils/tranfrom';
-import config from '../../utils/config';
-import request from '../../utils/request';
-import md5 from '../../utils/hrymd5';
-import I18n from '../../utils/i18n';
-import CheckModal from '../../components/checkModal';
-import Title from '../../components/title';
+import p from '../../../utils/tranfrom';
+import config from '../../../utils/config';
+import request from '../../../utils/request';
+import md5 from '../../../utils/hrymd5';
+import I18n from '../../../utils/i18n';
+import CheckModal from '../../../components/checkModal';
+import Title from '../../../components/title';
 
 export default class LoginPass extends PureComponent {
     // 构造
@@ -34,45 +34,49 @@ export default class LoginPass extends PureComponent {
         // 初始状态
         this.state = {
             name: '',
-            username:'',
+            username: '',
             checkCodeText: "获取验证码",
             codeStyle: styles.codeObtain,
             codeSent: true,
-            isCheckCode:false,
-            oldPassWord:null,
-            newPassWord:null,
-            pwSmsCode:null,
-            reNewPassWord:null,
-            timeId:'',
-            checkOpen:false,
-            type:0,
-            user:''
+            isCheckCode: false,
+            oldPassWord: null,
+            newPassWord: null,
+            pwSmsCode: null,
+            reNewPassWord: null,
+            timeId: '',
+            checkOpen: false,
+            type: 0,
+            user: ''
         };
     }
+
     //真实结构渲染之后
     componentDidMount() {
         const {params} = this.props.navigation.state;
-        console.log("member",params.member);
+        console.log("member", params.member);
         this.setState({
             username: params.username,
             user: params.member
         });
     }
+
     //组件被移除之后调用
     componentWillUnmount() {
 
     }
+
     //密码修改成功跳转主页
     saveUser = () => {
         Alert.alert(
             '提示',
             '登录密码修改成功',
-            [{text: '确认', onPress: () => {
+            [{
+                text: '确认', onPress: () => {
                     store.delete('member');
 
                     const resetAction = StackActions.reset({
                         index: 0,
-                        actions: [NavigationActions.navigate({ routeName: 'TabBar' })],
+                        actions: [NavigationActions.navigate({routeName: 'TabBar'})],
                     });
 
                     this.props.navigation.dispatch(resetAction);
@@ -89,20 +93,20 @@ export default class LoginPass extends PureComponent {
     //修改配置
     _toMain = (responseText, transPassURL) => {
 
-        const { obj, msg } = responseText;
-        const { toast } = this.refs;
+        const {obj, msg} = responseText;
+        const {toast} = this.refs;
 
         if (obj) {
 
-            const { phoneState, googleState } = obj;
-            if(phoneState === 1 && googleState === 1){
+            const {phoneState, googleState} = obj;
+            if (phoneState === 1 && googleState === 1) {
                 this.setState({
                     checkOpen: true,
                     type: 2,
                     user: obj,
                     transPassURL: transPassURL
                 })
-            }else if(phoneState === 1 && googleState === 0){
+            } else if (phoneState === 1 && googleState === 0) {
                 //手机认证
                 this.setState({
                     checkOpen: true,
@@ -110,7 +114,7 @@ export default class LoginPass extends PureComponent {
                     user: obj,
                     transPassURL: transPassURL
                 })
-            }else if(phoneState === 0 && googleState === 1){
+            } else if (phoneState === 0 && googleState === 1) {
                 //谷歌认证
                 this.setState({
                     checkOpen: true,
@@ -118,16 +122,16 @@ export default class LoginPass extends PureComponent {
                     user: obj,
                     transPassURL: transPassURL
                 })
-            }else{
+            } else {
                 toast.show(msg, DURATION.LENGTH_SHORT);
             }
-        }else{
+        } else {
             toast.show(msg, DURATION.LENGTH_SHORT);
         }
     };
     //提交修改的密码
     getLoginPass = () => {
-        const { toast } = this.refs;
+        const {toast} = this.refs;
 
         if (null === this.state.oldPassWord || '' === this.state.oldPassWord) {
             toast.show(I18n.t("oldpwd_no_null"), DURATION.LENGTH_SHORT);
@@ -171,24 +175,25 @@ export default class LoginPass extends PureComponent {
 
         request.post(url).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            request.manyLogin(this.props,responseText);
+            request.manyLogin(this.props, responseText);
 
-            if(responseText.success){
+            if (responseText.success) {
                 Alert.alert(
                     '提示',
                     '登录密码修改成功',
                     [{text: '确认', onPress: () => this.saveUser()}]
                 );
-            }else{
+            } else {
                 this._toMain(responseText, url);
             }
         });
     };
+
     // 渲染
     render() {
         return (
@@ -203,7 +208,7 @@ export default class LoginPass extends PureComponent {
                             <Text style={styles.inputText}>{I18n.t("yuanshidenglumima")}:</Text>
                         </View>
                         {/*原密码输入框*/}
-                        <View style={{flex:1}}>
+                        <View style={{flex: 1}}>
                             <TextInput
                                 underlineColorAndroid='transparent'
                                 placeholder={'请输入您的原始登录密码'}
@@ -213,7 +218,7 @@ export default class LoginPass extends PureComponent {
                                 value={this.state.oldPassWord}
                                 style={styles.inputTextView}
                                 secureTextEntry={true}
-                                onChangeText={text => this.setState({oldPassWord:text})}
+                                onChangeText={text => this.setState({oldPassWord: text})}
                             />
                         </View>
                     </View>
@@ -223,7 +228,7 @@ export default class LoginPass extends PureComponent {
                             <Text style={styles.inputText}>{I18n.t("xindenglumima")}:</Text>
                         </View>
                         {/*新密码输入框*/}
-                        <View style={{flex:1}}>
+                        <View style={{flex: 1}}>
                             <TextInput
                                 underlineColorAndroid='transparent'
                                 placeholder={I18n.t("mimageshi")}
@@ -233,7 +238,7 @@ export default class LoginPass extends PureComponent {
                                 value={this.state.newPassWord}
                                 style={styles.inputTextView}
                                 secureTextEntry={true}
-                                onChangeText={text => this.setState({newPassWord:text})}
+                                onChangeText={text => this.setState({newPassWord: text})}
                             />
 
                         </View>
@@ -244,7 +249,7 @@ export default class LoginPass extends PureComponent {
                             <Text style={styles.inputText}>{I18n.t("xindenglumima")}:</Text>
                         </View>
                         {/*新密码确认*/}
-                        <View style={{flex:1}}>
+                        <View style={{flex: 1}}>
                             <TextInput
                                 underlineColorAndroid='transparent'
                                 placeholder={'请再次输入您的新登录密码'}
@@ -254,7 +259,7 @@ export default class LoginPass extends PureComponent {
                                 value={this.state.reNewPassWord}
                                 style={styles.inputTextView}
                                 secureTextEntry={true}
-                                onChangeText={text => this.setState({reNewPassWord:text})}
+                                onChangeText={text => this.setState({reNewPassWord: text})}
                             />
                         </View>
                     </View>
@@ -272,7 +277,7 @@ export default class LoginPass extends PureComponent {
                         justifyContent: 'center',
                         borderRadius: p(10)
                     }}>
-                    <Text style={{color:'#fff',fontSize:p(26)}}>{I18n.t("baocun")}</Text>
+                    <Text style={{color: '#fff', fontSize: p(26)}}>{I18n.t("baocun")}</Text>
                 </TouchableOpacity>
                 {/*验证码模块*/}
                 <CheckModal
@@ -280,7 +285,7 @@ export default class LoginPass extends PureComponent {
                     {...this.props}
                     type={this.state.type}
                     user={this.state.user}
-                    password={md5.md5(this.state.pwd)}
+                    password={md5.md5(this.state.oldPassWord)}
                     saveUser={this.saveUser}
                     click={this._click}
                     transPassURL={this.state.transPassURL}
@@ -288,9 +293,9 @@ export default class LoginPass extends PureComponent {
                 {/*提示窗组件*/}
                 <Toast
                     ref="toast"
-                    style={{backgroundColor:'rgba(0,0,0,.6)'}}
+                    style={{backgroundColor: 'rgba(0,0,0,.6)'}}
                     position='top'
-                    textStyle={{color:'white'}}
+                    textStyle={{color: 'white'}}
                 />
             </View>
         );
@@ -311,11 +316,11 @@ let styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#1F2228',
     },
-    inputText:{
+    inputText: {
         color: 'white',
         paddingLeft: p(20),
     },
-    inputTextView:{
+    inputTextView: {
         alignItems: 'center',
         justifyContent: 'center',
         marginLeft: p(6),
@@ -326,13 +331,13 @@ let styles = StyleSheet.create({
         color: '#FFF',
         fontSize: p(24),
     },
-    reWithView:{
+    reWithView: {
         flexDirection: 'row',
         alignItems: 'center',
         height: p(70),
         justifyContent: 'space-between',
     },
-    codeObtain:{
+    codeObtain: {
         backgroundColor: "#D95411",
         color: 'white',
         marginRight: p(20),
@@ -341,7 +346,7 @@ let styles = StyleSheet.create({
         paddingHorizontal: p(12),
         fontSize: p(26),
     },
-    codeFalse:{
+    codeFalse: {
         backgroundColor: "#929BA1",
         color: 'white',
         marginRight: p(20),

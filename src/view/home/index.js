@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     View,
     Text,
@@ -31,8 +31,8 @@ import {
     markSuccess,
 } from 'react-native-update';
 import SegmentedControlTab from 'react-native-segmented-control-tab';
-import { Theme, Overlay } from 'teaset'
-import { connect } from 'react-redux';
+import {Theme, Overlay} from 'teaset'
+import {connect} from 'react-redux';
 
 import p from '../../utils/tranfrom';
 import I18n from '../../utils/i18n';
@@ -42,10 +42,10 @@ import request from '../../utils/request';
 import Title from '../../components/title';
 import RollingCaption from '../../components/rollingCaption';
 import SwiperBanner from '../../components/swiperBanner';
-import { homeLoop } from '../../store/actions/IndexLoopAction';
+import {homeLoop} from '../../store/actions/IndexLoopAction';
 
-const { appKey } = urlConfig.api[Platform.OS];
-const { width } = Dimensions.get('window');
+const {appKey} = urlConfig.api[Platform.OS];
+const {width} = Dimensions.get('window');
 
 class Index extends PureComponent {
     constructor(props) {
@@ -62,6 +62,7 @@ class Index extends PureComponent {
     }
 
     info = '';
+
     //在完成首次渲染之前调用
     componentWillMount() {
         InteractionManager.runAfterInteractions(() => {
@@ -71,45 +72,49 @@ class Index extends PureComponent {
             } else if (isRolledBack) {
                 //更新失败了,版本被回滚
                 this.showPop('zoomOut', true, '温馨提示', '更新失败,版本已回滚', 0, '')
-            }else{
+            } else {
                 this.checkUpdate()
             }
         });
     };
+
     //真实的DOM被渲染出来后调用
     componentDidMount() {
 
-        const { IndexLoopReducer } = this.props;
-        console.log('在缓存里面拿到数据=>',IndexLoopReducer);
+        const {IndexLoopReducer} = this.props;
+        console.log('在缓存里面拿到数据=>', IndexLoopReducer);
         if (!IndexLoopReducer.homeLoading) {
             this.handleData(IndexLoopReducer.homeData);
         }
 
-        this.pollingData();
+        //this.pollingData();
     }
+
     //组件接收到新的props时调用，并将其作为参数nextProps使用
     componentWillReceiveProps(nextProps) {
-        const { IndexLoopReducer } = nextProps;
+        const {IndexLoopReducer} = nextProps;
         console.log('轮询拿到的数据', IndexLoopReducer);
 
         if (!IndexLoopReducer.homeLoading) {
             this.handleData(IndexLoopReducer.homeData);
         }
     }
+
     //组件被移除之前被调用
     componentWillUnmount() {
         clearInterval(this.dexInter);
     }
+
     //轮询获取首页数据
     pollingData = () => {
-        const { dispatch } = this.props;
+        const {dispatch} = this.props;
         //开启计时器循环拿取首页显示数据
         this.dexInter = setTimeout(() => {
             let URL = config.api.index.indexList;
 
             request.post(URL, {}).then(responseText => {
 
-                if(responseText.ok){//判断接口是否请求成功
+                if (responseText.ok) {//判断接口是否请求成功
                     console.log('接口请求失败进入失败函数');
                     //toast.show('登陆失败', 50000);
                     return;
@@ -127,31 +132,32 @@ class Index extends PureComponent {
         checkUpdate(appKey).then(info => {
             this.info = info;
             console.log(info);
-            const { expired, upToDate } = info;
+            const {expired, upToDate} = info;
             if (expired) {
-                this.showPop('zoomOut', true,'版本升级','您的应用版本已更新,需下载新的版本!',4,config.api.appReleaseApk)
+                this.showPop('zoomOut', true, '版本升级', '您的应用版本已更新,需下载新的版本!', 4, config.api.appReleaseApk)
             } else if (upToDate) {
                 //this.showPop('zoomOut', true,'温馨提示','您的应用版本已是最新!',5,'')
             } else {
-                this.showPop('zoomOut', true,'更新提示','检查到新的版本'+info.name+',是否现在更新?',1,'')
+                this.showPop('zoomOut', true, '更新提示', '检查到新的版本' + info.name + ',是否现在更新?', 1, '')
             }
         }).catch(err => {
-            console.log('更新失败错误=>',err);
-            this.showPop('zoomOut', true,'温馨提示','更新失败',0,'')
+            console.log('更新失败错误=>', err);
+            this.showPop('zoomOut', true, '温馨提示', '更新失败', 0, '')
         });
     };
     //正在更新执行中
-    doUpdate = (info,overlayPopView) => {
+    doUpdate = (info, overlayPopView) => {
         overlayPopView.close();
-        this.showPop('zoomOut', true,'温馨提示','正在更新,请稍等...',2,'');
+        this.showPop('zoomOut', true, '温馨提示', '正在更新,请稍等...', 2, '');
         downloadUpdate(info).then(hash => {
-            this.showPop('zoomOut', true,'温馨提示','已更新完毕,请重启您的应用!',3,hash)
+            this.showPop('zoomOut', true, '温馨提示', '已更新完毕,请重启您的应用!', 3, hash)
         }).catch(err => {
-            console.log('更新错误=>',err);
+            console.log('更新错误=>', err);
             overlayPopView.close();
-            this.showPop('zoomOut', true,'温馨提示','更新失败',0,'')
+            this.showPop('zoomOut', true, '温馨提示', '更新失败', 0, '')
         });
     };
+
     //更新弹出层
     showPop(type, modal, title, content, step, hash) {
         let overlayView = (
@@ -179,12 +185,23 @@ class Index extends PureComponent {
                             {title}
                         </Text>
                     </View>
-                    <View style={{alignItems: 'center', justifyContent: 'center', marginTop: p(30), marginLeft: p(15), marginRight: p(15)}}>
+                    <View style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        marginTop: p(30),
+                        marginLeft: p(15),
+                        marginRight: p(15)
+                    }}>
                         <Text style={{color: '#3b3b3b', fontSize: p(26)}}>{content}</Text>
                     </View>
                     {
                         step === 1 || step === 3 || step === 4 || step === 5 || step === 0 ?
-                            <View style={{alignItems:'center',justifyContent:'center',marginTop:p(40),marginBottom:p(30)}}>
+                            <View style={{
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                marginTop: p(40),
+                                marginBottom: p(30)
+                            }}>
                                 {
                                     step === 1 ?
                                         <TouchableOpacity
@@ -194,11 +211,11 @@ class Index extends PureComponent {
                                                 justifyContent: 'center',
                                                 borderRadius: p(5),
                                                 width: width - p(300),
-                                                backgroundColor:'#D95411',
-                                                height:p(60)
+                                                backgroundColor: '#D95411',
+                                                height: p(60)
                                             }}
                                         >
-                                            <Text style={{color:'#FFF',fontSize:p(24)}}>确认</Text>
+                                            <Text style={{color: '#FFF', fontSize: p(24)}}>确认</Text>
                                         </TouchableOpacity>
                                         : step === 3 ?
                                         <TouchableOpacity
@@ -208,10 +225,11 @@ class Index extends PureComponent {
                                                 justifyContent: 'center',
                                                 borderRadius: p(5),
                                                 width: width - p(300),
-                                                backgroundColor:'#D95411',
-                                                height:p(60)}}
+                                                backgroundColor: '#D95411',
+                                                height: p(60)
+                                            }}
                                         >
-                                            <Text style={{color:'#FFF',fontSize:p(24)}}>确认</Text>
+                                            <Text style={{color: '#FFF', fontSize: p(24)}}>确认</Text>
                                         </TouchableOpacity>
                                         : step === 4 ?
                                             <TouchableOpacity
@@ -222,11 +240,12 @@ class Index extends PureComponent {
                                                     borderRadius: p(5),
                                                     width: width - p(300),
                                                     backgroundColor: '#D95411',
-                                                    height:p(60)}}
+                                                    height: p(60)
+                                                }}
                                             >
-                                                <Text style={{color:'#FFF',fontSize:p(24)}}>确认</Text>
+                                                <Text style={{color: '#FFF', fontSize: p(24)}}>确认</Text>
                                             </TouchableOpacity>
-                                            :null
+                                            : null
                                 }
                                 {
                                     step !== 3 ?
@@ -242,28 +261,34 @@ class Index extends PureComponent {
                                                 height: p(60)
                                             }}
                                         >
-                                            <Text style={{color:'#FFF',fontSize:p(24)}}>取消</Text>
+                                            <Text style={{color: '#FFF', fontSize: p(24)}}>取消</Text>
                                         </TouchableOpacity>
-                                        :null
+                                        : null
                                 }
                             </View>
                             : step === 2 ?
-                            <View style={{alignItems:'center',justifyContent:'center',marginTop:p(40),marginBottom:p(30)}}>
+                            <View style={{
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                marginTop: p(40),
+                                marginBottom: p(30)
+                            }}>
                                 <ProgressBarAndroid
                                     color="#D95411"
                                     styleAttr='Horizontal'
                                     progress={this.state.progress}
                                     indeterminate={true}
-                                    style={{marginTop:10,width:width-p(300)}}
+                                    style={{marginTop: 10, width: width - p(300)}}
                                 />
                             </View>
-                            :null
+                            : null
                     }
                 </View>
             </Overlay.PopView>
         );
         Overlay.show(overlayView);
     }
+
     //首页数据渲染函数
     handleData = (homeData) => {
         let areaData = {};
@@ -272,7 +297,7 @@ class Index extends PureComponent {
         homeData.map((item, index) => {
             let coinCode = item.coinCode.split("_")[1];
 
-            if(index === 0){
+            if (index === 0) {
                 headData.push("USDT");
             }
 
@@ -301,7 +326,7 @@ class Index extends PureComponent {
     };
     /*首頁转换交易区的点击事件*/
     handleCustomIndexSelect = (index) => {
-        let { headList, areaList } = this.state;
+        let {headList, areaList} = this.state;
 
         if (areaList) {
             this.setState({
@@ -317,12 +342,12 @@ class Index extends PureComponent {
         }
     };
     //下拉刷新
-    queryIndex = () =>{
-        const { dispatch } = this.props;
+    queryIndex = () => {
+        const {dispatch} = this.props;
         let URL = config.api.index.indexList;
         request.post(URL, {}).then(responseText => {
 
-            if(response.ok){//判断接口是否请求成功
+            if (response.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 //toast.show('登陆失败', 50000);
                 return;
@@ -333,6 +358,7 @@ class Index extends PureComponent {
             console.log('进入失败函数');
         });
     };
+
     //渲染
     render() {
         return (
@@ -371,7 +397,7 @@ class Index extends PureComponent {
                             borderColor: '#313840',
                         }}
                         activeTabStyle={{backgroundColor: '#313840'}}
-                        tabTextStyle={{color: '#FFFFFF',fontSize:p(32)}}
+                        tabTextStyle={{color: '#FFFFFF', fontSize: p(32)}}
                         activeTabTextStyle={{color: '#FFFFFF'}}
                     />
                     {/*显示每条数据的涨幅情况信息*/}
@@ -379,7 +405,7 @@ class Index extends PureComponent {
                         horizontal={false}
                         data={this.state.indexData}
                         renderItem={this._renderRow}
-                        keyExtractor = {(item, index) => index.toString()}
+                        keyExtractor={(item, index) => index.toString()}
                         onEndReachedThreshold={1}
                         refreshing={false}
                     />
@@ -388,6 +414,7 @@ class Index extends PureComponent {
             </View>
         );
     }
+
     //行情升降的显示方式
     rowContent = (currentExchangPrice, lastExchangPrice, keep) => {
         if (currentExchangPrice < lastExchangPrice) {
@@ -433,7 +460,7 @@ class Index extends PureComponent {
     };
     //每一行数据的显示方式
     _renderRow = ({item}) => {
-        const { value } = item;
+        const {value} = item;
         let {
             RiseAndFall,
             picturePath,
@@ -480,8 +507,12 @@ class Index extends PureComponent {
                         {
                             RiseAndFall > 0 ?
                                 <View style={{
-                                    backgroundColor: '#c1180f', alignItems: 'center',
-                                    justifyContent: 'center', borderRadius: p(5), height: p(34),paddingHorizontal:p(15)
+                                    backgroundColor: '#c1180f',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    borderRadius: p(5),
+                                    height: p(34),
+                                    paddingHorizontal: p(15)
                                 }}>
                                     <Text style={{
                                         fontSize: p(24),
@@ -490,8 +521,12 @@ class Index extends PureComponent {
                                 </View>
                                 : RiseAndFall === 0 ?
                                 <View style={{
-                                    backgroundColor: '#5a5a5a', alignItems: 'center',
-                                    justifyContent: 'center', borderRadius: p(5), height: p(34),paddingHorizontal:p(15)
+                                    backgroundColor: '#5a5a5a',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    borderRadius: p(5),
+                                    height: p(34),
+                                    paddingHorizontal: p(15)
                                 }}>
                                     <Text style={{
                                         fontSize: p(24),
@@ -500,8 +535,12 @@ class Index extends PureComponent {
                                 </View>
                                 :
                                 <View style={{
-                                    backgroundColor: '#018F67', alignItems: 'center',
-                                    justifyContent: 'center', borderRadius: p(5), height: p(34),paddingHorizontal:p(15)
+                                    backgroundColor: '#018F67',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    borderRadius: p(5),
+                                    height: p(34),
+                                    paddingHorizontal: p(15)
                                 }}>
                                     <Text style={{
                                         fontSize: p(24),
@@ -550,7 +589,7 @@ const styles = StyleSheet.create({
     modal: {
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius:p(20),
+        borderRadius: p(20),
         height: p(270),
         width: width - p(150)
     },
@@ -590,7 +629,7 @@ const styles = StyleSheet.create({
     modal_1: {
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius:p(20)
+        borderRadius: p(20)
     },
     modal3: {
         height: p(450),
@@ -599,7 +638,7 @@ const styles = StyleSheet.create({
 });
 
 export default connect((state) => {
-    const { IndexLoopReducer } = state;
+    const {IndexLoopReducer} = state;
     return {
         IndexLoopReducer
     }

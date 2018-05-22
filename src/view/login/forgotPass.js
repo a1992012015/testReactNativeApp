@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     View,
     Text,
@@ -38,8 +38,8 @@ export default class ForgotPass extends PureComponent {
     }
 
 
-    fotOne = () =>{
-        const { toast, emailInput } = this.refs;
+    fotOne = () => {
+        const {toast, emailInput} = this.refs;
 
         if (this.state.email === '' || this.state.email === null) {
             toast.show("请输入邮箱", DURATION.LENGTH_SHORT);
@@ -47,8 +47,7 @@ export default class ForgotPass extends PureComponent {
         }
 
         let myReg = /^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/;
-        if(!myReg.test(this.state.email))
-        {
+        if (!myReg.test(this.state.email)) {
             toast.show(I18n.t('emailvail'), DURATION.LENGTH_SHORT);
             return;
         }
@@ -60,13 +59,13 @@ export default class ForgotPass extends PureComponent {
         emailInput.blur();
 
         this.setState({
-            visible:true
+            visible: true
         });
         let url = `${config.api.login.stepOne}?email=${this.state.email}`;
 
-        request.post(url).then((responseText)=>{
+        request.post(url).then((responseText) => {
 
-            if(responseText.ok){
+            if (responseText.ok) {
                 console.log('请求接口失败');
                 toast.show('数据获取失败', DURATION.LENGTH_SHORT);
                 return;
@@ -78,8 +77,8 @@ export default class ForgotPass extends PureComponent {
                     fotSent: false,
                     visible: false
                 });
-            }else{
-                const { msg } = responseText;
+            } else {
+                const {msg} = responseText;
                 toast.show(msg, DURATION.LENGTH_SHORT);
             }
 
@@ -105,7 +104,7 @@ export default class ForgotPass extends PureComponent {
                             placeholderTextColor={'#B0B0B0'}
                             value={this.state.email}
                             style={styles.inputTextView}
-                            onChangeText={(text) => this.setState({email:text})}
+                            onChangeText={(text) => this.setState({email: text})}
                         />
                     </View>
 
@@ -113,21 +112,23 @@ export default class ForgotPass extends PureComponent {
                 <TouchableOpacity
                     onPress={() => this.fotOne()}
                     activeOpacity={.8}
-                    style={{ height: p(80),
+                    style={{
+                        height: p(80),
                         backgroundColor: '#D95411',
                         borderWidth: 1,
                         margin: p(20),
                         alignItems: 'center',
                         justifyContent: 'center',
-                        borderRadius: p(10)}}
+                        borderRadius: p(10)
+                    }}
                 >
-                    <Text style={{color:'#fff',fontSize:p(26)}}>{I18n.t('next')}</Text>
+                    <Text style={{color: '#fff', fontSize: p(26)}}>{I18n.t('next')}</Text>
                 </TouchableOpacity>
                 <Toast
                     ref="toast"
-                    style={{backgroundColor:'rgba(0,0,0,.6)'}}
+                    style={{backgroundColor: 'rgba(0,0,0,.6)'}}
                     position='top'
-                    textStyle={{color:'white'}}
+                    textStyle={{color: 'white'}}
                 />
                 <Loading visible={this.state.visible}/>
                 <PromptModal isOpen={this.state.isOpen} {...this.props}/>
@@ -150,13 +151,13 @@ let styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#1F2228'
     },
-    inputText:{
+    inputText: {
         color: 'white',
         paddingLeft: p(20),
         width: p(180),
         fontSize: p(24)
     },
-    inputTextView:{
+    inputTextView: {
         alignItems: 'center',
         justifyContent: 'center',
         marginLeft: p(6),
@@ -167,17 +168,17 @@ let styles = StyleSheet.create({
         paddingLeft: p(10),
         color: '#FFF'
     },
-    reWithView:{
+    reWithView: {
         flexDirection: 'row',
         alignItems: 'center',
         height: p(70)
     },
-    promptText:{
+    promptText: {
         color: '#B0B0B0',
         fontSize: p(22),
         padding: p(10)
     },
-    codeObtain:{
+    codeObtain: {
         backgroundColor: "#D95411",
         color: 'white',
         marginRight: p(20),
@@ -185,7 +186,7 @@ let styles = StyleSheet.create({
         textAlign: 'center',
         paddingHorizontal: p(12)
     },
-    codeFalse:{
+    codeFalse: {
         backgroundColor: "#929BA1",
         color: 'white',
         marginRight: p(20),

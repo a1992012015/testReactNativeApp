@@ -7,8 +7,8 @@
 'use strict';
 
 import React, {Component} from 'react';
-import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
+import {Provider} from 'react-redux';
+import {PersistGate} from 'redux-persist/integration/react';
 
 import configureStore from './store/store';
 import AppNavigator from './navigationConfiguration';
@@ -26,18 +26,14 @@ if (!__DEV__) {
     };
 }
 
-const { store, durable } = configureStore();
+const {store, durable} = configureStore();
 
 class Index extends Component {
-    componentWillMount() {
-
-    }
-
     render() {
         return (
-            <Provider store={ store }>
-                <PersistGate loading={ null } persistor={ durable }>
-                    <AppNavigator />
+            <Provider store={store}>
+                <PersistGate loading={null} persistor={durable}>
+                    <AppNavigator/>
                 </PersistGate>
             </Provider>
         );

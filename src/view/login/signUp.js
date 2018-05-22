@@ -6,7 +6,7 @@
  * */
 'use strict';
 
-import React, { PureComponent }from 'react';
+import React, {PureComponent} from 'react';
 import {
     View,
     Dimensions,
@@ -18,21 +18,21 @@ import {
     KeyboardAvoidingView,
     Alert,
     ScrollView
-}from 'react-native';
-import Toast, { DURATION } from 'react-native-easy-toast';
-import { Checkbox } from 'teaset';
+} from 'react-native';
+import Toast, {DURATION} from 'react-native-easy-toast';
+import {Checkbox} from 'teaset';
 import Modal from 'react-native-modalbox';
 import HTMLView from 'react-native-htmlview';
 
 import md5 from '../../utils/hrymd5';
 import I18n from '../../utils/i18n';
-import p  from '../../utils/tranfrom'
+import p from '../../utils/tranfrom'
 import config from '../../utils/config';
 import request from '../../utils/request';
-import Title from  '../../components/title';
+import Title from '../../components/title';
 import SModal from '../../components/sModal';
 
-const {width, height}=Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 class SignUp extends PureComponent {
 
@@ -53,6 +53,7 @@ class SignUp extends PureComponent {
             fotPassword: null,
         }
     }
+
     //真实的DOM被渲染出来后调用
     componentDidMount() {
 
@@ -60,14 +61,14 @@ class SignUp extends PureComponent {
         let url = config.api.login.regreg;
         request.post(url).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 //toast.show('登陆失败', 5000);
                 return;
             }
 
-            if(responseText.success){
-                const { obj } = responseText;
+            if (responseText.success) {
+                const {obj} = responseText;
                 this.setState({
                     content: obj.regreg,
                 })
@@ -75,14 +76,15 @@ class SignUp extends PureComponent {
 
         })
     }
+
     //组件被移除之前被调用
     componentWillUnmount() {
         clearInterval(this.state.timeId);
     }
 
-    _register = async() => {
+    _register = async () => {
 
-        const { toast } = this.refs;
+        const {toast} = this.refs;
 
         if (this.state.data.telephone === '' || this.state.data.telephone === null) {
             toast.show(I18n.t('emailisnull'), DURATION.LENGTH_SHORT);
@@ -90,7 +92,7 @@ class SignUp extends PureComponent {
         }
 
         let myReg = /^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/;
-        if(!myReg.test(this.state.data.telephone)) {
+        if (!myReg.test(this.state.data.telephone)) {
             toast.show(I18n.t('emailvail'), DURATION.LENGTH_SHORT);
             return;
         }
@@ -112,12 +114,12 @@ class SignUp extends PureComponent {
             return;
         }
 
-        if(this.state.data.password !== this.state.fotPassword){
+        if (this.state.data.password !== this.state.fotPassword) {
             toast.show(I18n.t('fotpassvail'), DURATION.LENGTH_SHORT);
             return;
         }
 
-        if(!this.state.checked){
+        if (!this.state.checked) {
             toast.show(I18n.t('agreement'), DURATION.LENGTH_SHORT);
             return;
         }
@@ -130,9 +132,9 @@ class SignUp extends PureComponent {
         });
 
         request.post(signUrl).then(responseText => {
-            console.log("responseText",responseText);
+            console.log("responseText", responseText);
 
-            if(responseText.ok){
+            if (responseText.ok) {
                 console.log('请求接口失败');
                 toast.show('数据获取失败', DURATION.LENGTH_SHORT);
                 return;
@@ -154,7 +156,7 @@ class SignUp extends PureComponent {
             } else {
                 this.refresh();
                 this.setState({userIsLogin: false});
-                const { msg } = responseText;
+                const {msg} = responseText;
                 toast.show(msg, DURATION.LENGTH_SHORT);
             }
         })
@@ -170,14 +172,14 @@ class SignUp extends PureComponent {
     //查看协议
     _readModal = () => {
         this.setState({
-            isOpen:true,
-            checked:true
+            isOpen: true,
+            checked: true
         });
     };
     //关闭
-    _click=()=>{
+    _click = () => {
         this.setState({
-            isOpen:false
+            isOpen: false
         });
     };
 
@@ -198,7 +200,7 @@ class SignUp extends PureComponent {
                                 underlineColorAndroid='transparent'
                                 clearButtonMode={'while-editing'}
                                 placeholderTextColor={'#565A5D'}
-                                onChangeText={(telephone) => this.state.data.telephone=telephone}
+                                onChangeText={(telephone) => this.state.data.telephone = telephone}
                             />
                         </View>
 
@@ -210,7 +212,7 @@ class SignUp extends PureComponent {
                                 placeholderTextColor={'#565A5D'}
                                 style={styles.regInput}
                                 secureTextEntry={true}
-                                onChangeText={(password) => this.state.data.password=password}
+                                onChangeText={(password) => this.state.data.password = password}
                             />
                         </View>
                         <View style={styles.regInputView}>
@@ -221,7 +223,7 @@ class SignUp extends PureComponent {
                                 placeholderTextColor={'#565A5D'}
                                 style={styles.regInput}
                                 secureTextEntry={true}
-                                onChangeText={(fotPassword) => this.state.fotPassword=fotPassword}
+                                onChangeText={(fotPassword) => this.state.fotPassword = fotPassword}
                             />
                         </View>
                         <View style={styles.regInputView}>
@@ -231,13 +233,13 @@ class SignUp extends PureComponent {
                                 clearButtonMode={'while-editing'}
                                 placeholderTextColor={'#565A5D'}
                                 style={styles.regInput}
-                                onChangeText={(registCode) => this.state.data.registCode=registCode}
+                                onChangeText={(registCode) => this.state.data.registCode = registCode}
                             />
                             <TouchableOpacity
                                 activeOpacity={.8}
                                 onPress={this.refresh}>
-                                <Image style={{width:p(130),height:p(50),marginRight:p(10)}}
-                                       source={{uri:this.state.GraphicCode}}/>
+                                <Image style={{width: p(130), height: p(50), marginRight: p(10)}}
+                                       source={{uri: this.state.GraphicCode}}/>
                             </TouchableOpacity>
                         </View>
 
@@ -247,7 +249,7 @@ class SignUp extends PureComponent {
                                        placeholderTextColor={'#565A5D'}
                                        clearButtonMode={'while-editing'}
                                        style={styles.regInput}
-                                       onChangeText={(referralCode) => this.state.data.referralCode=referralCode}
+                                       onChangeText={(referralCode) => this.state.data.referralCode = referralCode}
                             />
                         </View>
 
@@ -285,11 +287,11 @@ class SignUp extends PureComponent {
                        swipeToClose={false}
                        isOpen={this.state.isOpen}>
 
-                    <View style={{height: p(60),alignItems: 'center',justifyContent: 'center'}}>
-                        <Text style={{fontSize:p(24)}}>注册服务协议</Text>
+                    <View style={{height: p(60), alignItems: 'center', justifyContent: 'center'}}>
+                        <Text style={{fontSize: p(24)}}>注册服务协议</Text>
                     </View>
 
-                    <ScrollView style={{flex:1,borderBottomRightRadius: p(20),borderBottomLeftRadius: p(20)}}>
+                    <ScrollView style={{flex: 1, borderBottomRightRadius: p(20), borderBottomLeftRadius: p(20)}}>
                         <HTMLView value={this.state.content}
                                   style={{padding: 10, backgroundColor: '#f9f9f9'}}
                         />
@@ -297,7 +299,7 @@ class SignUp extends PureComponent {
                     </ScrollView>
 
                     <TouchableOpacity style={styles.imageView}
-                                      onPress={()=>this._click()}
+                                      onPress={() => this._click()}
                     >
                         <Image source={require('../../static/login/clean.png')}
                                style={styles.imageType}
@@ -306,9 +308,9 @@ class SignUp extends PureComponent {
                 </Modal>
 
                 <Toast ref="toast"
-                       style={{backgroundColor:'rgba(0,0,0,.6)'}}
+                       style={{backgroundColor: 'rgba(0,0,0,.6)'}}
                        position='top'
-                       textStyle={{color:'white'}}
+                       textStyle={{color: 'white'}}
                 />
                 <SModal hasLoading={this.state.userIsLogin}/>
 
@@ -329,7 +331,7 @@ const styles = StyleSheet.create({
         height: p(90),
         flex: 1,
         padding: 0,
-        color:'#FFFFFF',
+        color: '#FFFFFF',
     },
     regInputView: {
         height: p(80),
@@ -347,7 +349,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#D95411',
         padding: p(20),
         marginTop: p(20),
-        justifyContent:'center',
+        justifyContent: 'center',
     },
     reg_btn_text: {
         color: '#fff',
@@ -361,15 +363,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
 
     },
-    codeObtain:{
-        color:'#FFFFFF',
+    codeObtain: {
+        color: '#FFFFFF',
         backgroundColor: "#D95411",
         marginRight: p(20),
         paddingVertical: p(10),
         textAlign: 'center',
         paddingHorizontal: p(12),
     },
-    codeFalse:{
+    codeFalse: {
         color: '#FFFFFF',
         backgroundColor: "#929BA1",
         marginRight: p(20),
@@ -377,7 +379,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         paddingHorizontal: p(12),
     },
-    checkStyle:{
+    checkStyle: {
         marginRight: p(10),
         flexDirection: 'row',
         alignItems: 'center',
@@ -385,7 +387,7 @@ const styles = StyleSheet.create({
         marginTop: p(20),
         marginBottom: p(20),
     },
-    checkboxStyle:{
+    checkboxStyle: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
@@ -397,14 +399,14 @@ const styles = StyleSheet.create({
 
     },
     modal3: {
-        height: height/2+p(200),
-        width: width-p(60),
+        height: height / 2 + p(200),
+        width: width - p(60),
     },
-    imageType:{
+    imageType: {
         width: p(45),
         height: p(45),
     },
-    imageView:{
+    imageView: {
         position: 'absolute',
         top: 0,
         right: 0,

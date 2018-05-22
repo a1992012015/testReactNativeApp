@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     StyleSheet,
     View,
@@ -23,12 +23,12 @@ import request from '../../utils/request';
 import Loading from '../../components/loading';
 import BuySellModal from './buySellModal';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 
 export default class Item_3 extends PureComponent {
     //构建
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             orderList: [],
@@ -37,6 +37,7 @@ export default class Item_3 extends PureComponent {
             isType: 'buy',
         }
     }
+
     //真实的结构渲染出来之后调用
     componentDidMount() {
         this.setState({
@@ -45,9 +46,10 @@ export default class Item_3 extends PureComponent {
             loading: false,
         })
     }
+
     //接收一个新的props调用
     componentWillReceiveProps(props) {
-        const { coinCode, c2cBuySellList } = props;
+        const {coinCode, c2cBuySellList} = props;
         this.setState({
             coinCode: coinCode,
             orderList: c2cBuySellList.orderList,
@@ -57,34 +59,34 @@ export default class Item_3 extends PureComponent {
 
     setItemText = () => {
         this.setState({
-            isOpen:false
+            isOpen: false
         })
     };
     //查看汇款详情
     getCTowCTransaction = item => {
-        const { transactionType, transactionNum } = item;
+        const {transactionType, transactionNum} = item;
 
-        if(transactionType === 1){
+        if (transactionType === 1) {
             this.setState({
-                isType:'buy',
+                isType: 'buy',
             })
-        }else{
+        } else {
             this.setState({
-                isType:'sell',
+                isType: 'sell',
             })
         }
         let url = `${config.api.ctc.getc2cTransaction}?transactionNum=${transactionNum}`;
         request.post(url).then(responseText => {
             request.manyLogin(this.props, responseText);
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            const { obj } = responseText;
+            const {obj} = responseText;
 
-            if(responseText.success){
+            if (responseText.success) {
                 this.setState({
                     buySellData: obj,
                     isOpen: true,
@@ -95,9 +97,9 @@ export default class Item_3 extends PureComponent {
         });
     };
 
-    render(){
+    render() {
         return (
-            <View style={{flex:1, marginBottom: config.api.isTabView ? p(100) : 0}}>
+            <View style={{flex: 1, marginBottom: config.api.isTabView ? p(100) : 0}}>
                 <ScrollView
                     style={{flex: 1, backgroundColor: '#fafafa'}}
                     refreshControl={
@@ -108,14 +110,14 @@ export default class Item_3 extends PureComponent {
                     }>
                     <View style={styles.ViewFlex}>
                         {/*副标题*/}
-                        <View style={{marginTop:p(30)}}>
+                        <View style={{marginTop: p(30)}}>
                             <Text style={{color: '#00c2d2', fontSize: p(28), fontWeight: '500'}}>最近兑换记录</Text>
                         </View>
 
                         <View style={{height: p(2), backgroundColor: '#e6e6e6', width: width, marginTop: p(10)}}/>
                         {/*table列表选项*/}
                         <View style={{
-                            flexDirection: 'row', alignItems: 'center',marginTop: p(20)
+                            flexDirection: 'row', alignItems: 'center', marginTop: p(20)
                         }}>
                             <Text style={[styles.textRecord, {width: '15%', fontSize: p(26)}]}>时间</Text>
                             <Text style={[styles.textRecord, {width: '12%', fontSize: p(26)}]}>类型</Text>
@@ -126,11 +128,12 @@ export default class Item_3 extends PureComponent {
                             <Text style={[styles.textRecord, {width: '12%', fontSize: p(26)}]}>信息</Text>
                         </View>
 
-                        <View style={{height: p(2), backgroundColor: '#e6e6e6', width: width - p(40), marginTop: p(20)}}/>
+                        <View
+                            style={{height: p(2), backgroundColor: '#e6e6e6', width: width - p(40), marginTop: p(20)}}/>
                         {/*列表具体的信息*/}
                         <FlatList
-                            style={{marginTop:p(20)}}
-                            horizontal={  false }
+                            style={{marginTop: p(20)}}
+                            horizontal={false}
                             onEndReachedThreshold={1}
                             refreshing={false}
                             data={this.state.orderList}
@@ -144,19 +147,21 @@ export default class Item_3 extends PureComponent {
                                     status2,
                                 } = item;
                                 return (
-                                    <View style={{flexDirection:'row',
-                                        alignItems:'center',
-                                        borderBottomWidth:p(2),
-                                        borderBottomColor:'#e6e6e6'}}
+                                    <View style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        borderBottomWidth: p(2),
+                                        borderBottomColor: '#e6e6e6'
+                                    }}
                                     >
-                                        <Text style={[styles.textRecord,{width: '15%'}]}>{transactionTime}</Text>
-                                        <Text style={[styles.textRecord,{width: '12%'}]}>
+                                        <Text style={[styles.textRecord, {width: '15%'}]}>{transactionTime}</Text>
+                                        <Text style={[styles.textRecord, {width: '12%'}]}>
                                             {transactionType === 1 ? '买' : '卖'}
                                         </Text>
-                                        <Text style={[styles.textRecord,{width: '15%'}]}>{transactionCount}</Text>
-                                        <Text style={[styles.textRecord,{width: '15%'}]}>{transactionPrice}</Text>
-                                        <Text style={[styles.textRecord,{width: '15%'}]}>{transactionMoney}</Text>
-                                        <Text style={[styles.textRecord,{width:'12%'}]}>
+                                        <Text style={[styles.textRecord, {width: '15%'}]}>{transactionCount}</Text>
+                                        <Text style={[styles.textRecord, {width: '15%'}]}>{transactionPrice}</Text>
+                                        <Text style={[styles.textRecord, {width: '15%'}]}>{transactionMoney}</Text>
+                                        <Text style={[styles.textRecord, {width: '12%'}]}>
                                             {
                                                 item.status === 3 && status2 === 3 ? '已否决(交易关闭)' :
                                                     item.status === 3 && status2 === 4 ? '已否决(交易失败)' :
@@ -167,10 +172,10 @@ export default class Item_3 extends PureComponent {
                                             }
                                         </Text>
                                         {
-                                            transactionType!== 2 ?
+                                            transactionType !== 2 ?
                                                 <Text
                                                     onPress={() => this.getCTowCTransaction(item)}
-                                                    style={[styles.textRecord, {width: '16%' ,color: '#00c2d2'}]}
+                                                    style={[styles.textRecord, {width: '16%', color: '#00c2d2'}]}
                                                 >查看</Text>
                                                 :
                                                 <Text style={[styles.textRecord, {width: '16%', color: '#00c2d2'}]}/>
@@ -216,7 +221,7 @@ let styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
-    inputTextStyle:{
+    inputTextStyle: {
         flexDirection: 'row',
         height: p(120),
         alignItems: 'center',
@@ -228,24 +233,24 @@ let styles = StyleSheet.create({
         borderColor: '#e6e6e6',
         marginLeft: p(10)
     },
-    inputTextView:{
+    inputTextView: {
         flex: 1,
         height: p(120),
         fontSize: p(26),
         color: '#565A5D'
     },
-    promptText:{
+    promptText: {
         color: '#2b2b2b',
         fontSize: p(26),
         lineHeight: p(40),
         marginTop: p(20)
     },
-    textRecord:{
+    textRecord: {
         fontSize: p(24),
         color: '#292b2c',
         textAlign: 'center'
     },
-    ViewFlex:{
+    ViewFlex: {
         width: width - p(20),
         marginLeft: p(10)
     }

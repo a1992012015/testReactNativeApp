@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     StyleSheet,
     Text,
@@ -24,9 +24,9 @@ import config from '../../utils/config';
 import p from '../../utils/tranfrom';
 import Title from '../../components/title';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
-export default class TurnoutCurrencyList  extends PureComponent {
+export default class TurnoutCurrencyList extends PureComponent {
     // 构造
     constructor(props) {
         super(props);
@@ -36,6 +36,7 @@ export default class TurnoutCurrencyList  extends PureComponent {
             dataSource: [],
         };
     }
+
     /*真实结构渲染出来之后调用*/
     componentDidMount() {
         const {params} = this.props.navigation.state;
@@ -47,14 +48,17 @@ export default class TurnoutCurrencyList  extends PureComponent {
     }
 
     newsDetail = row => {
-        const { openTibi } = row;
-        if(openTibi === "0"){
+        const {openTibi} = row;
+        if (openTibi === "0") {
             Alert.alert(
                 '提示',
                 '暂不支持提币',
-                [{text: '确认', onPress: () => {}}]
+                [{
+                    text: '确认', onPress: () => {
+                    }
+                }]
             );
-        }else{
+        } else {
             this.props.navigation.navigate('TurnoutCurrency', {
                 intoData: row,
                 telephone: this.state.telephone,
@@ -68,18 +72,18 @@ export default class TurnoutCurrencyList  extends PureComponent {
 
         request.post(url).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            request.manyLogin(this.props,responseText);
-            console.log("responseText",responseText);
+            request.manyLogin(this.props, responseText);
+            console.log("responseText", responseText);
 
             const listData = [];
-            const { obj } = responseText;
+            const {obj} = responseText;
 
-            obj.map((item,index)=>{
+            obj.map((item, index) => {
                 listData.push({
                     key: index,
                     value: item
@@ -133,7 +137,7 @@ export default class TurnoutCurrencyList  extends PureComponent {
                     <Text style={styles.textView}>{item.coinCode}</Text>
                 </View>
                 <Image
-                    style={{width:p(35),height:p(35)}}
+                    style={{width: p(35), height: p(35)}}
                     source={require('../../static/arrow.png')}
                 />
             </TouchableOpacity>)
@@ -150,7 +154,7 @@ const styles = StyleSheet.create({
         marginVertical: p(20),
         width: width,
     },
-    newsItems:{
+    newsItems: {
         overflow: 'hidden',
         width: width / 2 - p(30),
         marginLeft: p(20),
@@ -164,12 +168,12 @@ const styles = StyleSheet.create({
         marginTop: p(20),
         borderRadius: p(4),
     },
-    textView:{
+    textView: {
         color: '#B0B0B0',
         fontSize: p(26),
         left: -p(40)
     },
-    contentView:{
+    contentView: {
         flexDirection: 'row',
         alignItems: 'center',
     },

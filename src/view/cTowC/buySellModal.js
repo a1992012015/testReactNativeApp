@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     View,
     Text,
@@ -20,7 +20,7 @@ import Modal from 'react-native-modalbox';
 
 import p from '../../utils/tranfrom';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 export default class BuySellModal extends PureComponent {
     //构建
@@ -34,6 +34,7 @@ export default class BuySellModal extends PureComponent {
             isType: 'buy',
         };
     }
+
     //组件接收到新的props时调用
     componentWillReceiveProps(nextProps) {
         this.setState({
@@ -45,34 +46,34 @@ export default class BuySellModal extends PureComponent {
     }
 
     _click = () => {
-        const { goBack } = this.props.navigation;
+        const {goBack} = this.props.navigation;
 
         this.setState({
-            isOpen:false
+            isOpen: false
         });
 
         this.props.setItemText();
 
-        if(this.state.isGoBack){
+        if (this.state.isGoBack) {
             goBack();
         }
     };
 
     render() {
-        const { buySellData } = this.state;
+        const {buySellData} = this.state;
         console.log(buySellData);
 
-        if(buySellData !== null && buySellData !== undefined){
-            const { bankowner, bankname, bankcard, transactionMoney, randomNum, status2,  } = buySellData;
+        if (buySellData !== null && buySellData !== undefined) {
+            const {bankowner, bankname, bankcard, transactionMoney, randomNum, status2,} = buySellData;
             console.log('buySellData', buySellData);
             return (
                 <Modal
                     style={[styles.modal, styles.modal3]}
-                       position={"center"}
-                       backButton={false}
-                       backdropPressToClose={false}
-                       swipeToClose={false}
-                       isOpen={this.state.isOpen}
+                    position={"center"}
+                    backButton={false}
+                    backdropPressToClose={false}
+                    swipeToClose={false}
+                    isOpen={this.state.isOpen}
                 >
                     <TouchableOpacity
                         style={styles.imageView}
@@ -81,30 +82,30 @@ export default class BuySellModal extends PureComponent {
                                style={styles.imageType}/>
                     </TouchableOpacity>
 
-                    <ScrollView style={{width:width-(70)}}>
-                        <View style={{flex:1, alignItems:'center'}}>
-                            <Text style={{fontSize:p(30),paddingVertical:p(20)}}>
+                    <ScrollView style={{width: width - (70)}}>
+                        <View style={{flex: 1, alignItems: 'center'}}>
+                            <Text style={{fontSize: p(30), paddingVertical: p(20)}}>
                                 {this.state.isType === 'buy' ? '汇款订单' : '收款订单'}
                             </Text>
                         </View>
-                        <View style={{flex:1,paddingHorizontal:p(20)}}>
+                        <View style={{flex: 1, paddingHorizontal: p(20)}}>
 
-                            <View style={{paddingVertical:p(20), backgroundColor:'#FFE7E1'}}>
-                                <Text style={{fontSize:p(26),marginRight:p(15),marginLeft:p(15)}}>
+                            <View style={{paddingVertical: p(20), backgroundColor: '#FFE7E1'}}>
+                                <Text style={{fontSize: p(26), marginRight: p(15), marginLeft: p(15)}}>
                                     <Text style={styles.modeText}>
-                                        {this.state.isType === 'buy' ? '1、请按提示信息向卖家汇款':'1、您的收款信息如下'}
+                                        {this.state.isType === 'buy' ? '1、请按提示信息向卖家汇款' : '1、您的收款信息如下'}
                                     </Text>
                                 </Text>
                             </View>
 
-                            <View style={[styles.modeView,{marginTop:p(20)}]}>
+                            <View style={[styles.modeView, {marginTop: p(20)}]}>
                                 <Text style={styles.bankText}>收款方户名</Text>
                                 <Text style={styles.modeText}>{bankowner}</Text>
                             </View>
 
                             <View style={styles.modeView}>
                                 <Text style={styles.bankText}>收款方开户行</Text>
-                                <Text style={[styles.bankTextM,{fontSize:p(24)}]}>{bankname}</Text>
+                                <Text style={[styles.bankTextM, {fontSize: p(24)}]}>{bankname}</Text>
                             </View>
 
                             <View style={styles.modeView}>
@@ -114,7 +115,7 @@ export default class BuySellModal extends PureComponent {
 
                             <View style={styles.modeView}>
                                 <Text style={styles.bankText}>
-                                    {this.state.isType === 'buy'?'转账金额':'收账金额'}
+                                    {this.state.isType === 'buy' ? '转账金额' : '收账金额'}
                                 </Text>
                                 <Text style={styles.bankTextM}>{transactionMoney}</Text>
                             </View>
@@ -140,33 +141,33 @@ export default class BuySellModal extends PureComponent {
                             </View>
                             {
                                 this.state.isType === 'buy' ?
-                                    <View style={{paddingVertical:p(20), backgroundColor:'#FFE7E1'}}>
+                                    <View style={{paddingVertical: p(20), backgroundColor: '#FFE7E1'}}>
 
-                                        <Text style={{fontSize:p(26),marginRight:p(15),marginLeft:p(15)}}>
+                                        <Text style={{fontSize: p(26), marginRight: p(15), marginLeft: p(15)}}>
                                             <Text style={styles.modeText}>1、卖家为认证商户，可放心付款；</Text>
                                         </Text>
 
-                                        <Text style={{fontSize:p(26),marginRight:p(15),marginLeft:p(15)}}>
+                                        <Text style={{fontSize: p(26), marginRight: p(15), marginLeft: p(15)}}>
                                             <Text style={styles.modeText}>2、汇款时请一定要填写备注信息；</Text>
                                         </Text>
 
-                                        <Text style={{fontSize:p(26),marginRight:p(15),marginLeft:p(15)}}>
+                                        <Text style={{fontSize: p(26), marginRight: p(15), marginLeft: p(15)}}>
                                             <Text style={styles.modeText}>
                                                 3、卖家确认收到款后，自动充值。如超过24小时未收到币，请向客户反馈解决
                                             </Text>
                                         </Text>
                                     </View>
                                     :
-                                    <View style={{paddingVertical:p(20), backgroundColor:'#FFE7E1'}}>
-                                        <Text style={{fontSize:p(26),marginRight:p(15),marginLeft:p(15)}}>
+                                    <View style={{paddingVertical: p(20), backgroundColor: '#FFE7E1'}}>
+                                        <Text style={{fontSize: p(26), marginRight: p(15), marginLeft: p(15)}}>
                                             <Text style={styles.modeText}>1、卖家为认证商户，可放心等待收款；</Text>
                                         </Text>
 
-                                        <Text style={{fontSize:p(26),marginRight:p(15),marginLeft:p(15)}}>
+                                        <Text style={{fontSize: p(26), marginRight: p(15), marginLeft: p(15)}}>
                                             <Text style={styles.modeText}>2、收款时请确认金额信息；</Text>
                                         </Text>
 
-                                        <Text style={{fontSize:p(26),marginRight:p(15),marginLeft:p(15)}}>
+                                        <Text style={{fontSize: p(26), marginRight: p(15), marginLeft: p(15)}}>
                                             <Text style={styles.modeText}>3、卖家确认收到款后，自动充值。如超过24小时未收到款项，
                                                 请向客户反馈解决</Text>
                                         </Text>
@@ -180,7 +181,7 @@ export default class BuySellModal extends PureComponent {
                     </ScrollView>
                 </Modal>
             );
-        }else{
+        } else {
             console.log('buySellData => null');
             return (
                 <View/>
@@ -193,48 +194,48 @@ const styles = StyleSheet.create({
     modal: {
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius:p(10)
+        borderRadius: p(10)
     },
     modal3: {
         height: p(870),
-        width: width-p(80)
+        width: width - p(80)
     },
-    text:{
-        color:'#727272',
-        marginTop:p(40),
-        fontSize:p(24)
+    text: {
+        color: '#727272',
+        marginTop: p(40),
+        fontSize: p(24)
     },
-    modeView:{
-        flex:1,
-        flexDirection:'row',
-        padding:p(20),
-        borderColor:'#ccc',
-        borderWidth:StyleSheet.hairlineWidth,
-        alignItems:'center',
+    modeView: {
+        flex: 1,
+        flexDirection: 'row',
+        padding: p(20),
+        borderColor: '#ccc',
+        borderWidth: StyleSheet.hairlineWidth,
+        alignItems: 'center',
     },
-    modeText:{
-        color:'#D95411',
-        paddingLeft:p(20),
-        fontSize:p(24)
+    modeText: {
+        color: '#D95411',
+        paddingLeft: p(20),
+        fontSize: p(24)
     },
-    imageType:{
-        width:p(45),
-        height:p(45)
+    imageType: {
+        width: p(45),
+        height: p(45)
     },
-    bankText:{
-        width:p(180),
-        borderRightColor:'#ccc',
-        borderRightWidth:StyleSheet.hairlineWidth,
-        fontSize:p(24)
+    bankText: {
+        width: p(180),
+        borderRightColor: '#ccc',
+        borderRightWidth: StyleSheet.hairlineWidth,
+        fontSize: p(24)
     },
-    imageView:{
+    imageView: {
         position: 'absolute',
         top: 0,
-        right:0,
-        zIndex:999
+        right: 0,
+        zIndex: 999
     },
-    bankTextM:{
-        paddingLeft:p(20),
-        width:p(380)
+    bankTextM: {
+        paddingLeft: p(20),
+        width: p(380)
     }
 });

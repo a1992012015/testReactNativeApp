@@ -6,8 +6,8 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
-import{
+import React, {PureComponent} from 'react';
+import {
     View,
     StyleSheet,
     ScrollView,
@@ -27,21 +27,22 @@ export default class CodeBillFlow extends PureComponent {
             selectedIndex: 0,
             selectedIndices: [0],
             customStyleIndex: 0,
-            coinCode:''
+            coinCode: ''
         }
     }
+
     //真实DOM渲染出来之后调用
     componentDidMount() {
-        const { params } = this.props.navigation.state;
+        const {params} = this.props.navigation.state;
 
         this.setState({
-            titleName: params.intoData.coinCode+" 账单流水",
+            titleName: params.intoData.coinCode + " 账单流水",
             moneyAndCoin: params.intoData.moneyAndCoin,
             coinCode: params.intoData.coinCode,
         });
     }
 
-    handleCustomIndexSelect =  index => {
+    handleCustomIndexSelect = index => {
         this.setState({
             customStyleIndex: index,
         });
@@ -57,10 +58,14 @@ export default class CodeBillFlow extends PureComponent {
                         selectedIndex={this.state.customStyleIndex}
                         onTabPress={this.handleCustomIndexSelect}
                         borderRadius={0}
-                        tabsContainerStyle={{ height: p(70), backgroundColor: '#1F2229', marginVertical: p(20)}}
-                        tabStyle={{backgroundColor: '#1F2229', borderWidth: StyleSheet.hairlineWidth, borderColor: '#313840'}}
+                        tabsContainerStyle={{height: p(70), backgroundColor: '#1F2229', marginVertical: p(20)}}
+                        tabStyle={{
+                            backgroundColor: '#1F2229',
+                            borderWidth: StyleSheet.hairlineWidth,
+                            borderColor: '#313840'
+                        }}
                         activeTabStyle={{backgroundColor: '#313840'}}
-                        tabTextStyle={{ color: '#FFFFFF'}}
+                        tabTextStyle={{color: '#FFFFFF'}}
                         activeTabTextStyle={{color: '#FFFFFF'}}/>
                     {
                         this.state.customStyleIndex === 0 ?

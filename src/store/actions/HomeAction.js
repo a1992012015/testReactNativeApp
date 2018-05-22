@@ -16,7 +16,7 @@ export let InitUserInfo = (props) => {
         console.log(URL);
         dispatch(fetchIndexMiddleBanner());
         request.post(URL).then((responseText) => {
-            console.log('用户资产',responseText);
+            console.log('用户资产', responseText);
             request.manyLogin(props, responseText);
             dispatch(myAssets(responseText))
         })
@@ -29,7 +29,7 @@ let fetchIndexMiddleBanner = () => {
     }
 };
 
-let myAssets= (userAssets) => {
+let myAssets = (userAssets) => {
     return {
         type: types.FETCH_MYACCOUNT_DATA,
         userAssets: userAssets,

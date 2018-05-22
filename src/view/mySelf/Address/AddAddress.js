@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     View,
     Text,
@@ -16,7 +16,7 @@ import {
     TextInput,
     Alert,
 } from 'react-native' ;
-import Toast, { DURATION } from 'react-native-easy-toast';
+import Toast, {DURATION} from 'react-native-easy-toast';
 
 import p from '../../../utils/tranfrom';
 import config from '../../../utils/config';
@@ -32,12 +32,13 @@ export default class AddAddress extends PureComponent {
         // 初始状态
         this.state = {
             currencyList: [],
-            currencyType:null,
-            publicKey:null,
-            remark:null,
-            visible:false
+            currencyType: null,
+            publicKey: null,
+            remark: null,
+            visible: false
         };
     }
+
     //真实的DOM渲染出来后调用
     componentDidMount() {
         this.getType();
@@ -45,42 +46,42 @@ export default class AddAddress extends PureComponent {
 
     getType = () => {
         this.setState({
-            visible:true
+            visible: true
         });
 
         let typeUrl = config.api.currency.addAccount;
 
         request.post(typeUrl).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
             this.setState({
-                visible:false
+                visible: false
             });
-            request.manyLogin(this.props,responseText);
+            request.manyLogin(this.props, responseText);
 
-            const { obj } = responseText;
+            const {obj} = responseText;
             let currencyList = [];
 
-            for(let i = 0; i < obj.length; i++){
+            for (let i = 0; i < obj.length; i++) {
                 let item = {
                     text: obj[i].coinCode,
                     value: obj[i].coinCode,
                 };
                 currencyList.push(item);
             }
-            console.log("currencyList",currencyList);
+            console.log("currencyList", currencyList);
             this.setState({
                 currencyList: currencyList,
             })
         })
     };
 
-    addWallet = () =>{
-        const { toast } = this.refs;
+    addWallet = () => {
+        const {toast} = this.refs;
 
         if (null == this.state.currencyType || '' === this.state.currencyType) {
             toast.show('请选择币的类型', DURATION.LENGTH_SHORT);
@@ -92,50 +93,51 @@ export default class AddAddress extends PureComponent {
             return;
         }
 
-        let re =  /^[0-9a-zA-Z]*$/g;
+        let re = /^[0-9a-zA-Z]*$/g;
         if (!re.test(this.state.publicKey)) {
             toast.show('钱包地址格式不正确', DURATION.LENGTH_SHORT);
             return;
         }
 
-        if(this.state.currencyType === 'TV'){
-            if(this.state.remark === null || this.state.remark === ''){
+        if (this.state.currencyType === 'TV') {
+            if (this.state.remark === null || this.state.remark === '') {
                 toast.show('请填写备注', DURATION.LENGTH_SHORT);
                 return;
             }
         }
 
         this.setState({
-            visible:true
+            visible: true
         });
 
         let url = `${config.api.currency.addWallet}?currencyType=${this.state.currencyType}&publicKey=${this.state.publicKey}&remark=${this.state.remark}`;
 
         request.post(url).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
             this.setState({
-                visible:false
+                visible: false
             });
-            request.manyLogin(this.props,responseText);
+            request.manyLogin(this.props, responseText);
 
-            const { msg } = responseText;
-            if(responseText.success){
+            const {msg} = responseText;
+            if (responseText.success) {
                 Alert.alert(
                     '提示',
                     '添加成功',
-                    [{text: '确认', onPress: () => {
-                            const { params } = this.props.navigation.state;
+                    [{
+                        text: '确认', onPress: () => {
+                            const {params} = this.props.navigation.state;
                             params.getAddress();
                             this.props.navigation.goBack();
                         }
                     }]
                 );
-            }else{
+            } else {
                 toast.show(msg, DURATION.LENGTH_SHORT);
             }
         })
@@ -150,9 +152,9 @@ export default class AddAddress extends PureComponent {
                     <View style={styles.reWithView}>
                         <Text style={styles.inputText}>虚拟币类型:</Text>
                         <SelectApp
-                            style={{flex:1,borderColor:'transparent',backgroundColor:"transparent"}}
+                            style={{flex: 1, borderColor: 'transparent', backgroundColor: "transparent"}}
                             size='md'
-                            valueStyle={{color:'#fff',padding:0}}
+                            valueStyle={{color: '#fff', padding: 0}}
                             value={this.state.currencyType}
                             getItemValue={item => item.value}
                             getItemText={item => item.text}
@@ -176,7 +178,7 @@ export default class AddAddress extends PureComponent {
                             placeholderTextColor={'#B0B0B0'}
                             value={this.state.publicKey}
                             style={styles.inputTextView}
-                            onChangeText={text => this.setState({publicKey:text})}
+                            onChangeText={text => this.setState({publicKey: text})}
                         />
                     </View>
                     <View style={styles.reWithView}>
@@ -188,7 +190,7 @@ export default class AddAddress extends PureComponent {
                             placeholderTextColor={'#B0B0B0'}
                             value={this.state.remark}
                             style={styles.inputTextView}
-                            onChangeText={(text) => this.setState({remark:text})}
+                            onChangeText={(text) => this.setState({remark: text})}
                         />
                     </View>
 
@@ -198,8 +200,10 @@ export default class AddAddress extends PureComponent {
                     onPress={this.addWallet}
                     activeOpacity={.8}
                     disabled={this.state.visible}
-                    style={{ height: p(80), backgroundColor: '#D95411', borderWidth: 1, margin: p(20),
-                    alignItems: 'center', justifyContent: 'center', borderRadius: p(10)}}>
+                    style={{
+                        height: p(80), backgroundColor: '#D95411', borderWidth: 1, margin: p(20),
+                        alignItems: 'center', justifyContent: 'center', borderRadius: p(10)
+                    }}>
                     <Text style={{color: '#fff', fontSize: p(26)}}>确认添加</Text>
                 </TouchableOpacity>
                 <Loading visible={this.state.visible}/>
@@ -254,13 +258,13 @@ let styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#1F2228',
     },
-    inputText:{
+    inputText: {
         color: 'white',
         paddingLeft: p(20),
         width: p(180),
         fontSize: p(24),
     },
-    inputTextView:{
+    inputTextView: {
         alignItems: 'center',
         justifyContent: 'center',
         marginLeft: p(6),
@@ -271,12 +275,12 @@ let styles = StyleSheet.create({
         paddingLeft: p(10),
         color: '#FFF',
     },
-    reWithView:{
+    reWithView: {
         flexDirection: 'row',
         alignItems: 'center',
         height: p(70),
     },
-    promptText:{
+    promptText: {
         color: '#B0B0B0',
         fontSize: p(22),
         padding: p(10),

@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react'
+import React, {PureComponent} from 'react'
 import {
     StyleSheet,
     View,
@@ -14,13 +14,13 @@ import {
     StatusBar,
     Platform
 } from 'react-native';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import PropTypes from 'prop-types'; // ES6
 
 import FirstStart from '../../components/startPage/firstStart'
 import SecondStart from '../../components/startPage/secondStart';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 class App extends PureComponent {
     constructor(props) {
@@ -35,11 +35,13 @@ class App extends PureComponent {
             touchPwd: ''
         }
     }
+
     //在完成首次渲染之前调用
     componentWillMount() {
         console.log(this.props.StartPage.pageFlag);
         console.log(this.props.navigation.state);
     }
+
     //真实的DOM被渲染出来后调用
     componentDidMount() {
         /**
@@ -56,7 +58,7 @@ class App extends PureComponent {
             //第一次启动app显示的图片
             console.log('app第一次启动');
             return <FirstStart {...this.props} />
-        }else{
+        } else {
             //第一次之后启动app显示的图片
             console.log('app第二次启动');
             return (
@@ -91,7 +93,7 @@ FirstStart.propTypes = {
 };
 
 export default connect((state) => {
-    const { StartPage } = state;
+    const {StartPage} = state;
     return {
         StartPage
     }

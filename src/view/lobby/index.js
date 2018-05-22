@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react'
+import React, {PureComponent} from 'react'
 import {
     View,
     Text,
@@ -24,7 +24,7 @@ import ScrollableTabView from 'react-native-scrollable-tab-view';
 import Icon from 'react-native-vector-icons/Ionicons';
 import io from 'socket.io-client/dist/socket.io';
 import store from 'react-native-simple-store';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 
 import p from '../../utils/tranfrom';
 import config from '../../utils/config';
@@ -35,16 +35,17 @@ import SellOut from './trading/sellOut';
 import CurrentEntrust from './trading/currentEntrust';
 import HistoryEntrust from './trading/historyEntrust';
 import BuessModal from './buessModal/buessModal';
-import { tradingHall } from '../../store/actions/TradingAction';
-import { InitUserInfo } from '../../store/actions/HomeAction';
-import { homeLoop } from '../../store/actions/IndexLoopAction';
+import {tradingHall} from '../../store/actions/TradingAction';
+import {InitUserInfo} from '../../store/actions/HomeAction';
+import {homeLoop} from '../../store/actions/IndexLoopAction';
 
-const { height } = Dimensions.get('window');
-const { PushCandlestickChart } = NativeModules;
+const {height} = Dimensions.get('window');
+const {PushCandlestickChart} = NativeModules;
 
 class Business extends PureComponent {
 
     static defaultProps = {};
+
     // 构造
     constructor(props) {
         super(props);
@@ -89,11 +90,12 @@ class Business extends PureComponent {
         });
         this.twoLoad = 1;
     }
+
     //真实的DOM渲染出来之后调用
     componentDidMount() {
         this.getSocket();
 
-        if(this.props.tabTitle){
+        if (this.props.tabTitle) {
             let coinCodes = this.props.tabTitle.split("_");
             this.setState({
                 coinCode: this.props.tabTitle,
@@ -118,12 +120,14 @@ class Business extends PureComponent {
             }
         });
     }
+
     //组件被销毁的时候调用
     componentWillUnmount() {
 
         this.socket && this.socket.close();
         this.timeName && this.timeName.remove();
     }
+
     //接受到一个新的props调用
     componentWillReceiveProps(props) {
 
@@ -140,7 +144,7 @@ class Business extends PureComponent {
             });
         }
 
-        const { TradingReducer, IndexLoopReducer, HomeReducer } = props;
+        const {TradingReducer, IndexLoopReducer, HomeReducer} = props;
 
         if (!IndexLoopReducer.homeLoading && IndexLoopReducer.homeData) {
             this.coreData(IndexLoopReducer.homeData);
@@ -158,11 +162,11 @@ class Business extends PureComponent {
         let trans = this.state.coinCode;
 
         if (trans && !TradingReducer.tradingLoading && TradingReducer.tradingData) {
-            const { marketDetail } = TradingReducer.tradingData;
+            const {marketDetail} = TradingReducer.tradingData;
 
             if (marketDetail && marketDetail[trans]) {
                 let coinData = marketDetail[trans][0].payload;
-                const { asks, bids } = coinData;
+                const {asks, bids} = coinData;
 
                 //let asks = coinData.asks.price;
                 let amount = asks.amount;
@@ -204,9 +208,10 @@ class Business extends PureComponent {
             }
         }
     }
+
     //结构赋值 => 强迫症复发
     splitData = data => {
-        const { transactionSum } = data;
+        const {transactionSum} = data;
         return transactionSum;
     };
 
@@ -220,7 +225,7 @@ class Business extends PureComponent {
 
         request.post(url, actions).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
@@ -230,14 +235,13 @@ class Business extends PureComponent {
             if (responseText.obj) {
 
                 const account = responseText.obj;
-                const { coinAccount, myAccount, coinFee } = account;
-                console.log(account);
+                const {coinAccount, myAccount, coinFee} = account;
 
                 this.setState({
                     balance: false,
                     personal: {
-                        available: parseFloat(coinAccount.hotMoney),
-                        frozen: parseFloat(myAccount.hotMoney),
+                        available: coinAccount ? parseFloat(coinAccount.hotMoney) : 0.00,
+                        frozen: myAccount ? parseFloat(myAccount.hotMoney) : 0.00,
                         buyFeeRate: parseFloat(coinFee.buyFeeRate),//买的手续费
                         sellFeeRate: parseFloat(coinFee.sellFeeRate),//卖的
                     }
@@ -256,7 +260,7 @@ class Business extends PureComponent {
         let coinCodeArray = "";
         let businessData = null;
 
-        if(homeData){
+        if (homeData) {
             homeData.map((item, index) => {
 
                 if (index === 0 && this.twoLoad === 1) {
@@ -303,7 +307,7 @@ class Business extends PureComponent {
     };
 
     getSocket = () => {
-        const { dispatch } = this.props;
+        const {dispatch} = this.props;
 
         // 告诉服务器端有用户登录
         this.socket.emit('login', {
@@ -357,14 +361,14 @@ class Business extends PureComponent {
 
         request.post(url, actions).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            const { businessData, priceLow, priceNew, priceHigh, totalAmount } = this.state;
-            const { RiseAndFall, currentExchangPrice, lastExchangPrice } = businessData;
-            const { setkchart } = PushCandlestickChart;
+            const {businessData, priceLow, priceNew, priceHigh, totalAmount} = this.state;
+            const {RiseAndFall, currentExchangPrice, lastExchangPrice} = businessData;
+            const {setkchart} = PushCandlestickChart;
 
             setkchart(
                 responseText,
@@ -386,20 +390,20 @@ class Business extends PureComponent {
 
     componentWillMount() {
         let that = this;
-        Platform.OS === 'android' ? this.timeName = DeviceEventEmitter.addListener('TimeName', function  (msg) {
-            if(msg){
+        Platform.OS === 'android' ? this.timeName = DeviceEventEmitter.addListener('TimeName', function (msg) {
+            if (msg) {
                 that.setState({
-                    time:msg
+                    time: msg
                 }, () => that.getKlineData())
-            }else{
+            } else {
                 that.getKlineData();
             }
         }) : new NativeEventEmitter(PushCandlestickChart).addListener('EventReminder', reminder => {
-                if(reminder.name){
+                if (reminder.name) {
                     that.setState({
                         time: reminder.name,
                     }, () => that.toIOS())
-                }else{
+                } else {
                     that.toIOS();
                 }
             }
@@ -408,7 +412,7 @@ class Business extends PureComponent {
 
     getKlineData = () => {
         //获取首页数据  进入原生页面后定时器暂停了 只能重新获取
-        const { dispatch } = this.props;
+        const {dispatch} = this.props;
         //地址
         let url = config.api.index.indexList;
 
@@ -427,14 +431,14 @@ class Business extends PureComponent {
 
         request.post(url_K, actions).then(responseText => {
 
-            const { reqKLine } = responseText;
+            const {reqKLine} = responseText;
             let Kline = '';
             let payload = reqKLine.payload;
-            let { priceOpen } = payload;
+            let {priceOpen} = payload;
             let period = reqKLine.payload.period;
 
-            priceOpen.map((item,index)=>{
-                Kline += item +"|";
+            priceOpen.map((item, index) => {
+                Kline += item + "|";
                 Kline += payload.priceHigh[index] + "|";
                 Kline += payload.priceLow[index] + "|";
                 Kline += payload.priceLast[index] + "|";
@@ -442,21 +446,21 @@ class Business extends PureComponent {
 
                 let commonTime = this.formatDate(payload.time[index] * 1000);
 
-                if(index === (priceOpen.length - 1)){
+                if (index === (priceOpen.length - 1)) {
                     Kline += commonTime;
-                }else{
+                } else {
                     Kline += commonTime + ",";
                 }
             });
 
-            if(period !== this.state.time){
+            if (period !== this.state.time) {
                 return;
             }
 
-            const { businessData, priceLow, priceNew, priceHigh, totalAmount } = this.state;
-            const { price_keepDecimalFor, RiseAndFall, currentExchangPrice, lastExchangPrice } = businessData;
-            const { KCharts } = NativeModules;
-            const { setkchart } = KCharts;
+            const {businessData, priceLow, priceNew, priceHigh, totalAmount} = this.state;
+            const {price_keepDecimalFor, RiseAndFall, currentExchangPrice, lastExchangPrice} = businessData;
+            const {KCharts} = NativeModules;
+            const {setkchart} = KCharts;
             let keepDecimal = price_keepDecimalFor === null ? 4 : price_keepDecimalFor;
 
             setkchart(
@@ -497,8 +501,8 @@ class Business extends PureComponent {
                             onPress={() => {
                                 Platform.OS === 'android' ?
                                     (() => {
-                                        const { KCharts } = NativeModules;
-                                        const { kchart } = KCharts;
+                                        const {KCharts} = NativeModules;
+                                        const {kchart} = KCharts;
                                         console.log(this.state.coinCode);
                                         kchart(this.state.coinCode, page => {
                                             this.setState({
@@ -508,7 +512,7 @@ class Business extends PureComponent {
                                     })()
                                     :
                                     (() => {
-                                        const { RNOpenOneVC } = PushCandlestickChart;
+                                        const {RNOpenOneVC} = PushCandlestickChart;
                                         RNOpenOneVC(this.state.coinCode, page => {
                                             this.setState({
                                                 page: page,
@@ -668,7 +672,7 @@ const styles = StyleSheet.create({
 });
 
 export default connect((state) => {
-    const { IndexLoopReducer, TradingReducer, HomeReducer } = state;
+    const {IndexLoopReducer, TradingReducer, HomeReducer} = state;
     return {
         IndexLoopReducer,
         TradingReducer,

@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     StyleSheet,
     Text,
@@ -25,15 +25,15 @@ import Title from '../../components/title';
 import ListFooter from './listFooter';
 import ListEmpty from './listEmpty';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
-export default class NewsList  extends PureComponent {
+export default class NewsList extends PureComponent {
     // 构造
     constructor(props) {
         super(props);
         // 初始状态
         this.state = {
-            data:[],
+            data: [],
             refreshing: false,
             hasMore: true,
             loadData: false,
@@ -43,17 +43,22 @@ export default class NewsList  extends PureComponent {
             obj: [],
         };
     }
+
     //真实的DOM渲染完成之后调用
     componentDidMount() {
         this.pullDown()
     }
+
     /*点击新闻的触发函数*/
     newsDetail = index => {
         console.log('点击俩表');
 
-        const { obj } = this.state;
+        const {obj} = this.state;
 
-        this.props.navigation.navigate('ConsDetail', {content: obj[index].content, title: obj[index].title, ...this.props})
+        this.props.navigation.navigate('ConsDetail', {
+            content: obj[index].content,
+            title: obj[index].title, ...this.props
+        })
     };
     /*获取全部的新闻信息*/
     pullDown = () => {
@@ -69,16 +74,16 @@ export default class NewsList  extends PureComponent {
 
         request.post(url, actions).then((responseText) => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            console.log("responseText",responseText);
+            console.log("responseText", responseText);
 
-            const { obj } = responseText;
+            const {obj} = responseText;
 
-            if(obj.length > 0){
+            if (obj.length > 0) {
                 let dataBlob = [];
                 let i = 0;
 
@@ -90,14 +95,14 @@ export default class NewsList  extends PureComponent {
                     i++;
                 });
 
-                if(dataBlob.length > 5){
+                if (dataBlob.length > 5) {
                     this.setState({
                         loadData: true,
                         data: dataBlob,
                         obj,
                     });
                     this.pageIndex = 2;
-                }else{
+                } else {
                     this.setState({
                         loadData: true,
                         hasMore: true,
@@ -119,7 +124,7 @@ export default class NewsList  extends PureComponent {
     pullUp = () => {
         if (this.pageIndex > 1) {
             //地址
-            let url= config.api.index.article;
+            let url = config.api.index.article;
 
             const actions = {
                 type: 4,
@@ -130,13 +135,13 @@ export default class NewsList  extends PureComponent {
 
             request.post(url, actions).then(responseText => {
 
-                if(responseText.ok){//判断接口是否请求成功
+                if (responseText.ok) {//判断接口是否请求成功
                     console.log('接口请求失败进入失败函数');
                     return;
                 }
 
-                console.log("responseText",responseText);
-                const { obj, recordsTotal } = responseText;
+                console.log("responseText", responseText);
+                const {obj, recordsTotal} = responseText;
 
                 if (obj.length > 0 && (this.pageIndex - 1) * 10 < recordsTotal) {
 
@@ -183,11 +188,11 @@ export default class NewsList  extends PureComponent {
 
         if (this.state.loadData) {
             return (
-                <View style={{backgroundColor: '#1F2229',flex:1}}>
+                <View style={{backgroundColor: '#1F2229', flex: 1}}>
                     <Title titleName="新闻公告" canBack={false} {...this.props}/>
                     <FlatList
-                        style={{marginTop:p(20),marginBottom:p(100)}}
-                        horizontal={  false }
+                        style={{marginTop: p(20), marginBottom: p(100)}}
+                        horizontal={false}
                         data={this.state.data}
                         renderItem={this._renderRow}
                         ListFooterComponent={<ListFooter hasMore={this.state.hasMore}/>}
@@ -196,7 +201,7 @@ export default class NewsList  extends PureComponent {
                         onEndReached={this.pullUp}
                         onRefresh={this.pullDown}
                         refreshing={false}
-                        keyExtractor = {(item, index) => index.toString()}
+                        keyExtractor={(item, index) => index.toString()}
                     />
                 </View>
             )
@@ -204,7 +209,7 @@ export default class NewsList  extends PureComponent {
             return (
                 <ActivityIndicator
                     animating={true}
-                    style={{height: height/2}}
+                    style={{height: height / 2}}
                     size="large"
                 />
             )
@@ -212,7 +217,7 @@ export default class NewsList  extends PureComponent {
     }
 
     _renderRow = ({item, index}) => {
-        let { title, created } = item.value;
+        let {title, created} = item.value;
 
         return (
             <TouchableOpacity
@@ -221,7 +226,7 @@ export default class NewsList  extends PureComponent {
             >
                 <View style={styles.newsItems}>
                     <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                        <View style={{width:width * .8}}>
+                        <View style={{width: width * .8}}>
 
                             <Text style={{color: '#ffffff'}}>{title}</Text>
 
@@ -256,7 +261,7 @@ const styles = StyleSheet.create({
         marginVertical: p(20),
         width: width
     },
-    newsItems:{
+    newsItems: {
         width: width,
         padding: p(10),
         borderBottomWidth: StyleSheet.hairlineWidth,

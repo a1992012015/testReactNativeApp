@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     StyleSheet,
     Text,
@@ -16,9 +16,9 @@ import {
 
 import p from '../../utils/tranfrom';
 
-const { width }=Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
-export default class ListFooter  extends PureComponent {
+export default class ListFooter extends PureComponent {
     constructor(props) {
         super(props);
         // 初始状态
@@ -26,13 +26,14 @@ export default class ListFooter  extends PureComponent {
             hasMore: false
         };
     }
+
     render() {
         if (this.state.hasMore) {
             return (
                 <View style={[styles.loadingMore, {height: this.state.viewType === 0 ? p(50) : p(50)}]}>
                     <Text style={styles.loadingText}> 没有更多数据了</Text>
-                </View> )
-        }else{
+                </View>)
+        } else {
             return (<View/>)
         }
     }

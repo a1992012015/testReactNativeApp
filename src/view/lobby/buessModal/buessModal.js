@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react'
+import React, {PureComponent} from 'react'
 import {
     Dimensions,
     StyleSheet,
@@ -17,24 +17,26 @@ import Modal from 'react-native-modalbox';
 import p from '../../../utils/tranfrom';
 import Currency from './Currency';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 export default class BuessModal extends PureComponent {
 
     static defaultProps = {};
+
     // 构造
     constructor(props) {
         super(props);
         // 初始状态
         this.state = {
-            isOpen:false,
-            headList:[],
-            areaList:[]
+            isOpen: false,
+            headList: [],
+            areaList: []
         };
     }
+
     //接收到一个新的props之后调用
     componentWillReceiveProps(props) {
-        let { isOpen, headList, areaList } = props;
+        let {isOpen, headList, areaList} = props;
         this.setState({
             isOpen: isOpen,
             headList: headList,
@@ -43,7 +45,7 @@ export default class BuessModal extends PureComponent {
     }
 
     render() {
-        let { headList, areaList, isOpen } = this.state;
+        let {headList, areaList, isOpen} = this.state;
         return (
             <Modal
                 style={[styles.modal, styles.modal3]}
@@ -59,12 +61,12 @@ export default class BuessModal extends PureComponent {
                     tabBarBackgroundColor='#FFF'
                     tabBarActiveTextColor='#EA2000'
                     tabBarInactiveTextColor='#686868'
-                    tabBarTextStyle={{fontSize: p(24),fontWeight: '400', paddingTop:p(10)}}
+                    tabBarTextStyle={{fontSize: p(24), fontWeight: '400', paddingTop: p(10)}}
                     style={{flex: 1, height: p(350), width: width}}
                 >
                     {
                         headList && headList.map((item, index) => {
-                            return(
+                            return (
                                 <Currency
                                     tabLabel={item}
                                     currList={areaList[item]}

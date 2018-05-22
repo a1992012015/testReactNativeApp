@@ -6,8 +6,8 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
-import{
+import React, {PureComponent} from 'react';
+import {
     View,
     StyleSheet,
 } from 'react-native';
@@ -24,7 +24,7 @@ export default class Entrusted extends PureComponent {
         this.state = {
             selectedIndex: 0,
             selectedIndices: [0],
-            customStyleIndex:0
+            customStyleIndex: 0
         }
     }
 
@@ -37,9 +37,9 @@ export default class Entrusted extends PureComponent {
 
     render() {
         return (
-            <View style={{backgroundColor:'#1F2229', flex: 1}}>
+            <View style={{backgroundColor: '#1F2229', flex: 1}}>
                 <Title titleName="委托管理" canBack={true} {...this.props} />
-                <View style={{margin:p(20)}}>
+                <View style={{margin: p(20)}}>
                     <SegmentedControlTab
                         values={['当前委托', '历史委托']}
                         selectedIndex={this.state.customStyleIndex}
@@ -48,17 +48,17 @@ export default class Entrusted extends PureComponent {
                         tabsContainerStyle={{
                             height: p(70),
                             backgroundColor: '#1F2229',
-                            marginVertical:p(20)
+                            marginVertical: p(20)
                         }}
                         tabStyle={{
                             backgroundColor: '#1F2229',
                             borderWidth: StyleSheet.hairlineWidth,
-                            borderColor:'#313840'
+                            borderColor: '#313840'
                         }}
                         activeTabStyle={{backgroundColor: '#313840'}}
                         tabTextStyle={{color: '#FFFFFF', fontWeight: 'bold'}}
                         activeTabTextStyle={{color: '#FFFFFF'}}/>
-                    <View style={{flex:1}}>
+                    <View style={{flex: 1}}>
                         {this.state.customStyleIndex === 0 ?
                             <Item_1  {...this.props}/>
                             :

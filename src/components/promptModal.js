@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react'
+import React, {PureComponent} from 'react'
 import {
     TouchableOpacity,
     Text,
@@ -19,11 +19,12 @@ import Modal from 'react-native-modalbox';
 import p from '../utils/tranfrom';
 import I18n from '../utils/i18n';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 export default class PromptModal extends PureComponent {
 
     static defaultProps = {};
+
     // 构造
     constructor(props) {
         super(props);
@@ -32,21 +33,26 @@ export default class PromptModal extends PureComponent {
             isOpen: false,
         };
     }
+
     //接收定时器
     close: null;
+
     //真实的DOM被渲染出来后调用
-    componentDidMount() {}
+    componentDidMount() {
+    }
+
     //组件接收到新的props时调用
     componentWillReceiveProps(nextProps) {
-        console.log("nextProps.isOpen",nextProps.isOpen);
+        console.log("nextProps.isOpen", nextProps.isOpen);
         this.setState({
             isOpen: nextProps.isOpen
         });
 
-        if(nextProps.isOpen){
+        if (nextProps.isOpen) {
             this._setInterval();
         }
     }
+
     //组件被移除之前被调用
     componentWillUnmount() {
         clearInterval(this.close);
@@ -63,8 +69,8 @@ export default class PromptModal extends PureComponent {
         }, 1000);
     };
 
-    _click=()=>{
-        const { goBack } = this.props.navigation;
+    _click = () => {
+        const {goBack} = this.props.navigation;
         this.setState({
             isOpen: false
         });
@@ -82,7 +88,7 @@ export default class PromptModal extends PureComponent {
                    isOpen={this.state.isOpen}>
                 <TouchableOpacity
                     style={styles.imageView}
-                    onPress={()=>this._click()}>
+                    onPress={() => this._click()}>
                     <Image source={require('../static/login/clean.png')}
                            style={styles.imageType}
                     />
@@ -100,28 +106,28 @@ const styles = StyleSheet.create({
     },
     modal: {
         alignItems: 'center',
-        borderRadius:p(20)
+        borderRadius: p(20)
     },
     modal3: {
         height: p(350),
-        width: width*.6
+        width: width * .6
     },
-    imageType:{
-        width:p(45),
-        height:p(45)
+    imageType: {
+        width: p(45),
+        height: p(45)
     },
-    imageView:{
+    imageView: {
         position: 'absolute',
         top: 0,
-        right:0,
-        zIndex:999
+        right: 0,
+        zIndex: 999
     },
-    textView:{
-        paddingVertical:p(30),
-        fontSize:p(28)
+    textView: {
+        paddingVertical: p(30),
+        fontSize: p(28)
     },
-    textViewOne:{
-        paddingHorizontal:p(30)
+    textViewOne: {
+        paddingHorizontal: p(30)
     }
 
 });

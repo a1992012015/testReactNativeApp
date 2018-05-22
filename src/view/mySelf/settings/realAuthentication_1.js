@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     View,
     Dimensions,
@@ -18,22 +18,22 @@ import {
     Image,
     ScrollView
 } from 'react-native';
-import Toast, { DURATION } from 'react-native-easy-toast';
+import Toast, {DURATION} from 'react-native-easy-toast';
 import ImagePicker from 'react-native-image-picker';
-import { connect } from 'react-redux';
-import { Select } from 'teaset';
+import {connect} from 'react-redux';
+import {Select} from 'teaset';
 
-import p from '../../utils/tranfrom';
-import request from '../../utils/request';
-import config from '../../utils/config';
-import I18n from '../../utils/i18n';
-import allCountriesData from '../../utils/data';
-import { InitUserInfo } from '../../store/actions/HomeAction';
-import Loading from '../../components/loading';
-import SModal from '../../components/sModal'
-import Title from '../../components/title';
+import p from '../../../utils/tranfrom';
+import request from '../../../utils/request';
+import config from '../../../utils/config';
+import I18n from '../../../utils/i18n';
+import allCountriesData from '../../../utils/data';
+import {InitUserInfo} from '../../../store/actions/HomeAction';
+import Loading from '../../../components/loading';
+import SModal from '../../../components/sModal'
+import Title from '../../../components/title';
 
-const { height } = Dimensions.get('window');
+const {height} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
     blockSty: {
@@ -114,12 +114,12 @@ class RealAuthentication_1 extends PureComponent {
             sex: I18n.t('nan'),
             picIDa1: [],
             picIDa2: [],
-            picIDa11: config.api.host +'static/dist/img/idetify/idcard-f.png',
-            picIDa12: config.api.host +'static/dist/img/idetify/idcard-b.png',
-            picIDa13: config.api.host +'static/dist/img/idetify/idcard-h.jpg',
-            picIDa21: config.api.host +'static/dist/img/idetify/passport-f.png',
-            picIDa22: config.api.host +'static/dist/img/idetify/passport-b.png',
-            picIDa23: config.api.host +'static/dist/img/idetify/passport-h.jpg',
+            picIDa11: config.api.host + 'static/dist/img/idetify/idcard-f.png',
+            picIDa12: config.api.host + 'static/dist/img/idetify/idcard-b.png',
+            picIDa13: config.api.host + 'static/dist/img/idetify/idcard-h.jpg',
+            picIDa21: config.api.host + 'static/dist/img/idetify/passport-f.png',
+            picIDa22: config.api.host + 'static/dist/img/idetify/passport-b.png',
+            picIDa23: config.api.host + 'static/dist/img/idetify/passport-h.jpg',
             isCheck: false,
             visible: false,
         };
@@ -142,7 +142,7 @@ class RealAuthentication_1 extends PureComponent {
     }
 
     _tarnAuthentication = () => {
-        const { toast } = this.refs;
+        const {toast} = this.refs;
 
         if (null === this.state.surname || '' === this.state.surname) {
             toast.show(I18n.t('xingshishuru'), DURATION.LENGTH_SHORT);
@@ -169,7 +169,7 @@ class RealAuthentication_1 extends PureComponent {
             return;
         }
 
-        if(this.state.type === 0) {
+        if (this.state.type === 0) {
             const reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
             if (!(reg.test(this.state.cardId))) {
                 toast.show('身份证格式不正确', DURATION.LENGTH_SHORT);
@@ -177,7 +177,7 @@ class RealAuthentication_1 extends PureComponent {
             }
         }
 
-        if(this.state.type === 1){
+        if (this.state.type === 1) {
             if (null === this.state.sex || '' === this.state.sex) {
                 toast.show(I18n.t('xzsex'), DURATION.LENGTH_SHORT);
                 return;
@@ -191,48 +191,48 @@ class RealAuthentication_1 extends PureComponent {
         let url = '';
         let formData = new FormData();
 
-        if(this.state.type === 1){
+        if (this.state.type === 1) {
             let picIDa2 = this.state.picIDa2;
 
-            if(picIDa2.length < 3){
+            if (picIDa2.length < 3) {
                 toast.show(I18n.t('xztupian'), DURATION.LENGTH_SHORT);
                 return;
             }
 
 
             this.state.isCheck = true;
-            for(let i = 0; i < picIDa2.length; i++){
+            for (let i = 0; i < picIDa2.length; i++) {
                 let file = {uri: picIDa2[i], type: 'multipart/form-data', name: 'image.jpg'};
-                formData.append('img'+(i+1),file);
+                formData.append('img' + (i + 1), file);
             }
 
             url = `${config.api.person.setRealName}?surname=${this.state.surname}&trueName=${this.state.trueName}&country=${this.state.country}&cardId=${this.state.cardId}&cardType=${this.state.type}&type=${this.state.type}&sex=${this.state.sex}`;
 
-        }else{
+        } else {
             let picIDa1 = this.state.picIDa1;
 
-            if(picIDa1.length < 3){
+            if (picIDa1.length < 3) {
                 toast.show(I18n.t('xztupian'), DURATION.LENGTH_SHORT);
                 return;
             }
 
             this.state.isCheck = true;
 
-            for(let i = 0; i < picIDa1.length; i++){
+            for (let i = 0; i < picIDa1.length; i++) {
                 let file = {uri: picIDa1[i], type: 'multipart/form-data', name: 'image.jpg'};
-                formData.append('img'+(i+1),file);
+                formData.append('img' + (i + 1), file);
             }
 
             url = `${config.api.person.setRealName}?surname=${this.state.surname}&trueName=${this.state.trueName}&country=${this.state.country0}&cardId=${this.state.cardId}&cardType=${this.state.type}&type=${this.state.type}`;
         }
 
         this.setState({
-            visible:true
+            visible: true
         });
 
         request.upImage(url, formData).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
@@ -240,10 +240,10 @@ class RealAuthentication_1 extends PureComponent {
             request.manyLogin(this.props, responseText);
 
             this.setState({
-                visible:false
+                visible: false
             });
 
-            const { msg, success } = responseText;
+            const {msg, success} = responseText;
 
             if (success) {
                 Alert.alert(
@@ -254,7 +254,7 @@ class RealAuthentication_1 extends PureComponent {
                             const {params} = this.props.navigation.state;
                             params.infoAction();
                             this.props.navigation.goBack();
-                            const { dispatch } = this.props;
+                            const {dispatch} = this.props;
                             dispatch(InitUserInfo(this.props));
                         }
                     }]
@@ -268,7 +268,7 @@ class RealAuthentication_1 extends PureComponent {
 
     choiceImage = (type, step) => {
 
-        if(this.state.isCheck){
+        if (this.state.isCheck) {
             return;
         }
 
@@ -300,47 +300,47 @@ class RealAuthentication_1 extends PureComponent {
                 let picIDa1 = this.state.picIDa1;
                 let picIDa2 = this.state.picIDa2;
 
-                if(type === 0){
+                if (type === 0) {
 
-                    if(step === 1){
+                    if (step === 1) {
                         this.setState({
                             picIDa11: source
                         });
-                    }else if(step === 2){
+                    } else if (step === 2) {
                         this.setState({
                             picIDa12: source
                         });
-                    }else{
+                    } else {
                         this.setState({
                             picIDa13: source
                         });
                     }
 
-                    if(picIDa1[step-1]){
-                        picIDa1[step-1] = source;
-                    }else{
+                    if (picIDa1[step - 1]) {
+                        picIDa1[step - 1] = source;
+                    } else {
                         picIDa1.push(source);
                     }
 
-                }else{
+                } else {
 
-                    if(step === 1){
+                    if (step === 1) {
                         this.setState({
                             picIDa21: source
                         });
-                    }else if(step === 2){
+                    } else if (step === 2) {
                         this.setState({
                             picIDa22: source
                         });
-                    }else{
+                    } else {
                         this.setState({
                             picIDa23: source
                         });
                     }
 
-                    if(picIDa2[step-1]){
-                        picIDa2[step-1] = source;
-                    }else{
+                    if (picIDa2[step - 1]) {
+                        picIDa2[step - 1] = source;
+                    } else {
                         picIDa2.push(source);
                     }
                 }
@@ -388,7 +388,7 @@ class RealAuthentication_1 extends PureComponent {
                                         placeholder={I18n.t('xingshishuru')}
                                         value={this.state.surname}
                                         selectionColor={"#D95411"}
-                                        onChangeText={(text) => this.setState({surname:text})}
+                                        onChangeText={(text) => this.setState({surname: text})}
                                     />
                                 </View>
                                 <View style={styles.regInputView}>
@@ -401,7 +401,7 @@ class RealAuthentication_1 extends PureComponent {
                                         placeholder={I18n.t('mingzishuru')}
                                         value={this.state.trueName}
                                         selectionColor={"#D95411"}
-                                        onChangeText={text => this.setState({trueName:text})}
+                                        onChangeText={text => this.setState({trueName: text})}
                                     />
                                 </View>
                                 <View style={styles.regInputView}>
@@ -414,11 +414,11 @@ class RealAuthentication_1 extends PureComponent {
                                         placeholder={I18n.t('shenfzshuru')}
                                         value={this.state.cardId}
                                         selectionColor={"#D95411"}
-                                        onChangeText={text => this.setState({cardId:text})}
+                                        onChangeText={text => this.setState({cardId: text})}
                                     />
                                 </View>
 
-                                <View style={[styles.regInputView,{marginTop:p(10)}]}>
+                                <View style={[styles.regInputView, {marginTop: p(10)}]}>
                                     <Text style={styles.inputText}>{I18n.t('shenfzz')}:</Text>
 
                                     <TouchableOpacity
@@ -437,7 +437,7 @@ class RealAuthentication_1 extends PureComponent {
                                     <Text style={styles.inputText}>{I18n.t('shenfzs')}:</Text>
 
                                     <TouchableOpacity
-                                        onPress={() => this.choiceImage(this.state.type,2)}
+                                        onPress={() => this.choiceImage(this.state.type, 2)}
                                         activeOpacity={.8}
                                         style={{flex: 1}}
                                     >
@@ -448,11 +448,11 @@ class RealAuthentication_1 extends PureComponent {
                                         />
                                     </TouchableOpacity>
                                 </View>
-                                <View style={[styles.regInputView,{marginBottom:p(20)}]}>
+                                <View style={[styles.regInputView, {marginBottom: p(20)}]}>
                                     <Text style={styles.inputText}>{I18n.t('shenfzsc')}:</Text>
 
                                     <TouchableOpacity
-                                        onPress={() => this.choiceImage(this.state.type,3)}
+                                        onPress={() => this.choiceImage(this.state.type, 3)}
                                         activeOpacity={.8}
                                         style={{flex: 1}}
                                     >
@@ -489,7 +489,7 @@ class RealAuthentication_1 extends PureComponent {
                                         placeholder={I18n.t('xingshishuru')}
                                         value={this.state.trueName}
                                         selectionColor={"#D95411"}
-                                        onChangeText={text => this.setState({trueName:text})}
+                                        onChangeText={text => this.setState({trueName: text})}
                                     />
                                 </View>
                                 <View style={styles.regInputView}>
@@ -521,7 +521,10 @@ class RealAuthentication_1 extends PureComponent {
                                         placeholder={I18n.t('xzguoajia')}
                                         placeholderTextColor={'#B0B0B0'}
                                         pickerTitle={I18n.t('guoajia')}
-                                        onSelected={item => this.setState({countryValue:item.value,country: item.text})}
+                                        onSelected={item => this.setState({
+                                            countryValue: item.value,
+                                            country: item.text
+                                        })}
                                     />
                                 </View>
                                 <View style={styles.regInputView}>
@@ -534,13 +537,13 @@ class RealAuthentication_1 extends PureComponent {
                                         placeholder={I18n.t('guoajiasr')}
                                         value={this.state.cardId}
                                         selectionColor={"#D95411"}
-                                        onChangeText={text => this.setState({cardId:text})}
+                                        onChangeText={text => this.setState({cardId: text})}
                                     />
                                 </View>
                                 <View style={styles.regInputView}>
                                     <Text style={styles.inputText}>{I18n.t('huzhaozm')}:</Text>
                                     <TouchableOpacity
-                                        onPress={() => this.choiceImage(this.state.type,1)}
+                                        onPress={() => this.choiceImage(this.state.type, 1)}
                                         activeOpacity={.8}
                                         style={{flex: 1}}>
                                         <Image
@@ -550,10 +553,10 @@ class RealAuthentication_1 extends PureComponent {
                                         />
                                     </TouchableOpacity>
                                 </View>
-                                <View style={[styles.regInputView,{marginVertical:p(20)}]}>
+                                <View style={[styles.regInputView, {marginVertical: p(20)}]}>
                                     <Text style={styles.inputText}>{I18n.t('huzhaofm')}:</Text>
                                     <TouchableOpacity
-                                        onPress={() => this.choiceImage(this.state.type,2)}
+                                        onPress={() => this.choiceImage(this.state.type, 2)}
                                         activeOpacity={.8}
                                         style={{flex: 1}}>
                                         <Image
@@ -563,7 +566,7 @@ class RealAuthentication_1 extends PureComponent {
                                         />
                                     </TouchableOpacity>
                                 </View>
-                                <View style={[styles.regInputView,{marginBottom:p(20)}]}>
+                                <View style={[styles.regInputView, {marginBottom: p(20)}]}>
                                     <Text style={styles.inputText}>{I18n.t('huzhaosc')}:</Text>
                                     <TouchableOpacity
                                         onPress={() => this.choiceImage(this.state.type, 3)}
@@ -609,7 +612,7 @@ class RealAuthentication_1 extends PureComponent {
 }
 
 export default connect((state) => {
-    const { HomeReducer } = state;
+    const {HomeReducer} = state;
     return {
         HomeReducer
     }

@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     View,
     Text,
@@ -16,29 +16,31 @@ import {
     Alert,
     ActivityIndicator,
     Dimensions
-} from 'react-native' ;
-import { NavigationActions, StackActions } from 'react-navigation';
-import  Icon from 'react-native-vector-icons/Ionicons';
+} from 'react-native';
+import {NavigationActions, StackActions} from 'react-navigation';
+import Icon from 'react-native-vector-icons/Ionicons';
 import store from 'react-native-simple-store';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 
-import p from '../../utils/tranfrom';
-import config from '../../utils/config';
-import request from '../../utils/request';
-import I18n from '../../utils/i18n';
-import Title from '../../components/title';
-import { InitUserInfo } from '../../store/actions/HomeAction';
+import p from '../../../utils/tranfrom';
+import config from '../../../utils/config';
+import request from '../../../utils/request';
+import I18n from '../../../utils/i18n';
+import Title from '../../../components/title';
+import {InitUserInfo} from '../../../store/actions/HomeAction';
 
-const { height } = Dimensions.get('window');
+const {height} = Dimensions.get('window');
 
 /*按钮组件*/
 class BottomMenu extends PureComponent {
     render() {
-        const { icon, name, component, textColor, textView, onClickChange } = this.props;
+        const {icon, name, component, textColor, textView, onClickChange} = this.props;
         return (
             <TouchableOpacity
                 activeOpacity={.8}
-                onPress={() => {onClickChange(component,textView)}}
+                onPress={() => {
+                    onClickChange(component, textView)
+                }}
                 style={styles.menuItemSty}>
                 <View style={{flexDirection: "row", paddingLeft: p(20), alignItems: 'center'}}>
                     <Image
@@ -47,7 +49,8 @@ class BottomMenu extends PureComponent {
                     />
                     <Text style={{color: "#ACB3B9", paddingLeft: p(20)}}>{name}</Text>
                 </View>
-                <View style={{flexDirection: "row", marginRight: p(20), justifyContent: 'center', alignItems: 'center'}}>
+                <View
+                    style={{flexDirection: "row", marginRight: p(20), justifyContent: 'center', alignItems: 'center'}}>
                     <Text style={{color: textColor, paddingRight: p(10), fontSize: p(24)}}>{textView}</Text>
                     <Icon
                         name="ios-arrow-forward-outline"
@@ -75,30 +78,36 @@ class MySetUp extends PureComponent {
             loadData: false,
         };
     }
+
     //真实结构渲染出来之后调用
     componentDidMount() {
-        const { dispatch } = this.props;
+        const {dispatch} = this.props;
 
         dispatch(InitUserInfo(this.props));
 
-        const { params } = this.props.navigation.state;
+        const {params} = this.props.navigation.state;
 
         this.setState({
-            member:params.member
+            member: params.member
         });
 
         this.getIsReal();
     }
+
     //登陆和实名认证的方法
     onClickChange = (route, textView) => {
 
-        if(route === null || route === ''){
+        if (route === null || route === '') {
             return;
         }
-        console.log(route);
-        if(route === "RealAuthentications_2" || route === "TransPassword" || route === "RealAuthentications_1"){
-            this.props.navigation.navigate(route, {member: this.state.member, infoAction: this.getIsReal, textView: textView});
-        }else{
+
+        if (route === "RealAuthentications_2" || route === "TransPassword" || route === "RealAuthentications_1") {
+            this.props.navigation.navigate(route, {
+                member: this.state.member,
+                infoAction: this.getIsReal,
+                textView: textView
+            });
+        } else {
             this.props.navigation.navigate(route, {member: this.state.member, infoAction: this.getIsReal});
         }
     };
@@ -108,64 +117,64 @@ class MySetUp extends PureComponent {
 
         request.post(url).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            request.manyLogin(this.props,responseText);
+            request.manyLogin(this.props, responseText);
 
-            console.log('responseText',responseText);
+            console.log('responseText', responseText);
 
-            const { obj } = responseText;
-            const { states, phoneState } = obj.user;
+            const {obj} = responseText;
+            const {states, phoneState} = obj.user;
 
             //let obj = responseText.obj.user;
             store.update('member', {
                 memberInfo: obj.user
             });
 
-            console.log('states=>',states);
+            console.log('states=>', states);
 
-            if(states === 0){
+            if (states === 0) {
                 this.setState({
-                    ralComponent:'RealAuthentications_1',
-                    textRal:'未认证',
-                    textColor:"#ACB3B9"
+                    ralComponent: 'RealAuthentications_1',
+                    textRal: '未认证',
+                    textColor: "#ACB3B9"
                 })
-            }else if(states === 1){
+            } else if (states === 1) {
                 this.setState({
-                    ralComponent:'RealAuthentications_2',
-                    textRal:'审核中',
-                    textColor:"#D95411"
+                    ralComponent: 'RealAuthentications_2',
+                    textRal: '审核中',
+                    textColor: "#D95411"
                 })
-            }else if(states === 2){
+            } else if (states === 2) {
                 this.setState({
-                    ralComponent:'RealAuthentications_2',
-                    textRal:'已认证',
-                    textColor:"#018F67"
+                    ralComponent: 'RealAuthentications_2',
+                    textRal: '已认证',
+                    textColor: "#018F67"
                 })
-            }else if(states === 3){
+            } else if (states === 3) {
                 this.setState({
-                    ralComponent:'RealAuthentications_1',
-                    textRal:'已拒绝,重新认证',
-                    textColor:"#D95411"
+                    ralComponent: 'RealAuthentications_1',
+                    textRal: '已拒绝,重新认证',
+                    textColor: "#D95411"
                 })
             }
 
-            if(1=== phoneState){
+            if (1 === phoneState) {
                 this.setState({
-                    accountText:'修改',
-                    accountView:"ClosePhone"
+                    accountText: '修改',
+                    accountView: "ClosePhone"
                 })
-            }else{
+            } else {
                 this.setState({
-                    accountText:'设置',
-                    accountView:"PhoneAuthen"
+                    accountText: '设置',
+                    accountView: "PhoneAuthen"
                 })
             }
             this.setState({
-                loadData:true,
+                loadData: true,
                 member: obj.user
             })
         }).catch(error => {
@@ -174,24 +183,29 @@ class MySetUp extends PureComponent {
     };
     //退出的方法
     signOut = () => {
-        Alert.alert('温馨提醒','确定退出吗?',[
-            {text:'取消',onPress: () => {}},
-            {text:'确定',onPress: () => {
+        Alert.alert('温馨提醒', '确定退出吗?', [
+            {
+                text: '取消', onPress: () => {
+                }
+            },
+            {
+                text: '确定', onPress: () => {
                     store.delete('member');
                     const resetAction = StackActions.reset({
                         index: 0,
-                        actions: [NavigationActions.navigate({ routeName: 'TabBar' })],
+                        actions: [NavigationActions.navigate({routeName: 'TabBar'})],
                     });
 
                     this.props.navigation.dispatch(resetAction);
-                }}
+                }
+            }
         ]);
     };
 
     // 渲染
     render() {
         if (this.state.loadData) {
-            const { ralComponent, textColor, textRal } = this.state;
+            const {ralComponent, textColor, textRal} = this.state;
 
             return (
                 <View style={[styles.defaultView, {paddingBottom: p(100)}]}>
@@ -202,7 +216,7 @@ class MySetUp extends PureComponent {
                         {/*实名认证*/}
                         <View style={styles.blockSty}>
                             <BottomMenu
-                                icon={require('../../static/mySelf/realname.png')}
+                                icon={require('../../../static/mySelf/realname.png')}
                                 name={I18n.t('shimingrenzheng')}
                                 onClickChange={this.onClickChange}
                                 component={ralComponent}
@@ -213,7 +227,7 @@ class MySetUp extends PureComponent {
                         {/*登录密码*/}
                         <View style={styles.blockSty}>
                             <BottomMenu
-                                icon={require('../../static/mySelf/passw.png')}
+                                icon={require('../../../static/mySelf/passw.png')}
                                 name={I18n.t('denglumima')}
                                 onClickChange={this.onClickChange}
                                 component="LoginPass"
@@ -239,7 +253,7 @@ class MySetUp extends PureComponent {
                     </View>
                 </View>
             )
-        }else{
+        } else {
             return (
                 <ActivityIndicator
                     animating={true}
@@ -301,7 +315,7 @@ let styles = StyleSheet.create({
 });
 
 export default connect((state) => {
-    const { HomeReducer } = state;
+    const {HomeReducer} = state;
     return {
         HomeReducer
     }

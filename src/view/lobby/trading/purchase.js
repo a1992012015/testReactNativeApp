@@ -78,12 +78,13 @@ class Purchase extends PureComponent {
             }, () => {
                 this.queryCoin();
             });
+
             ref_price.clear();
             ref_count.clear();
 
             this.setState({
-                entrustPrice:0,
-                entrustCount:0
+                entrustPrice: 0,
+                entrustCount: 0
             });
         }
 
@@ -151,12 +152,12 @@ class Purchase extends PureComponent {
     };
 
     //委托成功重新查询可用余额和币  EA2000
-    queryCoin = () =>{
+    queryCoin = () => {
         console.log('定位函数位置=======================================》');
         //地址
-        let url = config.api.trades.appgetAccountInfo + "?symbol=" + this.state.coinCode;
+        let url = config.api.trades.appgetAccountInfo;
         //参数
-        const actions ={
+        const actions = {
             symbol: this.state.coinCode,
         };
         const { toast } = this.refs;
@@ -173,11 +174,12 @@ class Purchase extends PureComponent {
 
             if(responseText.obj){
 
-                let account = responseText.obj;
+                const { obj } = responseText;
+                console.log(obj);
 
                 this.setState({
-                    availableMoney: parseFloat(account.coinAccount.hotMoney),
-                    frozenMoney: parseFloat(account.myAccount.hotMoney),
+                    availableMoney: obj.coinAccount ? parseFloat(obj.coinAccount.hotMoney) : 0,
+                    frozenMoney: obj.myAccount ? parseFloat(obj.myAccount.hotMoney) : 0,
                     getMoney: true,
                 }, () => {
                     this.isLoginType()
@@ -236,8 +238,7 @@ class Purchase extends PureComponent {
         this.setState({
             visible:true
         }, () => {
-            let url = config.api.host + config.api.trades.trans + "1&entrustPrice=" + this.state.entrustPrice + "&entrustCount=" + this.state.entrustCount
-                + "&coinCode=" + this.state.coinCode +"&entrustWay=1";
+            let url = config.api.trades.trans;
 
             const actions = {
                 type: 1,

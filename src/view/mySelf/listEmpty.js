@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     StyleSheet,
     Text,
@@ -16,9 +16,9 @@ import {
 
 import p from '../../utils/tranfrom';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
-export default class ListEmpty  extends PureComponent {
+export default class ListEmpty extends PureComponent {
     render() {
         return (
             <View style={styles.loadingMore}>

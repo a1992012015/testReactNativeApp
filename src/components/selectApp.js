@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {
     View,
@@ -45,7 +45,7 @@ export default class SelectApp extends PureComponent {
     };
 
     measureInWindow(callback) {
-        const { selectView } = this.refs;
+        const {selectView} = this.refs;
         selectView && selectView.measureInWindow(callback);
     }
 
@@ -155,7 +155,18 @@ export default class SelectApp extends PureComponent {
 
         //iconTintColor
         if (!iconTintColor) iconTintColor = Theme.selectIconTintColor;
-        this.props = {style, size, value, valueStyle, valueElement, disabled, iconTintColor, iconSize, placeholder, placeholderTextColor, ...others};
+        this.props = {
+            style,
+            size,
+            value,
+            valueStyle,
+            valueElement,
+            disabled,
+            iconTintColor,
+            iconSize,
+            placeholder,
+            placeholderTextColor, ...others
+        };
     }
 
     showPullPicker() {
@@ -206,7 +217,10 @@ export default class SelectApp extends PureComponent {
             <ViewClass
                 style={style}
                 disabled={disabled || !editable}
-                onPress={e => {onPress && onPress(e) ; this.showPicker()}}
+                onPress={e => {
+                    onPress && onPress(e);
+                    this.showPicker()
+                }}
                 onLayout={e => {
                     this.measureInWindow((x, y, width, height) => {
                         this.popoverView && this.popoverView.updateFromBounds({x, y, width, height});
@@ -218,7 +232,8 @@ export default class SelectApp extends PureComponent {
             >
                 {valueElement}
                 <View style={{position: 'absolute', top: 0, bottom: 0, right: 0, justifyContent: 'center'}}>
-                    <Image style={{width: iconSize, height: iconSize, tintColor: iconTintColor}} source={require('../../node_modules/teaset/icons/select.png')} />
+                    <Image style={{width: iconSize, height: iconSize, tintColor: iconTintColor}}
+                           source={require('../../node_modules/teaset/icons/select.png')}/>
                 </View>
             </ViewClass>
         );

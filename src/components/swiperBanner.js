@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     Dimensions,
     View,
@@ -19,13 +19,14 @@ import p from '../utils/tranfrom';
 import config from '../utils/config';
 import request from '../utils/request';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 class SwiperBanner extends PureComponent {
     // 默认属性
     static defaultProps = {};
     // 属性类型
     static propTypes = {};
+
     //构建
     constructor(props) {
         super(props);
@@ -37,19 +38,20 @@ class SwiperBanner extends PureComponent {
             isLoading: false
         }
     }
+
     //真实的DOM被渲染出来后调用
     componentDidMount() {
-        const { height } = this.props;
+        const {height} = this.props;
         const url = config.api.index.banner;
 
         request.post(url, {}).then(response => {
 
-            if(response.ok){//判断接口是否请求成功
+            if (response.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            const { obj } = response;
+            const {obj} = response;
             console.log('首页轮播图片 =>', obj);
             this.setState({
                 images: obj,
@@ -61,6 +63,7 @@ class SwiperBanner extends PureComponent {
         })
 
     }
+
     // 渲染
     render() {
         const {images, height, loop, isLoading} = this.state;
@@ -71,7 +74,7 @@ class SwiperBanner extends PureComponent {
                 <Swiper
                     autoplay={true}                                 //是否自动播放
                     dot={<View style={styles.dot}/>}                //未选中的圆点样式
-                    activeDot={<View style={ styles.activeDot}/>}   //选中的小圆点样式
+                    activeDot={<View style={styles.activeDot}/>}   //选中的小圆点样式
                     loop={loop}                                     //滑动到最后一张是否继续滑动
                     autoplayTimeout={4}                             //每隔4秒切换
                     paginationStyle={{                              //小圆点的位置：距离底部10px
@@ -82,12 +85,12 @@ class SwiperBanner extends PureComponent {
                 >
                     {
                         images.map((item, index) => {
-                            const { picturePath } = item;
+                            const {picturePath} = item;
                             console.log(`${config.api.host}${picturePath}`);
                             return <Image
                                 key={index}
-                                source={{uri:`${config.api.host}${picturePath}`}}
-                                style={[styles.page, {height:height}]}
+                                source={{uri: `${config.api.host}${picturePath}`}}
+                                style={[styles.page, {height: height}]}
                             />
 
                         })
@@ -95,7 +98,7 @@ class SwiperBanner extends PureComponent {
                 </Swiper>)
         } else {
             return <View
-                style={{width:width, height:width*.5}}
+                style={{width: width, height: width * .5}}
                 resizeMode='stretch'
             />
         }

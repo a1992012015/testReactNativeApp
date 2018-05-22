@@ -8,8 +8,8 @@
 import * as types from '../actions/ActionTypes';
 
 const initialState = {
-    homeData:{},
-    homeLoading:true
+    homeData: {},
+    homeLoading: true
 };
 
 let IndexLoopReducer = (state = initialState, action) => {

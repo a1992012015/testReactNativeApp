@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react'
+import React, {PureComponent} from 'react'
 import {
     StyleSheet,
     View,
@@ -19,7 +19,7 @@ import {
     ActivityIndicator,
     Dimensions
 } from 'react-native';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import I18n from '../../utils/i18n';
 import Icon from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
@@ -27,23 +27,24 @@ import moment from 'moment';
 import config from '../../utils/config';
 import p from '../../utils/tranfrom';
 
-const { height } = Dimensions.get('window');
+const {height} = Dimensions.get('window');
 
 class TransQuotation extends PureComponent {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
-            rowPanDate:'',
-            isLoading:false,
-            tradesData:[],
-            priceLastT:null,
-            priceLowT:null,
-            priceNewT:null,
-            totalAmount:null,
-            priceOpen:null,
-            priceHigh:null
+            rowPanDate: '',
+            isLoading: false,
+            tradesData: [],
+            priceLastT: null,
+            priceLowT: null,
+            priceNewT: null,
+            totalAmount: null,
+            priceOpen: null,
+            priceHigh: null
         }
     }
+
     //真实的DOM渲染出来以后调用
     async componentDidMount() {
         const {params} = this.props.navigation.state;
@@ -52,13 +53,14 @@ class TransQuotation extends PureComponent {
             coinCode: params.coinCode
         });
     }
+
     //接收到一个新的props之后调用
     componentWillReceiveProps(props) {
-        const { TradingReducer, IndexLoopReducer } = props;
+        const {TradingReducer, IndexLoopReducer} = props;
         let trans = this.state.rowPanDate;
 
         if (trans && !TradingReducer.tradingLoading) {
-            const { marketDetail } = TradingReducer.tradingData;
+            const {marketDetail} = TradingReducer.tradingData;
             let coinData = marketDetail[trans.coinCode][0].payload;
             let homeData = IndexLoopReducer.homeData;
 
@@ -71,9 +73,9 @@ class TransQuotation extends PureComponent {
             });
 
             homeData.map(item => {
-                if(trans.coinCode === item.coinCode){
+                if (trans.coinCode === item.coinCode) {
                     this.setState({
-                        rowPanDate:item
+                        rowPanDate: item
                     })
                 }
             });
@@ -138,8 +140,8 @@ class TransQuotation extends PureComponent {
 
     render() {
         if (this.state.isLoading) {
-            const { rowPanDate, priceLowT, priceHigh, totalAmount, tradesData } = this.state;
-            let { RiseAndFall, picturePath, coinCode, currentExchangPrice, lastExchangPrice } = rowPanDate;
+            const {rowPanDate, priceLowT, priceHigh, totalAmount, tradesData} = this.state;
+            let {RiseAndFall, picturePath, coinCode, currentExchangPrice, lastExchangPrice} = rowPanDate;
             RiseAndFall = parseFloat(RiseAndFall).toFixed(3);
 
             return (
@@ -150,8 +152,8 @@ class TransQuotation extends PureComponent {
                         }}>
                             <Icon
                                 name="ios-arrow-back-outline" size={25}
-                                  color='#fff'
-                                  style={{paddingHorizontal: p(20)}}
+                                color='#fff'
+                                style={{paddingHorizontal: p(20)}}
                             />
                         </TouchableOpacity>
                         <Text style={styles.headerTitle}>{I18n.t('transquo')}</Text>
@@ -165,7 +167,7 @@ class TransQuotation extends PureComponent {
                     }}>
                         <Image
                             style={{width: p(35), height: p(35)}}
-                               source={{uri: config.api.host + picturePath}}
+                            source={{uri: config.api.host + picturePath}}
                         />
                         <Text style={styles.textViewTop}>{coinCode}</Text>
                     </View>
@@ -176,18 +178,18 @@ class TransQuotation extends PureComponent {
                                 {this.rowContent(currentExchangPrice, lastExchangPrice)}
                                 <Text style={{
                                     fontSize: p(28),
-                                    color: RiseAndFall > 0 ? '#FF0000' : RiseAndFall < 0 ? '#018F67':'#919191'
+                                    color: RiseAndFall > 0 ? '#FF0000' : RiseAndFall < 0 ? '#018F67' : '#919191'
                                 }}>{RiseAndFall}%</Text>
                             </View>
                         </View>
 
                         <View style={{margin: p(20)}}>
                             <View style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: p(20)}}>
-                                <View style={{flexDirection:'row',alignItems:'center'}}>
+                                <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                     <Text style={styles.textFont}>{I18n.t('zuiGao')}：</Text>
                                     <Text style={styles.textFont}>{priceHigh}</Text>
                                 </View>
-                                <View style={{flexDirection:'row',alignItems:'center'}}>
+                                <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                     <Text style={styles.textFont}>{I18n.t('zuiDi')}：</Text>
                                     <Text style={styles.textFont}>{priceLowT}</Text>
                                 </View>
@@ -195,7 +197,7 @@ class TransQuotation extends PureComponent {
                         </View>
 
                         <View style={{margin: p(20)}}>
-                            <View style={{flexDirection:'row',alignItems:'center'}}>
+                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                 <Text style={styles.textFont}>当日成交总额：</Text>
                                 <Text style={styles.textFont}>{totalAmount}</Text>
                             </View>
@@ -334,7 +336,7 @@ let styles = StyleSheet.create({
 });
 
 export default connect((state) => {
-    const { TradingReducer, IndexLoopReducer } = state;
+    const {TradingReducer, IndexLoopReducer} = state;
     return {
         TradingReducer,
         IndexLoopReducer

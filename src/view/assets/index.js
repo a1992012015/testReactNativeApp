@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     StyleSheet,
     View,
@@ -26,11 +26,11 @@ import p from '../../utils/tranfrom';
 import request from '../../utils/request';
 import Title from '../../components/title';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 export default class SpotAssets extends PureComponent {
     //构建
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             loadData: false,
@@ -41,11 +41,12 @@ export default class SpotAssets extends PureComponent {
             queryAccount: [],
         }
     }
+
     //加载数据
     componentDidMount() {
 
-        let { params } = this.props.navigation.state;
-        if(params){
+        let {params} = this.props.navigation.state;
+        if (params) {
             this.setState({
                 canBack: params.canBack,
             })
@@ -55,16 +56,16 @@ export default class SpotAssets extends PureComponent {
 
         request.post(url, {}).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
             request.manyLogin(this.props, responseText);
 
-            console.log('获取资产=>',responseText);
+            console.log('获取资产=>', responseText);
 
-            if(responseText.obj){
+            if (responseText.obj) {
                 this.setState({
                     coinAccount: responseText.obj.coinAccount,
                     queryAccount: responseText.obj.coinAccount,
@@ -82,38 +83,39 @@ export default class SpotAssets extends PureComponent {
             })
         });
     }
+
     //查询
     queryName = text => {
 
         this.setState({
-            codeName:text
+            codeName: text
         });
 
-        let data =[];
+        let data = [];
 
-        for(let i = 0; i < this.state.queryAccount.length; i++){
+        for (let i = 0; i < this.state.queryAccount.length; i++) {
 
             let coinItem = this.state.queryAccount[i];
-            let reg= /^[A-Za-z]+$/;
+            let reg = /^[A-Za-z]+$/;
 
             if (reg.test(text)) {
                 text = text.toUpperCase();
             }
 
-            if(coinItem.coinCode.indexOf(text) >= 0 || coinItem.name.indexOf(text) >= 0){
+            if (coinItem.coinCode.indexOf(text) >= 0 || coinItem.name.indexOf(text) >= 0) {
                 data.push(coinItem);
-            }else if(text===''){
+            } else if (text === '') {
                 this.setState({
                     coinAccount: this.state.queryAccount,
                 })
             }
         }
 
-        if(text === ''){
+        if (text === '') {
             this.setState({
                 coinAccount: this.state.queryAccount,
             })
-        }else{
+        } else {
             this.setState({
                 coinAccount: data,
             })
@@ -126,7 +128,7 @@ export default class SpotAssets extends PureComponent {
 
         request.post(url, {}).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
@@ -138,7 +140,7 @@ export default class SpotAssets extends PureComponent {
             this.setState({
                 member: responseText.obj.user,
                 languageCode: responseText.obj.languageCode,
-                user:responseText.obj
+                user: responseText.obj
             })
         }).catch(error => {
             console.log('进入失败函数 =>', error);
@@ -146,25 +148,25 @@ export default class SpotAssets extends PureComponent {
     };
     //充币
     getIntoCurrency = item => {
-        const { moneyAndCoin, coinCode } = item;
+        const {moneyAndCoin, coinCode} = item;
 
-        if(moneyAndCoin === 0){
+        if (moneyAndCoin === 0) {
             this.props.navigation.navigate('RechargeRMB', {member: this.state.member});
-        }else{
+        } else {
             let url = config.api.currency.account;
             request.post(url, {}).then(responseText => {
 
-                if(responseText.ok){//判断接口是否请求成功
+                if (responseText.ok) {//判断接口是否请求成功
                     console.log('接口请求失败进入失败函数');
                     return;
                 }
 
-                request.manyLogin(this.props,responseText);
+                request.manyLogin(this.props, responseText);
 
                 let data = responseText.obj;
 
-                for(let i = 0; i < data.length; i++){
-                    if(data[i].coinCode === coinCode){
+                for (let i = 0; i < data.length; i++) {
+                    if (data[i].coinCode === coinCode) {
                         this.props.navigation.navigate('IntoCurrency', {intoData: data[i]});
                     }
                 }
@@ -175,27 +177,27 @@ export default class SpotAssets extends PureComponent {
     };
     //提币
     getTurnoutCurrency = item => {
-        const { moneyAndCoin, coinCode } = item;
+        const {moneyAndCoin, coinCode} = item;
 
-        if(moneyAndCoin === 0){
-            this.props.navigation.navigate('withdrawalsRMB',{member:this.state.member});
-        }else{
+        if (moneyAndCoin === 0) {
+            this.props.navigation.navigate('withdrawalsRMB', {member: this.state.member});
+        } else {
             //地址
             let url = config.api.currency.account;
 
             request.post(url, {}).then(responseText => {
 
-                if(responseText.ok){//判断接口是否请求成功
+                if (responseText.ok) {//判断接口是否请求成功
                     console.log('接口请求失败进入失败函数');
                     return;
                 }
 
-                request.manyLogin(this.props,responseText);
+                request.manyLogin(this.props, responseText);
 
                 let data = responseText.obj;
 
-                for(let i = 0; i < data.length; i++){
-                    if(data[i].coinCode === coinCode){
+                for (let i = 0; i < data.length; i++) {
+                    if (data[i].coinCode === coinCode) {
                         this.props.navigation.navigate('TurnoutCurrency', {intoData: data[i], telephone: ''});
                     }
                 }
@@ -210,65 +212,80 @@ export default class SpotAssets extends PureComponent {
     };
     /*跳转下级页面方法*/
     isRealName = (page, memberInfo, item) => {
-        let { user } = this.state;
+        let {user} = this.state;
         console.log(user);
-        let { isChongbi, isTibi } = user;
+        let {isChongbi, isTibi} = user;
 
-        if(isChongbi === "0" || isChongbi === 0){
+        if (isChongbi === "0" || isChongbi === 0) {
             this.realNameJump(page, memberInfo, item);
 
-        }else if(isTibi === "0" || isTibi === 0){
+        } else if (isTibi === "0" || isTibi === 0) {
             this.realNameJump(page, memberInfo, item);
 
-        }else{
-            if(page === 1){
+        } else {
+            if (page === 1) {
                 this.getIntoCurrency(item);
 
-            }else if(page === 2){
+            } else if (page === 2) {
                 this.getTurnoutCurrency(item);
 
-            }else{
+            } else {
                 this.getCodeBillFlow(item);
             }
         }
     };
     //实名认证判断
     realNameJump = (page, memberInfo, item) => {
-        const { states } = memberInfo;
+        const {states} = memberInfo;
 
-        if(states === 0 || states === "0"){
+        if (states === 0 || states === "0") {
             Alert.alert(
                 '提示',
                 '请先实名认证',
-                [{text: '确认', onPress: () => this.props.navigation.navigate("realAuthentication", {member: memberInfo, infoAction: this.upState})}]
+                [{
+                    text: '确认',
+                    onPress: () => this.props.navigation.navigate("realAuthentication", {
+                        member: memberInfo,
+                        infoAction: this.upState
+                    })
+                }]
             );
-        }else if(states === 1 || states === "1"){
+        } else if (states === 1 || states === "1") {
             Alert.alert(
                 '提示',
                 '实名认证审核中',
-                [{text: '确认', onPress: () => {}}]
+                [{
+                    text: '确认', onPress: () => {
+                    }
+                }]
             );
-        }else if(states === 3 || states === "3"){
+        } else if (states === 3 || states === "3") {
             Alert.alert(
                 '提示',
                 '实名申请被拒绝，请重新认证',
-                [{text: '确认', onPress: () => this.props.navigation.navigate("realAuthentication", {member: memberInfo, infoAction: this.upState})}]
+                [{
+                    text: '确认',
+                    onPress: () => this.props.navigation.navigate("realAuthentication", {
+                        member: memberInfo,
+                        infoAction: this.upState
+                    })
+                }]
             );
-        }else{
-            if(page === 1){
+        } else {
+            if (page === 1) {
                 this.getIntoCurrency(item);
 
-            }else if(page === 2){
+            } else if (page === 2) {
                 this.getTurnoutCurrency(item);
 
-            }else{
+            } else {
                 this.getCodeBillFlow(item);
 
             }
         }
     };
 
-    render(){
+    render() {
         if (this.state.loadData) {
             return (
                 <View style={{flex: 1}}>
@@ -279,7 +296,7 @@ export default class SpotAssets extends PureComponent {
                         {/*查询输入框组件*/}
                         <View style={styles.inputView}>
                             <Image
-                                style={{zIndex: 99999, width: p(40), height: p(40),marginLeft: p(20)}}
+                                style={{zIndex: 99999, width: p(40), height: p(40), marginLeft: p(20)}}
                                 source={require('../../static/assets/query.png')}
                             />
 
@@ -290,7 +307,7 @@ export default class SpotAssets extends PureComponent {
                                 clearButtonMode={'while-editing'}
                                 placeholderTextColor={'#787e82'}
                                 style={styles.inputTextView}
-                                value= {this.state.codeName}
+                                value={this.state.codeName}
                                 onChangeText={text => this.queryName(text)}
                             />
                         </View>
@@ -298,8 +315,8 @@ export default class SpotAssets extends PureComponent {
                         <ScrollView style={{marginBottom: !this.state.canBack ? p(360) : p(1)}}>
                             {
                                 this.state.coinAccount.map((item, i) => {
-                                    const { moneyAndCoin, coinCode, name, hotMoney, coldMoney, keepDecimalForCoin, picturePath } = item;
-                                    return(
+                                    const {moneyAndCoin, coinCode, name, hotMoney, coldMoney, keepDecimalForCoin, picturePath} = item;
+                                    return (
                                         <View key={`ScrollView${i}`}>
                                             {
                                                 moneyAndCoin !== 0 ?
@@ -315,9 +332,11 @@ export default class SpotAssets extends PureComponent {
                                                                 {/*名字*/}
                                                                 <Text style={styles.textOne}>{coinCode} （{name}）</Text>
                                                                 {/*总数*/}
-                                                                <Text style={styles.textTwo}>{parseFloat(hotMoney).toFixed(keepDecimalForCoin)}</Text>
+                                                                <Text
+                                                                    style={styles.textTwo}>{parseFloat(hotMoney).toFixed(keepDecimalForCoin)}</Text>
                                                                 {/*冻结*/}
-                                                                <Text style={styles.textThree}>冻结{parseFloat(coldMoney).toFixed(keepDecimalForCoin)}</Text>
+                                                                <Text
+                                                                    style={styles.textThree}>冻结{parseFloat(coldMoney).toFixed(keepDecimalForCoin)}</Text>
                                                             </View>
                                                             {/*显示图片*/}
                                                             <View style={{marginRight: p(50)}}>
@@ -329,54 +348,90 @@ export default class SpotAssets extends PureComponent {
                                                             </View>
                                                         </View>
 
-                                                        <View style={{height: p(2), backgroundColor: '#dfdfdf', width: width}}/>
+                                                        <View style={{
+                                                            height: p(2),
+                                                            backgroundColor: '#dfdfdf',
+                                                            width: width
+                                                        }}/>
 
                                                         <View style={styles.viewTwo}>
                                                             {/*充币组件*/}
                                                             <TouchableOpacity
                                                                 onPress={() => this.isRealName(1, this.state.member, item)}
-                                                                style={{width: width * .3, flexDirection: "row", justifyContent: 'center'}}
+                                                                style={{
+                                                                    width: width * .3,
+                                                                    flexDirection: "row",
+                                                                    justifyContent: 'center'
+                                                                }}
                                                             >
                                                                 <Image
                                                                     resizeMode='stretch'
-                                                                    style={{width: p(30), height: p(30), marginRight: p(6)}}
+                                                                    style={{
+                                                                        width: p(30),
+                                                                        height: p(30),
+                                                                        marginRight: p(6)
+                                                                    }}
                                                                     source={require('../../static/assets/xz.png')}
                                                                 />
                                                                 <Text style={styles.textBottom}>充币</Text>
 
                                                             </TouchableOpacity>
 
-                                                            <View style={{height: p(40), backgroundColor: '#dfdfdf',width: p(2)}}/>
+                                                            <View style={{
+                                                                height: p(40),
+                                                                backgroundColor: '#dfdfdf',
+                                                                width: p(2)
+                                                            }}/>
                                                             {/*提币组件*/}
                                                             <TouchableOpacity
                                                                 onPress={() => this.isRealName(2, this.state.member, item)}
-                                                                style={{width: width * .3, flexDirection: "row", justifyContent: 'center'}}
+                                                                style={{
+                                                                    width: width * .3,
+                                                                    flexDirection: "row",
+                                                                    justifyContent: 'center'
+                                                                }}
                                                             >
                                                                 <Image
                                                                     resizeMode='stretch'
-                                                                    style={{width: p(30), height: p(30), marginRight: p(6)}}
+                                                                    style={{
+                                                                        width: p(30),
+                                                                        height: p(30),
+                                                                        marginRight: p(6)
+                                                                    }}
                                                                     source={require('../../static/assets/cb.png')}
                                                                 />
                                                                 <Text style={styles.textBottom}>提币</Text>
 
                                                             </TouchableOpacity>
 
-                                                            <View style={{height: p(40), backgroundColor: '#dfdfdf', width: p(2)}}/>
+                                                            <View style={{
+                                                                height: p(40),
+                                                                backgroundColor: '#dfdfdf',
+                                                                width: p(2)
+                                                            }}/>
                                                             {/*账单组件*/}
                                                             <TouchableOpacity
                                                                 onPress={() => this.isRealName(3, this.state.member, item)}
-                                                                style={{width: width * .3, flexDirection: "row", justifyContent: 'center'}}
+                                                                style={{
+                                                                    width: width * .3,
+                                                                    flexDirection: "row",
+                                                                    justifyContent: 'center'
+                                                                }}
                                                             >
                                                                 <Image
                                                                     resizeMode='stretch'
-                                                                    style={{width: p(26), height: p(26), marginRight: p(6)}}
+                                                                    style={{
+                                                                        width: p(26),
+                                                                        height: p(26),
+                                                                        marginRight: p(6)
+                                                                    }}
                                                                     source={require('../../static/assets/zd.png')}
                                                                 />
                                                                 <Text style={styles.textBottom}>账单</Text>
                                                             </TouchableOpacity>
                                                         </View>
                                                     </View>
-                                                    :null
+                                                    : null
                                             }
                                         </View>
                                     )
@@ -386,7 +441,7 @@ export default class SpotAssets extends PureComponent {
                     </View>
                 </View>
             )
-        }else{
+        } else {
             return (
                 <ActivityIndicator
                     animating={true}
@@ -399,11 +454,11 @@ export default class SpotAssets extends PureComponent {
 }
 
 const styles = StyleSheet.create({
-    textBottom:{
+    textBottom: {
         fontSize: p(22),
         color: '#454545',
     },
-    viewTwo:{
+    viewTwo: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -411,31 +466,31 @@ const styles = StyleSheet.create({
         flex: 1,
         borderRadius: p(5),
     },
-    textOne:{
+    textOne: {
         color: '#ffb339',
         fontSize: p(30),
     },
-    textTwo:{
+    textTwo: {
         color: '#676767',
         fontSize: p(36),
         marginTop: p(26),
         fontWeight: '400',
     },
-    textThree:{
+    textThree: {
         color: '#b8b8b8',
         fontSize: p(26),
         marginTop: p(26),
     },
-    viewOne:{
+    viewOne: {
         width: width - p(40),
-        height: p(330) ,
+        height: p(330),
         backgroundColor: '#fbfbfb',
         borderRadius: p(5),
         borderWidth: p(2),
         borderColor: '#d7d7d7',
         marginBottom: p(25),
     },
-    inputTextView:{
+    inputTextView: {
         width: width * .5,
         flex: 1,
         fontSize: p(26),
@@ -443,7 +498,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginLeft: p(30),
     },
-    inputView:{
+    inputView: {
         flexDirection: 'row',
         height: p(90),
         alignItems: 'center',

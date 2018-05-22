@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     Dimensions,
     View,
@@ -16,14 +16,14 @@ import {
     Platform,
     ActivityIndicator
 } from 'react-native' ;
-import  Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-import p from '../../utils/tranfrom';
-import config from '../../utils/config';
-import request from '../../utils/request';
-import I18n from '../../utils/i18n';
+import p from '../../../utils/tranfrom';
+import config from '../../../utils/config';
+import request from '../../../utils/request';
+import I18n from '../../../utils/i18n';
 
-const { height } = Dimensions.get('window');
+const {height} = Dimensions.get('window');
 
 export default class RealAuthentication_2 extends PureComponent {
     // 构造
@@ -31,32 +31,33 @@ export default class RealAuthentication_2 extends PureComponent {
         super(props);
         // 初始状态
         this.state = {
-            cardId:'',
-            trueName:'',
-            cardType:0,
-            papersType:'身份证',
-            surname:'',
-            loadData:false
+            cardId: '',
+            trueName: '',
+            cardType: 0,
+            papersType: '身份证',
+            surname: '',
+            loadData: false
         };
     }
+
     //真实结构渲染之后调用
     componentDidMount() {
         let url = config.api.person.realName;
         request.post(url).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            request.manyLogin(this.props,responseText);
+            request.manyLogin(this.props, responseText);
 
-            console.log('responseText',responseText);
-            const { obj } = responseText;
+            console.log('responseText', responseText);
+            const {obj} = responseText;
             let cardNum = obj.cardId;
 
-            if(cardNum.length>10){
-                cardNum = `${cardNum.substring(0,4)}********${cardNum.substring(cardNum.length - 4, cardNum.length)}`;
+            if (cardNum.length > 10) {
+                cardNum = `${cardNum.substring(0, 4)}********${cardNum.substring(cardNum.length - 4, cardNum.length)}`;
             }
 
             this.setState({
@@ -72,19 +73,19 @@ export default class RealAuthentication_2 extends PureComponent {
 
     // 渲染
     render() {
-        if(this.state.loadData){
+        if (this.state.loadData) {
             const {params} = this.props.navigation.state;
             return (
                 <View style={styles.defaultView}>
                     <View style={styles.header}>
-                        <TouchableOpacity onPress = {() => {
+                        <TouchableOpacity onPress={() => {
                             this.props.navigation.goBack();
                             params.infoAction();
                         }}>
                             <Icon
                                 name="ios-arrow-back-outline" size={25}
                                 color='#fff'
-                                style={{paddingHorizontal:p(20)}}
+                                style={{paddingHorizontal: p(20)}}
                             />
                         </TouchableOpacity>
                         <Text style={styles.headerTitle}>{I18n.t("verification")}</Text>
@@ -99,7 +100,7 @@ export default class RealAuthentication_2 extends PureComponent {
                     }}>
                         <Icon name="ios-checkmark-circle" size={30} color="#018F67"/>
                         <Text style={{color: "#018F67", fontSize: p(28), marginTop: p(20)}}>
-                            {params.textView==="审核中"?"实名认证正在审核!":I18n.t("smchenggong")}
+                            {params.textView === "审核中" ? "实名认证正在审核!" : I18n.t("smchenggong")}
                         </Text>
                     </View>
                     <View style={{alignItems: 'center', paddingVertical: p(20), justifyContent: 'flex-start'}}>
@@ -118,11 +119,11 @@ export default class RealAuthentication_2 extends PureComponent {
                     </View>
                 </View>
             );
-        }else{
+        } else {
             return (
                 <ActivityIndicator
                     animating={true}
-                    style={{height: height/2}}
+                    style={{height: height / 2}}
                     size="large"
                 />
             )

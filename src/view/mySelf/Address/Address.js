@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     StyleSheet,
     View,
@@ -18,26 +18,27 @@ import {
     Dimensions,
     Alert
 } from 'react-native';
-import Toast, { DURATION } from 'react-native-easy-toast';
+import Toast, {DURATION} from 'react-native-easy-toast';
 
 import config from '../../../utils/config';
 import p from '../../../utils/tranfrom';
 import request from '../../../utils/request';
 import Title from '../../../components/title';
 
-const { width, height }=Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 export default class Address extends PureComponent {
-    constructor(props){
+    constructor(props) {
         super(props);
         this._dataSource = new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2});
         this.state = {
-            loadData:false,
-            dataSource:this._dataSource.cloneWithRows([]),
+            loadData: false,
+            dataSource: this._dataSource.cloneWithRows([]),
             refreshing: false,
             hasMore: true,
         }
     }
+
     //真实的DOM渲染出来之后调用
     componentDidMount() {
         this.getAddress();
@@ -48,7 +49,7 @@ export default class Address extends PureComponent {
 
         request.post(url).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 console.log(responseText);
                 console.log(responseText.status);
@@ -56,9 +57,9 @@ export default class Address extends PureComponent {
                 return;
             }
 
-            request.manyLogin(this.props,responseText);
+            request.manyLogin(this.props, responseText);
 
-            const { obj } = responseText;
+            const {obj} = responseText;
 
             this.setState({
                 loadData: true,
@@ -66,10 +67,10 @@ export default class Address extends PureComponent {
                 hasMore: false
             });
         });
-        const { params } = this.props.navigation.state;
+        const {params} = this.props.navigation.state;
         let jumType = params.jumType;
-        if(jumType){
-            const { params } = this.props.navigation.state;
+        if (jumType) {
+            const {params} = this.props.navigation.state;
             params.getJumCode();
         }
     };
@@ -77,13 +78,13 @@ export default class Address extends PureComponent {
     _renderFooter = () => {
         if (!this.state.hasMore) {
             return (
-                <View style={[styles.loadingMore,{height:this.state.viewType === 0 ? p(50) : p(50)}]}>
+                <View style={[styles.loadingMore, {height: this.state.viewType === 0 ? p(50) : p(50)}]}>
                     <Text style={styles.loadingText}> 没有更多数据了</Text>
-                </View> )
+                </View>)
         }
     };
 
-    render(){
+    render() {
         if (this.state.loadData) {
             return (
                 <View style={{flex: 1, backgroundColor: '#1F2229', paddingBottom: p(80)}}>
@@ -100,7 +101,7 @@ export default class Address extends PureComponent {
                         <Text style={[styles.textRecord, {width: '15%'}]}>操作</Text>
                     </View>
                     <ListView
-                        horizontal={false }
+                        horizontal={false}
                         dataSource={this.state.dataSource}
                         renderRow={this._quotRow}
                         renderFooter={this._renderFooter}
@@ -115,7 +116,7 @@ export default class Address extends PureComponent {
                     <TouchableOpacity
                         activeOpacity={.8}
                         onPress={() => {
-                            this.props.navigation.navigate('AddAddress', {getAddress:this.getAddress});
+                            this.props.navigation.navigate('AddAddress', {getAddress: this.getAddress});
                         }}
                         style={styles.footerAll}>
                         <Image
@@ -125,13 +126,13 @@ export default class Address extends PureComponent {
                     </TouchableOpacity>
                     <Toast
                         ref="toast"
-                        style={{backgroundColor:'rgba(0,0,0,.6)'}}
+                        style={{backgroundColor: 'rgba(0,0,0,.6)'}}
                         position='top'
-                        textStyle={{color:'white'}}
+                        textStyle={{color: 'white'}}
                     />
                 </View>
             )
-        }else{
+        } else {
             return (
                 <ActivityIndicator
                     animating={true}
@@ -143,26 +144,30 @@ export default class Address extends PureComponent {
     }
 
     deleteAddress = id => {
-        const { toast }= this.refs;
+        const {toast} = this.refs;
 
         Alert.alert('温馨提醒', '是否删除', [
-            {text: '取消', onPress: () => {}},
-            {text: '确定', onPress: () => {
+            {
+                text: '取消', onPress: () => {
+                }
+            },
+            {
+                text: '确定', onPress: () => {
                     let url = `${config.api.currency.dlWallet}?id=${id}`;
                     request.post(url).then(responseText => {
 
-                        if(responseText.ok){//判断接口是否请求成功
+                        if (responseText.ok) {//判断接口是否请求成功
                             console.log('接口请求失败进入失败函数');
                             return;
                         }
 
-                        request.manyLogin(this.props,responseText);
+                        request.manyLogin(this.props, responseText);
 
-                        const { msg } = responseText;
-                        if(responseText.success){
+                        const {msg} = responseText;
+                        if (responseText.success) {
                             toast.show('删除成功', DURATION.LENGTH_SHORT);
                             this.getAddress();
-                        }else{
+                        } else {
                             toast.show(msg, DURATION.LENGTH_SHORT);
                         }
                     });
@@ -171,10 +176,10 @@ export default class Address extends PureComponent {
         ])
     };
 
-    _quotRow = row =>{
-        const { publicKey, remark, created, currencyType, id } = row;
+    _quotRow = row => {
+        const {publicKey, remark, created, currencyType, id} = row;
 
-        return(
+        return (
             <View style={{
                 flexDirection: 'row',
                 alignItems: 'center',
@@ -182,16 +187,21 @@ export default class Address extends PureComponent {
                 borderBottomColor: '#313840',
                 padding: p(10),
             }}>
-                <View style={{width:'70%', alignItems:'center'}}>
-                    <Text style={{color:"#D95411", textAlign: 'center', fontSize:p(22)}}>{publicKey}</Text>
-                    <Text style={{color:"#D95411", fontSize: p(22)}}>{remark == null || remark === 'null' ? "" : remark}</Text>
-                    <Text style={{color:"#D95411", fontSize: p(22)}}>{created}</Text>
+                <View style={{width: '70%', alignItems: 'center'}}>
+                    <Text style={{color: "#D95411", textAlign: 'center', fontSize: p(22)}}>{publicKey}</Text>
+                    <Text style={{
+                        color: "#D95411",
+                        fontSize: p(22)
+                    }}>{remark == null || remark === 'null' ? "" : remark}</Text>
+                    <Text style={{color: "#D95411", fontSize: p(22)}}>{created}</Text>
                 </View>
-                <Text style={[styles.textRecord,{width:'15%'}]}>{currencyType}</Text>
+                <Text style={[styles.textRecord, {width: '15%'}]}>{currencyType}</Text>
                 <TouchableOpacity
-                    onPress={()=>{this.deleteAddress(id)}}
+                    onPress={() => {
+                        this.deleteAddress(id)
+                    }}
                     activeOpacity={.8}
-                    style={{width:'15%', alignItems:'center'}}>
+                    style={{width: '15%', alignItems: 'center'}}>
                     <Text style={{
                         color: '#FFF',
                         backgroundColor: '#D95411',
@@ -206,16 +216,16 @@ export default class Address extends PureComponent {
 }
 
 let styles = StyleSheet.create({
-    textViewTop:{
+    textViewTop: {
         color: '#ACB3B9',
         fontSize: p(24),
     },
-    quotView:{
+    quotView: {
         padding: p(20),
         borderWidth: StyleSheet.hairlineWidth,
         borderColor: '#313840',
     },
-    textRecord:{
+    textRecord: {
         color: '#ACB3B9',
         fontSize: p(24),
         textAlign: 'center',

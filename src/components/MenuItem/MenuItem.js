@@ -7,7 +7,7 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, Text, TouchableHighlight } from 'react-native';
+import {StyleSheet, Text, TouchableHighlight} from 'react-native';
 import PropTypes from 'prop-types';
 
 const MenuItem = props => {
@@ -21,7 +21,7 @@ const MenuItem = props => {
             <Text numberOfLines={1}
                   style={[
                       styles.title,
-                      props.disabled && { color: props.disabledTextColor },
+                      props.disabled && {color: props.disabledTextColor},
                       props.textStyle,
                   ]}
             >

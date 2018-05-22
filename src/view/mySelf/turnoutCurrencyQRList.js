@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     StyleSheet,
     Text,
@@ -23,9 +23,9 @@ import config from '../../utils/config';
 import p from '../../utils/tranfrom';
 import Title from '../../components/title';
 
-const { width, height }=Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
-export default class TurnoutCurrencyQRList  extends PureComponent {
+export default class TurnoutCurrencyQRList extends PureComponent {
     // 构造
     constructor(props) {
         super(props);
@@ -33,9 +33,10 @@ export default class TurnoutCurrencyQRList  extends PureComponent {
         this.state = {
             loadData: false,
             dataSource: [],
-            telephone:''
+            telephone: ''
         };
     }
+
     //真实结构渲染出来以后
     componentDidMount() {
         const {params} = this.props.navigation.state;
@@ -47,9 +48,10 @@ export default class TurnoutCurrencyQRList  extends PureComponent {
 
         this.pullDown()
     }
+
     //跳转页面
     newsDetail = row => {
-        this.props.navigation.navigate('TurnoutCurrencyQR',{intoData:row,telephone:this.state.telephone});
+        this.props.navigation.navigate('TurnoutCurrencyQR', {intoData: row, telephone: this.state.telephone});
     };
 
     pullDown = () => {
@@ -58,18 +60,18 @@ export default class TurnoutCurrencyQRList  extends PureComponent {
 
         request.post(url).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            request.manyLogin(this.props,responseText);
-            console.log("responseText",responseText);
+            request.manyLogin(this.props, responseText);
+            console.log("responseText", responseText);
 
             let listData = [];
-            const { obj } = responseText;
+            const {obj} = responseText;
 
-            obj.map((item,index)=>{
+            obj.map((item, index) => {
                 listData.push({
                     key: index,
                     value: item,
@@ -118,13 +120,13 @@ export default class TurnoutCurrencyQRList  extends PureComponent {
                 onPress={() => this.newsDetail(item)}
                 activeOpacity={.8}>
                 <View style={styles.contentView}>
-                    <Image style={{width:p(35),height:p(35)}}
-                           source={{uri:config.api.host+item.picturePath}}
+                    <Image style={{width: p(35), height: p(35)}}
+                           source={{uri: config.api.host + item.picturePath}}
                     />
                     <Text style={styles.textView}>{item.coinCode}</Text>
                 </View>
                 <Image
-                    style={{width:p(35),height:p(35)}}
+                    style={{width: p(35), height: p(35)}}
                     source={require('../../static/arrow.png')}
                 />
             </TouchableOpacity>)
@@ -132,45 +134,34 @@ export default class TurnoutCurrencyQRList  extends PureComponent {
 }
 
 const styles = StyleSheet.create({
-    content: {
-        borderWidth: StyleSheet.hairlineWidth,
-        borderColor: '#cfcfcf',
-    },
-    loadingMore: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginVertical: p(20),
-        width: width
-    },
-    newsItems:{
-        overflow:'hidden',
-        width:width/2-p(30),
+    newsItems: {
+        overflow: 'hidden',
+        width: width / 2 - p(30),
         marginLeft: p(20),
         borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor:'#313840',
-        flexDirection:'row',
-        justifyContent:'space-between',
-        padding:p(20),
-        alignItems:'center',
-        backgroundColor:'#323840',
-        marginTop:p(20),
-        borderRadius:p(4)
+        borderBottomColor: '#313840',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: p(20),
+        alignItems: 'center',
+        backgroundColor: '#323840',
+        marginTop: p(20),
+        borderRadius: p(4)
     },
-    textView:{
-        color:'#B0B0B0',
-        fontSize:p(26),
-        left:-p(40)
+    textView: {
+        color: '#B0B0B0',
+        fontSize: p(26),
+        left: -p(40)
     },
-    contentView:{
-        flexDirection:'row',
-        alignItems:'center',
+    contentView: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     loadingText: {
         fontSize: p(25),
         color: '#828282'
     },
     list: {
-        //justifyContent: 'space-between',
         flexDirection: 'row',
         flexWrap: 'wrap'
     },

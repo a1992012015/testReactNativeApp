@@ -1255,13 +1255,13 @@ const allCountries = [
     ]
 ];
 
-const allCountriesData =[];
+const allCountriesData = [];
 // loop over all of the countries above
 for (let i = 0; i < allCountries.length; i++) {
     let c = allCountries[i];
     let item = {
         text: c[0],
-        value: c[1]+'_'+c[2],
+        value: c[1] + '_' + c[2],
     };
     allCountriesData.push(item);
     // allCountries[i] = {

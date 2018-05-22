@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
     StyleSheet,
     View,
@@ -14,7 +14,7 @@ import {
     FlatList,
     Dimensions
 } from 'react-native';
-import Toast, { DURATION } from 'react-native-easy-toast';
+import Toast, {DURATION} from 'react-native-easy-toast';
 
 import config from '../../../utils/config';
 import p from '../../../utils/tranfrom';
@@ -22,59 +22,61 @@ import request from '../../../utils/request';
 import I18n from '../../../utils/i18n';
 import Loading from '../../../components/loading';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 export default class Item_2 extends PureComponent {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
-            initItem:'',
-            initId:'0',
-            data:true,
-            isLogin:false,
-            member:null,
-            tranDate:null,
-            killData:[],
-            balance:true,
-            visible:true,
-            offset:0,
-            total:10
+            initItem: '',
+            initId: '0',
+            data: true,
+            isLogin: false,
+            member: null,
+            tranDate: null,
+            killData: [],
+            balance: true,
+            visible: true,
+            offset: 0,
+            total: 10
         }
     }
+
     //真实结构渲染出来之后
     componentDidMount() {
         this.queryKill(0)
     }
+
     //加载列表
     queryKill = () => {
         this.setState({
             visible: true,
-            killData:[],
-            offset:0
-        },() => {
-            const { toast } = this.refs;
+            killData: [],
+            offset: 0
+        }, () => {
+            const {toast} = this.refs;
 
             let url = `${config.api.trades.list}history&limit=12&offset=0&typeone=0&sortOrder=asc&querypath=enter`;
 
             request.post(url).then(responseText => {
 
-                if(responseText.ok){//判断接口是否请求成功
+                if (responseText.ok) {//判断接口是否请求成功
                     console.log('接口请求失败进入失败函数');
                     toast.show('接口请求失败', DURATION.LENGTH_SHORT);
                     return;
                 }
 
                 this.setState({
-                    visible:false
+                    visible: false
                 });
-                request.manyLogin(this.props,responseText);
+                request.manyLogin(this.props, responseText);
 
-                const { obj } = responseText;
+                const {obj} = responseText;
 
                 let rows = obj.rows;
                 let kill = [];
 
-                if(rows.length > 0){
+                if (rows.length > 0) {
                     rows.map((item, index) => {
                         kill.push({
                             key: index,
@@ -91,9 +93,9 @@ export default class Item_2 extends PureComponent {
                         total: obj.total,
                         offset: offsets,
                     })
-                }else{
+                } else {
                     this.setState({
-                        balance:false
+                        balance: false
                     })
                 }
 
@@ -107,38 +109,38 @@ export default class Item_2 extends PureComponent {
         });
     };
 
-    reachedKill = () =>{
+    reachedKill = () => {
         let offsetValue = this.state.offset * 12;
-        if(offsetValue > this.state.total){
+        if (offsetValue > this.state.total) {
             return;
         }
 
-        const { toast } = this.refs;
+        const {toast} = this.refs;
 
         let url = `${config.api.trades.list}history&limit=12&offset=${offsetValue}&typeone=0&sortOrder=asc&querypath=enter`;
 
         request.post(url).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 toast.show('接口请求失败', DURATION.LENGTH_SHORT);
                 return;
             }
 
-            request.manyLogin(this.props,responseText);
+            request.manyLogin(this.props, responseText);
 
             this.setState({
-                visible:false
+                visible: false
             });
 
-            const { obj } = responseText;
+            const {obj} = responseText;
 
-            if(obj){
+            if (obj) {
                 let rows = obj.rows;
                 let kill = [];
 
-                if(rows.length > 0){
-                    rows.map((item,index)=>{
+                if (rows.length > 0) {
+                    rows.map((item, index) => {
                         kill.push({
                             key: offsetValue + index,
                             value: item
@@ -155,9 +157,9 @@ export default class Item_2 extends PureComponent {
                         killData: arr,
                         offset: offsets
                     })
-                }else{
+                } else {
                     this.setState({
-                        balance:false
+                        balance: false
                     })
                 }
             }
@@ -171,43 +173,43 @@ export default class Item_2 extends PureComponent {
     };
 
     killType = type => {
-        if(type === 1){
-            return(
-                <Text style={[styles.textPrice, {width: '8%',color:'#F6574D',right:-p(16)}]}>买</Text>
+        if (type === 1) {
+            return (
+                <Text style={[styles.textPrice, {width: '8%', color: '#F6574D', right: -p(16)}]}>买</Text>
             )
-        }else{
-            return(
-                <Text style={[styles.textPrice, {width: '8%', color:'#28D74E',right:-p(16)}]}>卖</Text>
+        } else {
+            return (
+                <Text style={[styles.textPrice, {width: '8%', color: '#28D74E', right: -p(16)}]}>卖</Text>
             )
         }
     };
 
     killStatus = status => {
-        if(status === 2){
-            return(
+        if (status === 2) {
+            return (
                 <Text style={[styles.textRecord, {width: '20%'}]}>已完成</Text>
             )
-        }else if(status === 3){
-            return(
+        } else if (status === 3) {
+            return (
                 <Text style={[styles.textRecord, {width: '20%'}]}>部分成交已撤销</Text>
             )
-        }else if(status === 4){
-            return(
+        } else if (status === 4) {
+            return (
                 <Text style={[styles.textRecord, {width: '20%'}]}>已撤销</Text>
             )
-        }else if(status === 1){
-            return(
+        } else if (status === 1) {
+            return (
                 <Text style={[styles.textRecord, {width: '20%'}]}>部分成交</Text>
             )
-        }else{
-            return(
+        } else {
+            return (
                 <Text style={[styles.textRecord, {width: '20%'}]}>未成交</Text>
             )
         }
     };
 
-    renderKillRow=({item})=>{
-        let { entrustTime, entrustPrice,type , coinCode, entrustCount, status } = item.value;
+    renderKillRow = ({item}) => {
+        let {entrustTime, entrustPrice, type, coinCode, entrustCount, status} = item.value;
 
 
         let time = entrustTime.substring(5);
@@ -216,7 +218,7 @@ export default class Item_2 extends PureComponent {
 
         num = parseFloat(num).toFixed(8);
 
-        return(
+        return (
             <View style={{
                 flexDirection: 'row',
                 alignItems: 'center',
@@ -226,7 +228,7 @@ export default class Item_2 extends PureComponent {
             }}>
                 <Text style={[styles.textRecord, {width: '20%'}]}>{time}</Text>
                 {this.killType(type)}
-                <Text style={[styles.textRecord, {width: '15%',right:-p(12)}]}>{coinCode}</Text>
+                <Text style={[styles.textRecord, {width: '15%', right: -p(12)}]}>{coinCode}</Text>
                 <Text style={[styles.textRecord, {width: '20%'}]}>{num}</Text>
                 <Text style={[styles.textRecord, {flex: 1}]}>{parseFloat(entrustCount)}</Text>
                 {this.killStatus(status)}
@@ -235,10 +237,10 @@ export default class Item_2 extends PureComponent {
     };
 
     renderEmpty = () => {
-        return(
+        return (
             <View style={styles.viewStyle3}>
                 {
-                    !this.state.visible?
+                    !this.state.visible ?
                         <View style={styles.viewStyle4}>
                             <Text style={styles.textRecord}>亲,您还没有委托订单数据！</Text>
                         </View>
@@ -250,8 +252,8 @@ export default class Item_2 extends PureComponent {
         )
     };
 
-    render(){
-        return(
+    render() {
+        return (
             <View style={{minHeight: height * .8, backgroundColor: '#1F2229'}}>
                 <View style={{
                     flexDirection: 'row',
@@ -265,10 +267,10 @@ export default class Item_2 extends PureComponent {
                     <Text style={[styles.textRecord, {width: '15%'}]}>种类</Text>
                     <Text style={[styles.textRecord, {width: '20%'}]}>价格</Text>
                     <Text style={[styles.textRecord, {width: '20%'}]}>数量</Text>
-                    <Text style={[styles.textRecord, {flex:1}]}>状态</Text>
+                    <Text style={[styles.textRecord, {flex: 1}]}>状态</Text>
                 </View>
                 <FlatList
-                    style={{marginBottom:p(10)}}
+                    style={{marginBottom: p(10)}}
                     horizontal={false}
                     data={this.state.killData}
                     renderItem={this.renderKillRow}
@@ -280,9 +282,9 @@ export default class Item_2 extends PureComponent {
                 />
                 <Toast
                     ref="toast"
-                    style={{backgroundColor:'rgba(0,0,0,.6)'}}
+                    style={{backgroundColor: 'rgba(0,0,0,.6)'}}
                     position='top'
-                    textStyle={{color:'white'}}
+                    textStyle={{color: 'white'}}
                 />
 
                 <Loading visible={this.state.visible}/>
@@ -292,19 +294,19 @@ export default class Item_2 extends PureComponent {
 }
 
 let styles = StyleSheet.create({
-    textViewTop:{
+    textViewTop: {
         color: '#ACB3B9',
         marginLeft: p(8)
     },
-    quotView:{
-        padding:p(20),
+    quotView: {
+        padding: p(20),
         borderWidth: StyleSheet.hairlineWidth,
         borderColor: '#313840',
     },
-    textFont:{
+    textFont: {
         color: '#FFFFFF',
     },
-    textRecord:{
+    textRecord: {
         color: '#ACB3B9',
         textAlign: 'center',
     },
@@ -318,12 +320,12 @@ let styles = StyleSheet.create({
         fontSize: p(25),
         color: '#ACB3B9',
     },
-    viewStyle4:{
+    viewStyle4: {
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: p(200),
     },
-    viewStyle3:{
+    viewStyle3: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
