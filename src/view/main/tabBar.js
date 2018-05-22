@@ -56,14 +56,13 @@ const TAB_ITEMS = [
         selectIcon: require("../../static/tabBar/Assets_selsect.png"),
         component: Assets
     },
-    {
+    /*{
         title: 'c2c',
         name: 'cTwoC',
         icon: require("../../static/tabBar/Assets.png"),
         selectIcon: require("../../static/tabBar/Assets_selsect.png"),
         component: CTwoC
-    },
-
+    },*/
     {
         title: I18n.t('NewsInformation'),
         name: 'notice',

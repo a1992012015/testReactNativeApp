@@ -53,7 +53,7 @@ export default class RollingCaption extends PureComponent {
                 console.log('接口请求失败进入失败函数');
                 return;
             }
-            console.log('获取公告信息=>', response);
+            //console.log('获取公告信息=>', response);
             const { obj } = response;
             this.setState({
                 articleList: obj,

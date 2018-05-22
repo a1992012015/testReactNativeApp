@@ -37,16 +37,26 @@ export default class ClosingRecord extends PureComponent {
     //在第一次渲染后调用，只在客户端
     componentDidMount() {
         //交易记录地址
-        let url = `${config.api.main.apptradeslist}?offset=0&limit=10`;
+        let url = config.api.main.apptradeslist;
         console.log('ClosingURL',url);
 
-        request.post(url).then(responseText => {
+        const { params } = this.props.navigation.state;
+        const { mobile } = params.member;
+
+        const actions = {
+            offset: 0,
+            limit: '10',
+            type: '0',
+            phone: mobile,
+        };
+
+        request.post(url, actions).then(responseText => {
 
             if(responseText.ok){//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 console.log(responseText);
                 console.log(responseText.status);
-                this.props.navigation.goBack(null);
+                //this.props.navigation.goBack(null);
                 return;
             }
 
@@ -76,9 +86,9 @@ export default class ClosingRecord extends PureComponent {
     }
     //DOM移除立刻调用
     componentWillUnmount () {
-        /*数据获取失败关闭页面后弹出提示窗*/
-        const { onClose } = this.props.navigation.state.params;
-        onClose();
+        /*数据获取失败关闭页面后弹出提示窗 => 取消不用了*/
+       /* const { onClose } = this.props.navigation.state.params;
+        onClose();*/
     }
 
     pullUP = () => {

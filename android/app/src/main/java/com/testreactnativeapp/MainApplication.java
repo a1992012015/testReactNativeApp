@@ -19,10 +19,10 @@ import java.util.List;
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
-      @Override
-      protected String getJSBundleFile() {
-          return UpdateContext.getBundleUrl(MainApplication.this);
-      }
+    @Override
+    protected String getJSBundleFile() {
+      return UpdateContext.getBundleUrl(MainApplication.this);
+    }
 
     @Override
     public boolean getUseDeveloperSupport() {
@@ -32,10 +32,12 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-          new MainReactPackage(),
-          new UpdatePackage(),
-          new RNI18nPackage(), // <-- Add it to the packages list
-          new VectorIconsPackage()//ioc
+              new MainReactPackage(),
+              new UpdatePackage(),
+              new RNI18nPackage(), // <-- Add it to the packages list
+              new VectorIconsPackage(),//ioc
+
+              new KChartsPackage() //K线图
       );
     }
 

@@ -17,6 +17,7 @@ import {
     TouchableOpacity,
     FlatList
 } from 'react-native';
+import store from 'react-native-simple-store';
 
 import request from '../../utils/request';
 import config from '../../utils/config';
@@ -58,43 +59,57 @@ export default class MyNews  extends PureComponent {
 
     pullDown = () => {
         let url = config.api.main.myMsg;
-        request.post(url).then((responseText) => {
+        //参数
+        store.get('member').then(member => {
+            console.log('=====================================');
+            console.log(member);
+            const { memberInfo } = member;
+            const { mobile } = memberInfo;
 
-            if(responseText.ok){//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
-                return;
-            }
+            console.log(mobile);
 
-            request.manyLogin(this.props,responseText);
-            let data = responseText.rows;
-            if(data.length > 0){
-                let dataBlob = [];
-                let i = 0;
-                data.map(function (item) {
-                    dataBlob.push({
-                        key: i,
-                        value: item,
+            const actions = {
+                email: mobile,
+            };
+
+            request.post(url, actions).then((responseText) => {
+
+                if(responseText.ok){//判断接口是否请求成功
+                    console.log('接口请求失败进入失败函数');
+                    return;
+                }
+
+                request.manyLogin(this.props,responseText);
+                let data = responseText.rows;
+                if(data.length > 0){
+                    let dataBlob = [];
+                    let i = 0;
+                    data.map(function (item) {
+                        dataBlob.push({
+                            key: i,
+                            value: item,
+                        });
+                        i++;
                     });
-                    i++;
-                });
-                if(dataBlob.length > 5){
-                    this.setState({
-                        loadData: true,
-                        data: dataBlob,
-                    });
-                    this.pageIndex = 2;
+                    if(dataBlob.length > 5){
+                        this.setState({
+                            loadData: true,
+                            data: dataBlob,
+                        });
+                        this.pageIndex = 2;
+                    }else{
+                        this.setState({
+                            loadData: true,
+                            hasMore: true,
+                            data: dataBlob
+                        });
+                    }
                 }else{
                     this.setState({
-                        loadData: true,
-                        hasMore: true,
-                        data: dataBlob
+                        loadData: true
                     });
                 }
-            }else{
-                this.setState({
-                    loadData: true
-                });
-            }
+            });
         });
     };
 

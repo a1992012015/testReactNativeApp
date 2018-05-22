@@ -182,6 +182,7 @@ request.manyLogin = function (props, responseText) {
                                loginIndex = 1;
                            }
                        }]);
+
                store.delete('member');
 
                const resetAction = StackActions.reset({

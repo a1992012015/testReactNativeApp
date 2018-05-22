@@ -50,6 +50,7 @@ class SwiperBanner extends PureComponent {
             }
 
             const { obj } = response;
+            console.log('首页轮播图片 =>', obj);
             this.setState({
                 images: obj,
                 isLoading: true,
@@ -82,6 +83,7 @@ class SwiperBanner extends PureComponent {
                     {
                         images.map((item, index) => {
                             const { picturePath } = item;
+                            console.log(`${config.api.host}${picturePath}`);
                             return <Image
                                 key={index}
                                 source={{uri:`${config.api.host}${picturePath}`}}
