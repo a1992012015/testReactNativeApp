@@ -21,11 +21,13 @@ import Toast, {DURATION} from 'react-native-easy-toast';
 
 import p from '../../../utils/tranfrom';
 import config from '../../../utils/config';
-import request from '../../../utils/request';
+import Request from '../../../utils/request';
 import md5 from '../../../utils/hrymd5';
 import I18n from '../../../utils/i18n';
 import CheckModal from '../../../components/checkModal';
 import Title from '../../../components/title';
+
+const request = new Request();
 
 export default class LoginPass extends PureComponent {
     // 构造

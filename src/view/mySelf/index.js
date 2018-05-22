@@ -25,9 +25,11 @@ import {connect} from 'react-redux';
 
 import p from '../../utils/tranfrom';
 import config from '../../utils/config';
-import request from '../../utils/request';
+import Request from '../../utils/request';
 import I18n from '../../utils/i18n';
 import {InitUserInfo} from '../../store/actions/HomeAction';
+
+const request = new Request();
 
 //列表选项组件
 class BottomMenu extends PureComponent {
@@ -112,19 +114,22 @@ class myHome extends PureComponent {
                 console.log('接口请求失败进入失败函数');
                 return;
             }
+            console.log('upState', responseText);
+            request.manyLogin(this.props, responseText).then(member => {
+                console.log('登陆判定结果', member);
+                if(member){
+                    const {obj} = responseText;
 
-            request.manyLogin(this.props, responseText);
+                    store.update('member', {
+                        memberInfo: obj.user
+                    });
 
-            const {obj} = responseText;
-
-            store.update('member', {
-                memberInfo: obj.user
+                    this.setState({
+                        memberInfo: obj.user,
+                        languageCode: obj.languageCode,
+                    })
+                }
             });
-
-            this.setState({
-                memberInfo: obj.user,
-                languageCode: obj.languageCode,
-            })
         }).catch(error => {
             console.log('进入失败函数 =>', error);
         });

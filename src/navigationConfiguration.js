@@ -30,8 +30,8 @@ import IntoCurrencyList from "./view/mySelf/intoCurrencyList";
 import IntoCurrency from "./view/mySelf/intoCurrency";
 import TurnoutCurrencyList from "./view/mySelf/turnoutCurrencyList";
 import TurnoutCurrency from './view/mySelf/turnoutCurrency';
-import TurnoutCurrencyQRList from "./view/mySelf/turnoutCurrencyQRList";
-import TurnoutCurrencyQR from "./view/mySelf/turnoutCurrencyQR";
+import TurnoutCurrencyQRList from "./view/mySelf/currencyQR/turnoutCurrencyQRList";
+import TurnoutCurrencyQR from "./view/mySelf/currencyQR/turnoutCurrencyQR";
 import Entrusted from "./view/mySelf/entrusted/Entrusted";
 import ClosingRecord from "./view/mySelf/closingRecord";
 import CurrencyRen from "./view/mySelf/currencyRen";
@@ -44,6 +44,7 @@ import Recommend from "./view/mySelf/recommend";
 import ConsDetail from "./view/notice/consDetail";
 import CodeBillFlow from "./view/assets/codeBillFlow";
 import TransQuotation from "./view/lobby/transQuotation";
+//import CameraScanCode from "./view/mySelf/currencyQR/cameraScanCode";
 
 const routeConfiguration = {
     /*入口*/
@@ -77,6 +78,7 @@ const routeConfiguration = {
     TurnoutCurrency: {screen: TurnoutCurrency},
     TurnoutCurrencyQRList: {screen: TurnoutCurrencyQRList},
     TurnoutCurrencyQR: {screen: TurnoutCurrencyQR},
+    //CameraScanCode: {screen: CameraScanCode},
     Entrusted: {screen: Entrusted},
     ClosingRecord: {screen: ClosingRecord},
     CurrencyRen: {screen: CurrencyRen},

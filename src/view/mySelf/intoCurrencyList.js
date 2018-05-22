@@ -18,12 +18,13 @@ import {
     TouchableOpacity,
 } from 'react-native';
 
-import request from '../../utils/request'
+import Request from '../../utils/request'
 import config from '../../utils/config'
 import p from '../../utils/tranfrom';
 import Title from '../../components/title';
 
 const {width, height} = Dimensions.get('window');
+const request = new Request();
 
 export default class IntoCurrencyList extends PureComponent {
     // 构造

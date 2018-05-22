@@ -20,10 +20,12 @@ import Toast, {DURATION} from 'react-native-easy-toast';
 
 import p from '../../../utils/tranfrom';
 import config from '../../../utils/config';
-import request from '../../../utils/request';
+import Request from '../../../utils/request';
 import Loading from '../../../components/loading';
 import SelectApp from '../../../components/selectApp';
 import Title from '../../../components/title';
+
+const request = new Request();
 
 export default class AddAddress extends PureComponent {
     // 构造
@@ -79,7 +81,7 @@ export default class AddAddress extends PureComponent {
             })
         })
     };
-
+    //添加币账户
     addWallet = () => {
         const {toast} = this.refs;
 
@@ -106,22 +108,36 @@ export default class AddAddress extends PureComponent {
             }
         }
 
+        if(this.state.visible){
+            console.log('重复提交');
+            toast.show('不能重复提交', DURATION.LENGTH_SHORT);
+            return;
+        }
+        console.log('正常')
         this.setState({
             visible: true
         });
 
-        let url = `${config.api.currency.addWallet}?currencyType=${this.state.currencyType}&publicKey=${this.state.publicKey}&remark=${this.state.remark}`;
+        //地址
+        let url = config.api.currency.addWallet;
+        //参数
+        const actions = {
+            currencyType: this.state.currencyType,
+            publicKey: this.state.publicKey,
+            remark: this.state.remark,
+        };
 
-        request.post(url).then(responseText => {
+        request.post(url, actions).then(responseText => {
+
+            this.setState({
+                visible: false
+            });
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            this.setState({
-                visible: false
-            });
             request.manyLogin(this.props, responseText);
 
             const {msg} = responseText;
@@ -129,13 +145,13 @@ export default class AddAddress extends PureComponent {
                 Alert.alert(
                     '提示',
                     '添加成功',
-                    [{
-                        text: '确认', onPress: () => {
+                    [{text: '确认', onPress: () => {
                             const {params} = this.props.navigation.state;
                             params.getAddress();
                             this.props.navigation.goBack();
                         }
-                    }]
+                    }],
+                    { cancelable: false }
                 );
             } else {
                 toast.show(msg, DURATION.LENGTH_SHORT);
@@ -195,7 +211,7 @@ export default class AddAddress extends PureComponent {
                     </View>
 
                 </View>
-
+                {/*添加币账户*/}
                 <TouchableOpacity
                     onPress={this.addWallet}
                     activeOpacity={.8}

@@ -20,9 +20,11 @@ import Toast, {DURATION} from 'react-native-easy-toast';
 import QRCode from 'react-native-qrcode';
 
 import p from '../../utils/tranfrom';
-import request from '../../utils/request'
+import Request from '../../utils/request'
 import config from '../../utils/config'
 import I18n from '../../utils/i18n';
+
+const request = new Request();
 
 export default class IntoCurrency extends PureComponent {
     // 构造

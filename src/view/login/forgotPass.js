@@ -19,10 +19,12 @@ import Toast, {DURATION} from 'react-native-easy-toast';
 import p from '../../utils/tranfrom';
 import I18n from '../../utils/i18n';
 import config from '../../utils/config';
-import request from '../../utils/request';
+import Request from '../../utils/request';
 import Title from '../../components/title';
 import PromptModal from '../../components/promptModal';
 import Loading from '../../components/loading';
+
+const request = new Request();
 
 export default class ForgotPass extends PureComponent {
     // 构造
@@ -61,9 +63,14 @@ export default class ForgotPass extends PureComponent {
         this.setState({
             visible: true
         });
-        let url = `${config.api.login.stepOne}?email=${this.state.email}`;
+        //地址
+        let url = config.api.login.stepOne;
+        //参数
+        const actions = {
+            email: this.state.email,
+        };
 
-        request.post(url).then((responseText) => {
+        request.post(url, actions).then((responseText) => {
 
             if (responseText.ok) {
                 console.log('请求接口失败');
@@ -81,9 +88,7 @@ export default class ForgotPass extends PureComponent {
                 const {msg} = responseText;
                 toast.show(msg, DURATION.LENGTH_SHORT);
             }
-
         });
-
     };
 
     // 渲染
@@ -91,8 +96,9 @@ export default class ForgotPass extends PureComponent {
 
         return (
             <View style={styles.defaultView}>
+                {/*标题*/}
                 <Title titleName={I18n.t('chongzhimima')} canBack={true} {...this.props}/>
-
+                {/*手机号数据组件*/}
                 <View style={styles.blockSty}>
                     <View style={styles.reWithView}>
                         {/*手机号输入框*/}
@@ -107,8 +113,8 @@ export default class ForgotPass extends PureComponent {
                             onChangeText={(text) => this.setState({email: text})}
                         />
                     </View>
-
                 </View>
+                {/*确认按钮*/}
                 <TouchableOpacity
                     onPress={() => this.fotOne()}
                     activeOpacity={.8}

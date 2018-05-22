@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react'
+import React, {PureComponent} from 'react'
 import {
     View,
     Text,
@@ -20,17 +20,18 @@ import {
     ScrollView,
     RefreshControl
 } from 'react-native';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import Toast, {DURATION} from 'react-native-easy-toast';
 
 import p from '../../../utils/tranfrom';
 import config from '../../../utils/config';
-import request from '../../../utils/request';
+import Request from '../../../utils/request';
 import I18n from '../../../utils/i18n';
 import Loading from '../../../components/loading';
-import { InitUserInfo } from '../../../store/actions/HomeAction';
+import {InitUserInfo} from '../../../store/actions/HomeAction';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
+const request = new Request();
 
 class Purchase extends PureComponent {
     // 构造
@@ -66,13 +67,14 @@ class Purchase extends PureComponent {
             KeepDecimalForCoin: 4
         };
     }
+
     //接收到一个新的props之后调用
     componentWillReceiveProps(props) {
-        let { buyData, sellData, tradingData, isLogin, member, businessData, personal, coinCode, user } = props;
-        const { ref_price, ref_count } = this.refs;
-        const { price_keepDecimalFor } = businessData;
+        let {buyData, sellData, tradingData, isLogin, member, businessData, personal, coinCode, user} = props;
+        const {ref_price, ref_count} = this.refs;
+        const {price_keepDecimalFor} = businessData;
 
-        if(coinCode !== this.state.coinCode){
+        if (coinCode !== this.state.coinCode) {
             this.setState({
                 coinCode: coinCode,
             }, () => {
@@ -99,7 +101,7 @@ class Purchase extends PureComponent {
             KeepDecimalForCoin: price_keepDecimalFor == null ? 4 : price_keepDecimalFor
         });
 
-        if(isLogin){
+        if (isLogin) {
             this.setState({
                 buyFeeRate: personal.buyFeeRate,
                 sellFeeRate: personal.sellFeeRate,
@@ -116,8 +118,8 @@ class Purchase extends PureComponent {
     }
 
     isLoginType = () => {
-        let { isLogin ,coinCode } = this.state;
-        if(isLogin){
+        let {isLogin, coinCode} = this.state;
+        if (isLogin) {
             const currName = coinCode ? coinCode.split("_") : 'CNY';
             /*登陆之后的样式*/
             return (
@@ -129,17 +131,19 @@ class Purchase extends PureComponent {
                         </Text>
                         <Text style={[styles.textPrice, {color: '#018F67', marginTop: p(10)}]}>
                             {I18n.t("available")}{currName[0]}：
-                            {this.state.getMoney ? this.state.availableMoney: this.state.available}
+                            {this.state.getMoney ? this.state.availableMoney : this.state.available}
                         </Text>
                     </View>
                 </View>
             )
-        }else{
+        } else {
             /*没登录的样式*/
             return (
                 <TouchableOpacity
                     style={{alignItems: 'center', justifyContent: 'center', width: width * .45, height: height * .33}}
-                    onPress={() => {this.props.navigation.navigate('Login', {ISForm: true})}}
+                    onPress={() => {
+                        this.props.navigation.navigate('Login', {ISForm: true})
+                    }}
                     activeOpacity={.8}>
                     <Image
                         style={{width: p(120), height: p(120)}}
@@ -160,21 +164,21 @@ class Purchase extends PureComponent {
         const actions = {
             symbol: this.state.coinCode,
         };
-        const { toast } = this.refs;
+        const {toast} = this.refs;
 
         request.post(url, actions).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 toast.show('接口请求失败', DURATION.LENGTH_SHORT);
                 return;
             }
 
-            request.manyLogin(this.props,responseText);
+            request.manyLogin(this.props, responseText);
 
-            if(responseText.obj){
+            if (responseText.obj) {
 
-                const { obj } = responseText;
+                const {obj} = responseText;
                 console.log(obj);
 
                 this.setState({
@@ -192,16 +196,16 @@ class Purchase extends PureComponent {
     };
 
     purchase = () => {
-        const { toast } = this.refs;
+        const {toast} = this.refs;
 
-        if ( null == this.state.entrustPrice || '' === this.state.entrustPrice || this.state.entrustPrice === 0) {
+        if (null == this.state.entrustPrice || '' === this.state.entrustPrice || this.state.entrustPrice === 0) {
             toast.show('请输入买入价格', DURATION.LENGTH_SHORT);
             return;
         }
         //验证价格
-        console.log("entrustPrice",this.state.entrustPrice);
+        console.log("entrustPrice", this.state.entrustPrice);
 
-        if(isNaN(this.state.entrustPrice) || this.state.entrustPrice<0){
+        if (isNaN(this.state.entrustPrice) || this.state.entrustPrice < 0) {
             toast.show('请输入正确的价格', DURATION.LENGTH_SHORT);
             return;
         }
@@ -211,24 +215,24 @@ class Purchase extends PureComponent {
             return;
         }
 
-        if(isNaN(this.state.entrustCount) || this.state.entrustCount <= 0){
+        if (isNaN(this.state.entrustCount) || this.state.entrustCount <= 0) {
             toast.show('请输入正确的数量', DURATION.LENGTH_SHORT);
             return;
         }
-        if(this.state.isLogin){
+        if (this.state.isLogin) {
             const currName = this.state.coinCode ? this.state.coinCode.split("_") : 'CNY';
 
             if ((parseFloat(this.state.entrustCount) * parseFloat(this.state.entrustPrice)) > parseFloat(this.state.frozen)) {
-                toast.show(currName[1]+'不足', DURATION.LENGTH_SHORT);
+                toast.show(currName[1] + '不足', DURATION.LENGTH_SHORT);
                 return;
             }
 
-            if(this.state.isTrade === "0" || this.state.isTrade === 0){
+            if (this.state.isTrade === "0" || this.state.isTrade === 0) {
                 this.realNameJump(this.state.user.user, 1);
-            }else {
+            } else {
                 this.requestMethod();
             }
-        }else{
+        } else {
             this.props.navigation.navigate('Login', {ISForm: true});
         }
     };
@@ -236,7 +240,7 @@ class Purchase extends PureComponent {
     requestMethod = () => {
 
         this.setState({
-            visible:true
+            visible: true
         }, () => {
             let url = config.api.trades.trans;
 
@@ -247,35 +251,35 @@ class Purchase extends PureComponent {
                 coinCode: this.state.coinCode,
                 entrustWay: 1,
             };
-            const { toast } = this.refs;
+            const {toast} = this.refs;
 
             request.post(url, actions).then(responseText => {
 
-                if(responseText.ok){//判断接口是否请求成功
+                if (responseText.ok) {//判断接口是否请求成功
                     console.log('接口请求失败进入失败函数');
                     return;
                 }
 
-                request.manyLogin(this.props,responseText);
-                const { success, msg } = responseText;
+                request.manyLogin(this.props, responseText);
+                const {success, msg} = responseText;
 
-                if(success){
+                if (success) {
                     this.setState({
-                        balance:true,
-                        entrustPrice:0,
-                        entrustCount:0,
-                        visible:false
+                        balance: true,
+                        entrustPrice: 0,
+                        entrustCount: 0,
+                        visible: false
                     }, () => {
                         this.queryCoin();
-                        const { dispatch, queryCoinEntrust } = this.props;
+                        const {dispatch, queryCoinEntrust} = this.props;
                         dispatch(InitUserInfo(this.props));
                         queryCoinEntrust();
                     });
 
                     toast.show(msg, DURATION.LENGTH_SHORT);
-                }else{
+                } else {
                     this.setState({
-                        visible:false
+                        visible: false
                     });
 
                     toast.show(msg, DURATION.LENGTH_SHORT);
@@ -284,40 +288,55 @@ class Purchase extends PureComponent {
         });
     };
 
-    realNameJump = (memberInfo, type) =>{
-        const { states } = memberInfo;
+    realNameJump = (memberInfo, type) => {
+        const {states} = memberInfo;
 
-        if(states === 0 || states === "0"){
+        if (states === 0 || states === "0") {
             Alert.alert(
                 '提示',
                 '请先实名认证',
-                [{text: '确认', onPress: () => this.props.navigation.navigate("realAuthentication",{member: memberInfo, infoAction: this.upState})}]
+                [{
+                    text: '确认',
+                    onPress: () => this.props.navigation.navigate("realAuthentication", {
+                        member: memberInfo,
+                        infoAction: this.upState
+                    })
+                }]
             );
-        }else if(states === 1 || states === "1"){
+        } else if (states === 1 || states === "1") {
             Alert.alert(
                 '提示',
                 '实名认证审核中',
-                [{text: '确认', onPress: () =>{}}]
+                [{
+                    text: '确认', onPress: () => {
+                    }
+                }]
             );
-        }else if(states === 3 || states === "3"){
+        } else if (states === 3 || states === "3") {
             Alert.alert(
                 '提示',
                 '实名申请被拒绝，请重新认证',
-                [{text: '确认', onPress: () => this.props.navigation.navigate("realAuthentication", {member: memberInfo, infoAction: this.upState})}]
+                [{
+                    text: '确认',
+                    onPress: () => this.props.navigation.navigate("realAuthentication", {
+                        member: memberInfo,
+                        infoAction: this.upState
+                    })
+                }]
             );
-        }else{
-            if(type === 1){
+        } else {
+            if (type === 1) {
                 this.requestMethod();
-            }else{
+            } else {
                 this.props.navigation.navigate('RechargeRMB', {member: this.state.member})
             }
         }
     };
 
     render() {
-        let { sellData ,buyData, tradingData, coinCode} = this.state;
+        let {sellData, buyData, tradingData, coinCode} = this.state;
         let currName = coinCode ? coinCode.split("_") : 'CNY';
-        const { toast } = this.refs;
+        const {toast} = this.refs;
 
         return (
             <ScrollView
@@ -341,9 +360,9 @@ class Purchase extends PureComponent {
                                 placeholderTextColor={'#565A5D'}
                                 selectionColor={"#D95411"}
                                 style={styles.inputTextView}
-                                value= {this.state.entrustPrice.toString()}
+                                value={this.state.entrustPrice.toString()}
                                 onChangeText={text => {
-                                    if(text === "" || text === null || /\s/.exec(text) !== null || isNaN(text)){
+                                    if (text === "" || text === null || /\s/.exec(text) !== null || isNaN(text)) {
                                         text = 0;
                                     }
 
@@ -362,14 +381,14 @@ class Purchase extends PureComponent {
                                 clearButtonMode={'while-editing'}
                                 placeholderTextColor={'#565A5D'}
                                 selectionColor={"#D95411"}
-                                value = {this.state.entrustCount.toString()}
+                                value={this.state.entrustCount.toString()}
                                 style={styles.inputTextView}
-                                onChangeText={(text) =>{
-                                    if(text === "" || text === null || /\s/.exec(text) !== null || isNaN(text)){
+                                onChangeText={(text) => {
+                                    if (text === "" || text === null || /\s/.exec(text) !== null || isNaN(text)) {
                                         text = 0;
                                     }
 
-                                    if(parseFloat(text) < 0){
+                                    if (parseFloat(text) < 0) {
                                         text = 0;
                                         toast.show("请输入正确的委托数量", DURATION.LENGTH_SHORT);
                                     }
@@ -382,13 +401,13 @@ class Purchase extends PureComponent {
                                         turnover: turnovers.toFixed(5),
                                         service: services.toFixed(5),
                                     }, () => {
-                                        if(this.state.turnover>0){
+                                        if (this.state.turnover > 0) {
                                             this.setState({
-                                                buttonColor:'#EA2000',
+                                                buttonColor: '#EA2000',
                                             })
-                                        }else{
+                                        } else {
                                             this.setState({
-                                                buttonColor:'#018F67',
+                                                buttonColor: '#018F67',
                                             })
                                         }
                                     });
@@ -410,11 +429,18 @@ class Purchase extends PureComponent {
                             />
                             <Text style={{fontSize: p(24)}}>{currName[1]}</Text>
                         </View>
-                        <Text style={{fontSize: p(22), marginVertical: p(20), width:width * .44}}>{I18n.t("jiaoyitishi")}</Text>
+                        <Text style={{
+                            fontSize: p(22),
+                            marginVertical: p(20),
+                            width: width * .44
+                        }}>{I18n.t("jiaoyitishi")}</Text>
 
                         <TouchableOpacity
-                            onPress={() => {this.purchase()}}
-                            style={{height: p(70),
+                            onPress={() => {
+                                this.purchase()
+                            }}
+                            style={{
+                                height: p(70),
                                 width: width * .44,
                                 backgroundColor: '#EA2000',
                                 borderRadius: p(5),
@@ -442,7 +468,7 @@ class Purchase extends PureComponent {
                             <View>
                                 <Text style={[styles.textPriceB, {color: '#5f5f5f'}]}>单价</Text>
                             </View>
-                            <View style={{alignItems:'flex-end'}}>
+                            <View style={{alignItems: 'flex-end'}}>
                                 <Text style={[styles.textPriceB, {color: '#5f5f5f'}]}>数量</Text>
                             </View>
                         </TouchableOpacity>
@@ -457,7 +483,9 @@ class Purchase extends PureComponent {
                             />
                         </View>
                         <TouchableOpacity
-                            onPress={() => {this.calculation(tradingData.priceNew+"")}}
+                            onPress={() => {
+                                this.calculation(tradingData.priceNew + "")
+                            }}
                             style={{
                                 width: width * .44,
                                 height: p(70),
@@ -477,7 +505,7 @@ class Purchase extends PureComponent {
                         </TouchableOpacity>
                         <View style={{height: height * .31}}>
                             <FlatList
-                                horizontal={false }
+                                horizontal={false}
                                 data={buyData}
                                 renderItem={this.renderBuyRow}
                                 onEndReachedThreshold={1}
@@ -489,9 +517,9 @@ class Purchase extends PureComponent {
                     <Loading visible={this.state.visible}/>
                     <Toast
                         ref="toast"
-                        style={{backgroundColor:'rgba(0,0,0,.6)'}}
+                        style={{backgroundColor: 'rgba(0,0,0,.6)'}}
                         position='top'
-                        textStyle={{color:'white'}}
+                        textStyle={{color: 'white'}}
                     />
                 </View>
             </ScrollView>
@@ -499,26 +527,26 @@ class Purchase extends PureComponent {
     }
 
     calculation = text => {
-        const { toast } = this.refs;
+        const {toast} = this.refs;
 
-        if(parseFloat(text) < 0){
+        if (parseFloat(text) < 0) {
             text = 0;
             toast.show("请输入正确的委托价格", DURATION.LENGTH_SHORT);
         }
 
         let turnovers = parseFloat(text) * parseFloat(this.state.entrustCount);
-        let services = turnovers *  parseFloat(this.state.buyFeeRate) / 100;
+        let services = turnovers * parseFloat(this.state.buyFeeRate) / 100;
 
         this.setState({
             entrustPrice: text,
             turnover: turnovers.toFixed(5),
             service: services.toFixed(5),
         }, () => {
-            if(this.state.turnover>0){
+            if (this.state.turnover > 0) {
                 this.setState({
                     buttonColor: '#EA2000',
                 })
-            }else{
+            } else {
                 this.setState({
                     buttonColor: '#018F67',
                 })
@@ -527,10 +555,12 @@ class Purchase extends PureComponent {
     };
 
     renderSellRow = ({item}) => {
-        if(item.value.price){
-            return(
+        if (item.value.price) {
+            return (
                 <TouchableOpacity
-                    onPress={() => {this.calculation(item.value.price + "")}}
+                    onPress={() => {
+                        this.calculation(item.value.price + "")
+                    }}
                     style={styles.panelView}
                 >
                     <View>
@@ -547,10 +577,12 @@ class Purchase extends PureComponent {
     };
 
     renderBuyRow = ({item}) => {
-        if(item.value.price){
-            return(
+        if (item.value.price) {
+            return (
                 <TouchableOpacity
-                    onPress={() => {this.calculation(item.value.price + "");}}
+                    onPress={() => {
+                        this.calculation(item.value.price + "");
+                    }}
                     style={styles.panelView}
                 >
                     <View>
@@ -573,7 +605,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingHorizontal: p(20),
     },
-    inputView:{
+    inputView: {
         flexDirection: 'row',
         height: p(80),
         alignItems: 'center',
@@ -584,20 +616,20 @@ const styles = StyleSheet.create({
         width: width * .45,
         justifyContent: 'space-between',
     },
-    inputTextView:{
+    inputTextView: {
         width: width * .3,
         height: p(80),
         fontSize: p(26),
     },
-    textPriceB:{
+    textPriceB: {
         color: '#018F67',
         fontSize: p(20),
     },
-    textPriceR:{
+    textPriceR: {
         color: 'red',
         fontSize: p(20),
     },
-    panelView:{
+    panelView: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: width * .45,
@@ -606,7 +638,7 @@ const styles = StyleSheet.create({
 
 });
 export default connect((state) => {
-    const { HomeReducer } = state;
+    const {HomeReducer} = state;
     return {
         HomeReducer
     }

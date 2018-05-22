@@ -20,11 +20,12 @@ import Toast, {DURATION} from 'react-native-easy-toast';
 
 import config from '../../../utils/config';
 import p from '../../../utils/tranfrom';
-import request from '../../../utils/request';
+import Request from '../../../utils/request';
 import I18n from '../../../utils/i18n';
 import Loading from '../../../components/loading';
 
 const {width, height} = Dimensions.get('window');
+const request = new Request();
 
 export default class Item_1 extends PureComponent {
     constructor(props) {
@@ -56,10 +57,21 @@ export default class Item_1 extends PureComponent {
             killData: [],
             offset: 0
         }, () => {
-            let url = `${config.api.trades.list}current&limit=10&offset=0&typeone=0&sortOrder=asc&querypath=enter`;
+            //地址
+            let url = config.api.trades.list;
+            //参数
+            const actions = {
+                type: 'current',
+                limit: 10,
+                offset: 0,
+                typeone: 0,
+                sortOrder: 'asc',
+                querypath: 'enter',
+            };
+
             const {toast} = this.refs;
 
-            request.post(url).then(responseText => {
+            request.post(url, actions).then(responseText => {
 
                 if (responseText.ok) {//判断接口是否请求成功
                     console.log('接口请求失败进入失败函数');
@@ -117,10 +129,19 @@ export default class Item_1 extends PureComponent {
         }
 
         const {toast} = this.refs;
+        //地址
+        let url = config.api.trades.list;
+        //参数
+        const actions = {
+            type: 'current',
+            limit: 10,
+            offset: offsetValue,
+            typeone: 0,
+            sortOrder: 'asc',
+            querypath: 'enter',
+        };
 
-        let url = `${config.api.trades.list}current&limit=10&offset=${offsetValue}&typeone=0&sortOrder=asc&querypath=enter`;
-
-        request.post(url).then(responseText => {
+        request.post(url, actions).then(responseText => {
 
 
             if (responseText.ok) {//判断接口是否请求成功

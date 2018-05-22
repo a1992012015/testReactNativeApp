@@ -21,11 +21,12 @@ import {Toast} from 'teaset'
 
 import config from '../../utils/config';
 import p from '../../utils/tranfrom';
-import request from '../../utils/request';
+import Request from '../../utils/request';
 import Loading from '../../components/loading';
 import BuySellModal from './buySellModal';
 
 const {width, height} = Dimensions.get('window');
+const request = new Request();
 
 export default class Item_2 extends PureComponent {
     //构建

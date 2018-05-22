@@ -9,221 +9,206 @@
 import {
     Alert,
 } from 'react-native';
-import {NavigationActions, StackActions} from 'react-navigation';
 import store from 'react-native-simple-store';
 import {getLanguages} from 'react-native-i18n';
+import {NavigationActions, StackActions} from "react-navigation";
 
 import config from './config';
 
-const request = {};
-/*get请求*/
-request.get = async function (url) {
-    console.log("请求 get==" + url);
-    return fetch(url, {credentials: 'include'})
-        .then((response) => response.json())
-        .catch(error => {
-            console.log(error)
-        })
-};
-/*拼接post接口的参数*/
-const joinParamsPost = async function (params) {
+const request = function () {
+    /*拼接post接口的参数*/
+    this.joinParamsPost = async function (params) {
 
-    let token = await store.get('member').then(member => member && member.token);
-    console.log('token=>', token);
+        let token = await store.get('member').then(member => member && member.token);
+        console.log('token=>', token);
 
-    let languages = await getLanguages().then(languages => languages);
+        let languages = await getLanguages().then(languages => languages);
 
-    if (languages[0].indexOf("zh") > -1) {
-        languages = 'zh_CN';
-    } else if (languages[0].indexOf("en") > -1) {
-        languages = 'en';
-    } else {
-        languages = 'en';
-    }
-    if (token) {
-        if (params.indexOf("?") >= 0) {
-            params += `&tokenId=${token}`;
+        if (languages[0].indexOf("zh") > -1) {
+            languages = 'zh_CN';
+        } else if (languages[0].indexOf("en") > -1) {
+            languages = 'en';
         } else {
-            params += `?tokenId=${token}`;
-
+            languages = 'en';
         }
-    }
-    if (params.indexOf("?") >= 0) {
-        params += `&languages=${languages}`;
-    } else {
-        params += `?languages=${languages}`;
-    }
-
-    return params;
-};
-/*POST参数拼接函数*/
-const joinActionsPost = async function (url, actions) {
-
-    let token = await store.get('member').then(member => member && member.token);//获取token
-
-    let languages = await getLanguages().then(languages => languages);//获取语言
-
-    if (languages[0].indexOf("zh") > -1) {
-        actions.languages = 'zh_CN';
-    } else if (languages[0].indexOf("en") > -1) {
-        actions.languages = 'en';
-    } else {
-        actions.languages = 'en';
-    }
-
-    if (token) {
-        actions.tokenId = token;
-    }
-
-    for (let name in actions) {
-        if (actions.hasOwnProperty(name)) {
-            if (url.indexOf("?") >= 0) {
-
-                url += `&${name}=${actions[name]}`;
-
+        if (token) {
+            if (params.indexOf("?") >= 0) {
+                params += `&tokenId=${token}`;
             } else {
-
-                url += `?${name}=${actions[name]}`;
+                params += `?tokenId=${token}`;
 
             }
+        }
+        if (params.indexOf("?") >= 0) {
+            params += `&languages=${languages}`;
         } else {
-            console.log('没有包含的属性 =>', name);
+            params += `?languages=${languages}`;
         }
-    }
-    return url;
-};
-/*post请求*/
-request.post = async function (url, actions) {
 
-    if (actions) {
-        console.log('进入参数拼接函数');
-        url = await joinActionsPost(`${config.api.host}${url}`, actions);
-    } else {
+        return params;
+    };
+    /*POST参数拼接函数*/
+    this.joinActionsPost = async function (url, actions) {
 
-        url = await joinParamsPost(`${config.api.host}${url}`);
-    }
-    console.log(url);
-    return fetch(url, {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json;charset=utf-8',
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-    }).then(response => response.json()).catch(error => {
-        console.log(error);
-        return {ok: true};
-    })
-};
-/*存疑，和上面的POST函数一模一样，不知道具体含义在那里*/
-request.setPost = async function (url) {
-    url = await joinParamsPost(`${config.api.host}${url}`);
-    return fetch(url, {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json;charset=utf-8',
-            'Content-Type': 'application/x-www-form-urlencoded',
+        let token = await store.get('member').then(member => member && member.token);//获取token
+
+        let languages = await getLanguages().then(languages => languages);//获取语言
+
+        if (languages[0].indexOf("zh") > -1) {
+            actions.languages = 'zh_CN';
+        } else if (languages[0].indexOf("en") > -1) {
+            actions.languages = 'en';
+        } else {
+            actions.languages = 'en';
         }
-    }).then(response => response.json()).catch(error => {
-        console.log(error);
-        return {ok: true};
-    })
-};
-/*获取图片的函数*/
-request.upImage = async function (url, formData) {
-    url = await  joinParamsPost(url);
 
-    return fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'multipart/form-data',
-        },
-        body: formData,
-    }).then((response) => response.json()).catch(error => {
-        console.log(error);
-        return {ok: true};
-    })
-};
-/*猜测为图片参数拼接函数，并未使用*/
-/*const joinParamImage = async function (url) {
-    let token = await  store.get('member').then(member => member && member.token);
-
-    if (token) {
-        url += '&tokenId=' + token;
-    }
-
-    console.log("params==" + url);
-    return url;
-};*/
-/*判断登陆函数*/
-let loginIndex = 1;
-request.manyLogin = function (props, responseText) {
-
-    console.log("服务器返回的数据------", responseText);
-
-    let routeName = props.navigation.state.routeName;
-    const {msg, success} = responseText;
-
-    console.log("routeName------", routeName);
-
-    if (!success && (msg === "请先登录" || msg === "登录已超时" || msg === "未登录" || msg === "请登录或重新登录")) {
-
-        if (routeName === "Login" || loginIndex > 1) {
-            return;
+        if (token) {
+            actions.tokenId = token;
         }
-        loginIndex++;
-        store.get('member').then((member) => {
-            if (member) {
 
-                Alert.alert('温馨提示', '登录已超时，请重新登录！',
-                    [{text: '取消', onPress: () => loginIndex = 1},
-                        {
-                            text: '确定',
-                            onPress: () => {
-                                loginIndex = 1;
-                            }
-                        }]);
+        for (let name in actions) {
+            if (actions.hasOwnProperty(name)) {
+                if (url.indexOf("?") >= 0) {
 
-                store.delete('member');
+                    url += `&${name}=${actions[name]}`;
 
-                const resetAction = StackActions.reset({
-                    index: 0,
-                    actions: [NavigationActions.navigate({routeName: 'Login'})],
-                });
+                } else {
 
-                navigation.dispatch(resetAction);
-            } else {
-                if (props.index === 0) {
-                    return;
+                    url += `?${name}=${actions[name]}`;
+
                 }
-                Alert.alert('温馨提示', '是否前往登录',
-                    [{text: '取消', onPress: () => loginIndex = 1},
+            } else {
+                console.log('没有包含的属性 =>', name);
+            }
+        }
+        return url;
+    };
+    /*post请求*/
+    this.post = async function (url, actions) {
+
+        if (actions) {
+            console.log('进入参数拼接函数');
+            url = await this.joinActionsPost(`${config.api.host}${url}`, actions);
+        } else {
+
+            url = await this.joinParamsPost(`${config.api.host}${url}`);
+        }
+        console.log(url);
+        return fetch(url, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json;charset=utf-8',
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+        }).then(response => response.json()).catch(error => {
+            console.log(error);
+            return {ok: true};
+        })
+    };
+    /*获取图片的函数*/
+    this.upImage = async function (url, formData) {
+        url = await this.joinParamsPost(url);
+
+        return fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+            body: formData,
+        }).then((response) => response.json()).catch(error => {
+            console.log(error);
+            return {ok: true};
+        })
+    };
+    /*判断登陆函数*/
+    let loginIndex = 1;
+    this.manyLogin = async function (props, responseText) {
+
+        console.log("服务器返回的数据------", responseText);
+
+        let routeName = props.navigation.state.routeName;
+        const {msg, success} = responseText;
+
+        console.log("routeName------", routeName);
+
+        if (!success && (msg === "请先登录" || msg === "登录已超时" || msg === "未登录" || msg === "请登录或重新登录")) {
+
+            if (routeName === "Login" || loginIndex > 1) {
+                return;
+            }
+
+            loginIndex++;
+
+            await store.get('member').then((member) => {
+                console.log('getMember', member);
+                if (member) {
+
+                    Alert.alert('温馨提示', '登录已超时，请重新登录！', [
+                        {text: '取消', onPress: () => loginIndex = 1},
                         {
-                            text: '确定',
-                            onPress: () => {
+                            text: '确定', onPress: () => {
+                                loginIndex = 1;
+
+                                store.delete('member');
+
+                                const resetAction = StackActions.reset({
+                                    index: 0,
+                                    actions: [NavigationActions.navigate({routeName: 'Login'})],
+                                });
+
+                                props.navigation.dispatch(resetAction);
+                            }
+                        }
+                    ]);
+                } else {
+                    if (props.index === 0) {
+                        return false;
+                    }
+
+                    Alert.alert('温馨提示', '是否前往登录', [
+                        {text: '取消', onPress: () => loginIndex = 1},
+                        {
+                            text: '确定', onPress: () => {
                                 if (routeName !== "Login") {
                                     props.navigation.navigate('Login');
                                 }
+
                                 loginIndex = 1;
                             }
-                        }])
-            }
-        });
-    } else if (msg === "未登录" || msg === "请先登录") {
-        if (routeName === "Login" || loginIndex > 1) {
-            return;
-        }
-        loginIndex++;
-        Alert.alert('温馨提示', '是否前往登录',
-            [{text: '取消', onPress: () => loginIndex = 1}, {
-                text: '确定',
-                onPress: () => {
-                    if (routeName !== "Login") {
-                        props.navigation.navigate('Login');
-                    }
-                    loginIndex = 1;
+                        }
+                    ]);
                 }
-            }])
-    }
+                return false;
+            });
+
+            return false;
+        } else if (msg === "未登录" || msg === "请先登录") {
+            if (routeName === "Login" || loginIndex > 1) {
+                return false;
+            }
+
+            loginIndex++;
+
+            Alert.alert('温馨提示', '是否前往登录', [
+                {text: '取消', onPress: () => loginIndex = 1},
+                {
+                    text: '确定', onPress: () => {
+                        if (routeName !== "Login") {
+                            props.navigation.navigate('Login');
+                        }
+
+                        loginIndex = 1;
+                    }
+                }
+            ]);
+
+            return false;
+        }
+
+        return true;
+    };
+
+    return this;
 };
 
 export default request;

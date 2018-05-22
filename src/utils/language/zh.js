@@ -76,7 +76,7 @@ export default {
     oldpwd_no_null: '原始密码不能为空',
     newpwd_no_null: '新密码不能为空',
     newandold_no_null: '新登录密码不能和原始登录密码一致',
-    baocun: '提交验证码',
+    baocun: '提交',
     exception: '服务器异常，请稍后访问！',
     exceptionLogin: '请登录后访问！',
     agreement: '请先阅读注册服务协议！',

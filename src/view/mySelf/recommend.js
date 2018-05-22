@@ -24,10 +24,11 @@ import Toast, {DURATION} from 'react-native-easy-toast';
 import p from '../../utils/tranfrom';
 import I18n from '../../utils/i18n';
 import config from '../../utils/config';
-import request from '../../utils/request';
+import Request from '../../utils/request';
 import Title from '../../components/title';
 
 const {width, height} = Dimensions.get('window');
+const request = new Request();
 
 export default class Recommend extends PureComponent {
 

@@ -18,12 +18,13 @@ import {
     TouchableOpacity,
 } from 'react-native';
 
-import request from '../../utils/request';
-import config from '../../utils/config';
-import p from '../../utils/tranfrom';
-import Title from '../../components/title';
+import Request from '../../../utils/request';
+import config from '../../../utils/config';
+import p from '../../../utils/tranfrom';
+import Title from '../../../components/title';
 
 const {width, height} = Dimensions.get('window');
+const request = new Request();
 
 export default class TurnoutCurrencyQRList extends PureComponent {
     // 构造
@@ -89,7 +90,9 @@ export default class TurnoutCurrencyQRList extends PureComponent {
         if (this.state.loadData) {
             return (
                 <View style={{backgroundColor: '#1F2229', flex: 1}}>
+                    {/*组件标题*/}
                     <Title titleName="转出虚拟币" canBack={true} {...this.props}/>
+                    {/*组件列表*/}
                     <FlatList
                         horizontal={false}
                         data={this.state.dataSource}
@@ -127,7 +130,7 @@ export default class TurnoutCurrencyQRList extends PureComponent {
                 </View>
                 <Image
                     style={{width: p(35), height: p(35)}}
-                    source={require('../../static/arrow.png')}
+                    source={require('../../../static/arrow.png')}
                 />
             </TouchableOpacity>)
     }

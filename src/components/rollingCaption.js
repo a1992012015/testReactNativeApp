@@ -19,9 +19,10 @@ import Swiper from 'react-native-swiper';
 
 import p from '../utils/tranfrom';
 import config from '../utils/config';
-import request from '../utils/request';
+import Request from '../utils/request';
 
 const {width} = Dimensions.get('window');
+const request = new Request();
 
 export default class RollingCaption extends PureComponent {
 

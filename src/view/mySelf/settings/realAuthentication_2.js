@@ -20,10 +20,11 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import p from '../../../utils/tranfrom';
 import config from '../../../utils/config';
-import request from '../../../utils/request';
+import Request from '../../../utils/request';
 import I18n from '../../../utils/i18n';
 
 const {height} = Dimensions.get('window');
+const request = new Request();
 
 export default class RealAuthentication_2 extends PureComponent {
     // 构造

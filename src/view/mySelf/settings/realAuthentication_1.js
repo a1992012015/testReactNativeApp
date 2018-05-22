@@ -24,7 +24,7 @@ import {connect} from 'react-redux';
 import {Select} from 'teaset';
 
 import p from '../../../utils/tranfrom';
-import request from '../../../utils/request';
+import Request from '../../../utils/request';
 import config from '../../../utils/config';
 import I18n from '../../../utils/i18n';
 import allCountriesData from '../../../utils/data';
@@ -34,6 +34,7 @@ import SModal from '../../../components/sModal'
 import Title from '../../../components/title';
 
 const {height} = Dimensions.get('window');
+const request = new Request();
 
 const styles = StyleSheet.create({
     blockSty: {
@@ -265,13 +266,13 @@ class RealAuthentication_1 extends PureComponent {
             this.state.isCheck = false;
         })
     };
-
+    //图片提交方法
     choiceImage = (type, step) => {
 
         if (this.state.isCheck) {
             return;
         }
-
+        console.log('type=>', type,'step=>', step);
         const options = {
             title: I18n.t('qxuanzhe'),
             cancelButtonTitle: I18n.t('quxiao'),
@@ -354,11 +355,12 @@ class RealAuthentication_1 extends PureComponent {
     render() {
         return (
             <View style={{backgroundColor: '#1F2229', height: height}}>
-
+                {/*组件标题*/}
                 <Title {...this.props} canBack={true} titleName={I18n.t("verification")}/>
 
                 <ScrollView>
                     <View style={styles.blockSty}>
+                        {/*证件类型选择*/}
                         <View style={styles.regInputView}>
                             <Text style={styles.inputText}>{I18n.t('xzleixing')}:</Text>
                             <Select
@@ -375,9 +377,10 @@ class RealAuthentication_1 extends PureComponent {
                                 onSelected={item => this.setState({type: item.value})}
                             />
                         </View>
-
+                        {/*根据证件类型选择界面 0 中国 1 其他*/}
                         {this.state.type === 0 ?
                             <View>
+                                {/*姓氏*/}
                                 <View style={styles.regInputView}>
                                     <Text style={styles.inputText}>{I18n.t('xingshi')}:</Text>
                                     <TextInput
@@ -391,6 +394,7 @@ class RealAuthentication_1 extends PureComponent {
                                         onChangeText={(text) => this.setState({surname: text})}
                                     />
                                 </View>
+                                {/*名字*/}
                                 <View style={styles.regInputView}>
                                     <Text style={styles.inputText}>{I18n.t('mingzi')}:</Text>
                                     <TextInput
@@ -404,6 +408,7 @@ class RealAuthentication_1 extends PureComponent {
                                         onChangeText={text => this.setState({trueName: text})}
                                     />
                                 </View>
+                                {/*有效身份证*/}
                                 <View style={styles.regInputView}>
                                     <Text style={styles.inputText}>{I18n.t('shenfz')}:</Text>
                                     <TextInput
@@ -417,10 +422,9 @@ class RealAuthentication_1 extends PureComponent {
                                         onChangeText={text => this.setState({cardId: text})}
                                     />
                                 </View>
-
+                                {/*身份证正面照*/}
                                 <View style={[styles.regInputView, {marginTop: p(10)}]}>
                                     <Text style={styles.inputText}>{I18n.t('shenfzz')}:</Text>
-
                                     <TouchableOpacity
                                         onPress={() => this.choiceImage(this.state.type, 1)}
                                         activeOpacity={.8}
@@ -433,9 +437,9 @@ class RealAuthentication_1 extends PureComponent {
                                         />
                                     </TouchableOpacity>
                                 </View>
+                                {/*身份证背面照*/}
                                 <View style={[styles.regInputView, {marginVertical: p(20)}]}>
                                     <Text style={styles.inputText}>{I18n.t('shenfzs')}:</Text>
-
                                     <TouchableOpacity
                                         onPress={() => this.choiceImage(this.state.type, 2)}
                                         activeOpacity={.8}
@@ -448,9 +452,9 @@ class RealAuthentication_1 extends PureComponent {
                                         />
                                     </TouchableOpacity>
                                 </View>
+                                {/*本人手持证件和签名照*/}
                                 <View style={[styles.regInputView, {marginBottom: p(20)}]}>
                                     <Text style={styles.inputText}>{I18n.t('shenfzsc')}:</Text>
-
                                     <TouchableOpacity
                                         onPress={() => this.choiceImage(this.state.type, 3)}
                                         activeOpacity={.8}
@@ -466,6 +470,7 @@ class RealAuthentication_1 extends PureComponent {
                             </View>
                             :
                             <View>
+                                {/*名字*/}
                                 <View style={styles.regInputView}>
                                     <Text style={styles.inputText}>{I18n.t('mingzi')}:</Text>
                                     <TextInput
@@ -479,6 +484,7 @@ class RealAuthentication_1 extends PureComponent {
                                         onChangeText={text => this.setState({surname: text})}
                                     />
                                 </View>
+                                {/*姓氏*/}
                                 <View style={styles.regInputView}>
                                     <Text style={styles.inputText}>{I18n.t('xingshi')}:</Text>
                                     <TextInput
@@ -492,6 +498,7 @@ class RealAuthentication_1 extends PureComponent {
                                         onChangeText={text => this.setState({trueName: text})}
                                     />
                                 </View>
+                                {/*性别*/}
                                 <View style={styles.regInputView}>
                                     <Text style={styles.inputText}>{I18n.t('sex')}:</Text>
                                     <Select
@@ -508,6 +515,7 @@ class RealAuthentication_1 extends PureComponent {
                                         onSelected={item => this.setState({sex: item.value})}
                                     />
                                 </View>
+                                {/*国家*/}
                                 <View style={styles.regInputView}>
                                     <Text style={styles.inputText}>{I18n.t('guoajia')}:</Text>
                                     <Select
@@ -527,6 +535,7 @@ class RealAuthentication_1 extends PureComponent {
                                         })}
                                     />
                                 </View>
+                                {/*护照ID*/}
                                 <View style={styles.regInputView}>
                                     <Text style={styles.inputText}>{I18n.t('huzhaoid')}:</Text>
                                     <TextInput
@@ -540,6 +549,7 @@ class RealAuthentication_1 extends PureComponent {
                                         onChangeText={text => this.setState({cardId: text})}
                                     />
                                 </View>
+                                {/*护照正面照*/}
                                 <View style={styles.regInputView}>
                                     <Text style={styles.inputText}>{I18n.t('huzhaozm')}:</Text>
                                     <TouchableOpacity
@@ -553,6 +563,7 @@ class RealAuthentication_1 extends PureComponent {
                                         />
                                     </TouchableOpacity>
                                 </View>
+                                {/*护照封面*/}
                                 <View style={[styles.regInputView, {marginVertical: p(20)}]}>
                                     <Text style={styles.inputText}>{I18n.t('huzhaofm')}:</Text>
                                     <TouchableOpacity
@@ -566,6 +577,7 @@ class RealAuthentication_1 extends PureComponent {
                                         />
                                     </TouchableOpacity>
                                 </View>
+                                {/*本人手持护照照片*/}
                                 <View style={[styles.regInputView, {marginBottom: p(20)}]}>
                                     <Text style={styles.inputText}>{I18n.t('huzhaosc')}:</Text>
                                     <TouchableOpacity
@@ -583,10 +595,9 @@ class RealAuthentication_1 extends PureComponent {
                             </View>
                         }
                     </View>
-
+                    {/*提交按钮*/}
                     <View style={{margin: p(20)}}>
                         <Text style={[styles.textView, {marginTop: p(30)}]}>{I18n.t('smgd')}</Text>
-
                         <TouchableOpacity
                             activeOpacity={.8}
                             onPress={() => this._tarnAuthentication()}
@@ -594,16 +605,16 @@ class RealAuthentication_1 extends PureComponent {
                             <Text style={styles.reg_btn_text}>{I18n.t('tijiaorz')}</Text>
                         </TouchableOpacity>
                     </View>
-
+                    {/*加载特效组件*/}
                     <Loading visible={this.state.visible}/>
-
+                    {/*提示框*/}
                     <Toast
                         ref="toast"
                         style={{backgroundColor: 'rgba(0,0,0,.6)'}}
                         position='center'
                         textStyle={{color: 'white'}}
                     />
-
+                    {/*加载特效*/}
                     <SModal hasLoading={this.state.userIsLogin}/>
                 </ScrollView>
             </View>

@@ -20,11 +20,12 @@ import Toast, {DURATION} from 'react-native-easy-toast';
 
 import p from '../../../utils/tranfrom';
 import config from '../../../utils/config';
-import request from '../../../utils/request';
+import Request from '../../../utils/request';
 import Title from '../../../components/title';
 import Loading from '../../../components/loading';
 import SelectApp from '../../../components/selectApp';
 
+const request = new Request();
 
 export default class AddBankCard extends PureComponent {
     // 构造

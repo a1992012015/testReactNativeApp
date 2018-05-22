@@ -18,10 +18,11 @@ import {
 
 import config from '../../utils/config';
 import p from '../../utils/tranfrom';
-import request from '../../utils/request';
+import Request from '../../utils/request';
 import Title from '../../components/title';
 
 const {width, height} = Dimensions.get('window');
+const request = new Request();
 
 export default class ClosingRecord extends PureComponent {
     constructor(props) {

@@ -28,11 +28,12 @@ import md5 from '../../utils/hrymd5';
 import I18n from '../../utils/i18n';
 import p from '../../utils/tranfrom'
 import config from '../../utils/config';
-import request from '../../utils/request';
+import Request from '../../utils/request';
 import Title from '../../components/title';
 import SModal from '../../components/sModal';
 
 const {width, height} = Dimensions.get('window');
+const request = new Request();
 
 class SignUp extends PureComponent {
 
@@ -49,7 +50,7 @@ class SignUp extends PureComponent {
             },
             GraphicCode: `${config.api.host}${config.api.login.graCode}?${Math.random()}`,
             checked: true,
-            content: '无',
+            content: '页面加载中。。。',
             fotPassword: null,
         }
     }
@@ -142,12 +143,8 @@ class SignUp extends PureComponent {
 
             if (responseText.success) {
                 this.setState({userIsLogin: false});
-                Alert.alert(
-                    I18n.t('tishi'),
-                    I18n.t('zcchenggong'),
-                    [
-                        {
-                            text: I18n.t('queren'), onPress: () => {
+                Alert.alert(I18n.t('tishi'), I18n.t('zcchenggong'), [
+                        {text: I18n.t('queren'), onPress: () => {
                                 this.props.navigation.goBack();
                             }
                         }
@@ -162,13 +159,12 @@ class SignUp extends PureComponent {
         })
 
     };
-
+    //切换验证码
     refresh = () => {
         this.setState({
             GraphicCode: `${config.api.host}${config.api.login.graCode}?${Math.random()}`
         })
     };
-
     //查看协议
     _readModal = () => {
         this.setState({
@@ -192,7 +188,7 @@ class SignUp extends PureComponent {
                 <KeyboardAvoidingView behavior="padding" style={{flex: 1, paddingHorizontal: 20}}>
 
                     <ScrollView>
-
+                        {/*邮箱*/}
                         <View style={styles.regInputView}>
                             <TextInput
                                 placeholder={I18n.t('please_write_email')}
@@ -203,7 +199,7 @@ class SignUp extends PureComponent {
                                 onChangeText={(telephone) => this.state.data.telephone = telephone}
                             />
                         </View>
-
+                        {/*密码*/}
                         <View style={styles.regInputView}>
                             <TextInput
                                 placeholder={I18n.t('mimageshi')}
@@ -215,6 +211,7 @@ class SignUp extends PureComponent {
                                 onChangeText={(password) => this.state.data.password = password}
                             />
                         </View>
+                        {/*确认密码*/}
                         <View style={styles.regInputView}>
                             <TextInput
                                 placeholder={I18n.t('querenmima')}
@@ -226,7 +223,9 @@ class SignUp extends PureComponent {
                                 onChangeText={(fotPassword) => this.state.fotPassword = fotPassword}
                             />
                         </View>
+                        {/*验证码*/}
                         <View style={styles.regInputView}>
+                            {/*验证码输入*/}
                             <TextInput
                                 placeholder={I18n.t('tuxingyanzhengma')}
                                 underlineColorAndroid='transparent'
@@ -235,85 +234,99 @@ class SignUp extends PureComponent {
                                 style={styles.regInput}
                                 onChangeText={(registCode) => this.state.data.registCode = registCode}
                             />
+                            {/*点击切换验证码*/}
                             <TouchableOpacity
                                 activeOpacity={.8}
                                 onPress={this.refresh}>
                                 <Image style={{width: p(130), height: p(50), marginRight: p(10)}}
-                                       source={{uri: this.state.GraphicCode}}/>
+                                       source={{uri: this.state.GraphicCode}}
+                                />
                             </TouchableOpacity>
                         </View>
-
+                        {/*邀请人*/}
                         <View style={styles.regInputView}>
-                            <TextInput placeholder={I18n.t('tuijianrenshoujihao')}
-                                       underlineColorAndroid='transparent'
-                                       placeholderTextColor={'#565A5D'}
-                                       clearButtonMode={'while-editing'}
-                                       style={styles.regInput}
-                                       onChangeText={(referralCode) => this.state.data.referralCode = referralCode}
+                            <TextInput
+                                placeholder={I18n.t('tuijianrenshoujihao')}
+                                underlineColorAndroid='transparent'
+                                placeholderTextColor={'#565A5D'}
+                                clearButtonMode={'while-editing'}
+                                style={styles.regInput}
+                                onChangeText={(referralCode) => this.state.data.referralCode = referralCode}
                             />
                         </View>
-
+                        {/*阅读协议*/}
                         <View style={styles.checkStyle}>
+                            {/*阅读协议的选择按钮*/}
                             <View style={styles.checkboxStyle}>
-                                <Checkbox size='md'
-                                          checked={this.state.checked}
-                                          onChange={() => this.setState({checked: !this.state.checked})}
+                                <Checkbox
+                                    size='md'
+                                    checked={this.state.checked}
+                                    onChange={() => this.setState({checked: !this.state.checked})}
                                 />
                                 <Text style={{color: "#FFF", fontSize: p(25)}}>我已阅读并接受</Text>
                             </View>
-                            <TouchableOpacity activeOpacity={.8}
-                                              onPress={() => this._readModal(this)}>
+                            {/*阅读协议*/}
+                            <TouchableOpacity
+                                activeOpacity={.8}
+                                onPress={() => this._readModal(this)}>
                                 <Text style={{color: "#3F8DE0", fontSize: p(25), marginRight: p(20)}}>
                                     《用户服务协议》
                                 </Text>
                             </TouchableOpacity>
                         </View>
-
-
-                        <TouchableOpacity activeOpacity={.8}
-                                          onPress={() => this._register()}
-                                          style={styles.reg_btn}
+                        {/*注册按钮*/}
+                        <TouchableOpacity
+                            activeOpacity={.8}
+                            onPress={() => this._register()}
+                            style={styles.reg_btn}
                         >
                             <Text style={styles.reg_btn_text}>{I18n.t('signUp')}</Text>
                         </TouchableOpacity>
                     </ScrollView>
                 </KeyboardAvoidingView>
-
-
-                <Modal style={[styles.modal, styles.modal3]}
-                       position={"center"}
-                       backButton={false}
-                       backdropPressToClose={false}
-                       swipeToClose={false}
-                       isOpen={this.state.isOpen}>
-
-                    <View style={{height: p(60), alignItems: 'center', justifyContent: 'center'}}>
-                        <Text style={{fontSize: p(24)}}>注册服务协议</Text>
+                {/*协议模态框*/}
+                <Modal
+                    style={[styles.modal, styles.modal3]}
+                    position={"center"}
+                    backButton={false}
+                    backdropPressToClose={false}
+                    swipeToClose={false}
+                    isOpen={this.state.isOpen}
+                >
+                    {/*标题*/}
+                    <View style={{
+                        height: p(60),
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}>
+                        <Text style={{fontSize: p(24), color: '#FFFFFF'}}>注册服务协议</Text>
                     </View>
-
+                    {/*协议内容*/}
                     <ScrollView style={{flex: 1, borderBottomRightRadius: p(20), borderBottomLeftRadius: p(20)}}>
-                        <HTMLView value={this.state.content}
-                                  style={{padding: 10, backgroundColor: '#f9f9f9'}}
+                        <HTMLView
+                            value={this.state.content}
+                            style={{padding: 10, backgroundColor: '#f9f9f9'}}
                         />
-
                     </ScrollView>
-
-                    <TouchableOpacity style={styles.imageView}
-                                      onPress={() => this._click()}
+                    {/*协议关闭方式*/}
+                    <TouchableOpacity
+                        style={styles.imageView}
+                        onPress={() => this._click()}
                     >
-                        <Image source={require('../../static/login/clean.png')}
-                               style={styles.imageType}
+                        <Image
+                            source={require('../../static/login/clean.png')}
+                            style={styles.imageType}
                         />
                     </TouchableOpacity>
                 </Modal>
 
-                <Toast ref="toast"
-                       style={{backgroundColor: 'rgba(0,0,0,.6)'}}
-                       position='top'
-                       textStyle={{color: 'white'}}
+                <Toast
+                    ref="toast"
+                    style={{backgroundColor: 'rgba(0,0,0,.6)'}}
+                    position='top'
+                    textStyle={{color: 'white'}}
                 />
                 <SModal hasLoading={this.state.userIsLogin}/>
-
             </View>
         )
     }
@@ -371,14 +384,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         paddingHorizontal: p(12),
     },
-    codeFalse: {
-        color: '#FFFFFF',
-        backgroundColor: "#929BA1",
-        marginRight: p(20),
-        paddingVertical: p(10),
-        textAlign: 'center',
-        paddingHorizontal: p(12),
-    },
     checkStyle: {
         marginRight: p(10),
         flexDirection: 'row',
@@ -395,7 +400,7 @@ const styles = StyleSheet.create({
     modal: {
         alignItems: 'center',
         borderRadius: p(20),
-        backgroundColor: '#acacac',
+        backgroundColor: '#2a292a',
 
     },
     modal3: {

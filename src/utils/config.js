@@ -38,7 +38,7 @@ const config = {
             rechargeRMBList: 'user/rmbdeposit/list.do?order=asc&mycolumn=transactionTime',//交易记录
             myAccount: 'mobile/user/appCenter/myAccount.do',//用户资产
             bankCard: 'mobile/user/appbankcode/findBankCard.do',//查询当前账户下的银行卡
-            removeBank: 'mobile/user/appbankcode/removeBankCard.do?id=',//删除银行卡
+            removeBank: 'mobile/user/appbankcode/removeBankCard.do',//删除银行卡 => 修改
             province: 'mobile/user/appbankcode/findArea.do',//查询省
             city: 'mobile/user/appbankcode/appcity/',//查询市
             saveBank: 'mobile/user/appbankcode/saveBankCard',//保存银行卡

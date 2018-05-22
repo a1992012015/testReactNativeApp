@@ -1,3 +1,11 @@
+/**
+ * Created by 圆环之理 on 2018/5/15.
+ *
+ * 功能：存疑
+ *
+ */
+'use strict';
+
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
 

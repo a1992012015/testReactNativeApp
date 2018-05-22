@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react'
+import React, {PureComponent} from 'react'
 import {
     View,
     Text,
@@ -20,17 +20,18 @@ import {
     ScrollView,
     RefreshControl
 } from 'react-native';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import Toast, {DURATION} from 'react-native-easy-toast';
 
 import p from '../../../utils/tranfrom';
 import config from '../../../utils/config';
-import request from '../../../utils/request';
+import Request from '../../../utils/request';
 import I18n from '../../../utils/i18n';
 import Loading from '../../../components/loading';
-import { InitUserInfo } from '../../../store/actions/HomeAction';
+import {InitUserInfo} from '../../../store/actions/HomeAction';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
+const request = new Request();
 
 class SellOut extends PureComponent {
     // 构造
@@ -66,13 +67,14 @@ class SellOut extends PureComponent {
             KeepDecimalForCoin: 4,
         };
     }
+
     //接收到一个先的props的时候调用
     componentWillReceiveProps(props) {
 
-        let { buyData, sellData, tradingData, isLogin, member, businessData, personal, coinCode, user } = props;
-        const { ref_price, ref_count } = this.refs;
+        let {buyData, sellData, tradingData, isLogin, member, businessData, personal, coinCode, user} = props;
+        const {ref_price, ref_count} = this.refs;
 
-        if(coinCode !== this.state.coinCode){
+        if (coinCode !== this.state.coinCode) {
 
             this.setState({
                 coinCode: coinCode,
@@ -88,7 +90,7 @@ class SellOut extends PureComponent {
                 entrustCount: 0,
             })
         }
-        const { price_keepDecimalFor } =businessData;
+        const {price_keepDecimalFor} = businessData;
 
         this.setState({
             buyData: buyData,
@@ -101,7 +103,7 @@ class SellOut extends PureComponent {
             KeepDecimalForCoin: price_keepDecimalFor == null ? 4 : price_keepDecimalFor
         });
 
-        if(isLogin){
+        if (isLogin) {
             this.setState({
                 buyFeeRate: personal.buyFeeRate,
                 sellFeeRate: personal.sellFeeRate,
@@ -116,6 +118,7 @@ class SellOut extends PureComponent {
             })
         }
     }
+
     //委托成功重新查询可用余额和币
     queryCoin = () => {
         //地址
@@ -127,19 +130,19 @@ class SellOut extends PureComponent {
 
         request.post(url, actions).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            request.manyLogin(this.props,responseText);
-            if(responseText.obj){
+            request.manyLogin(this.props, responseText);
+            if (responseText.obj) {
                 let account = responseText.obj;
                 this.setState({
                     availableMoney: parseFloat(account.coinAccount.hotMoney),
                     frozenMoney: parseFloat(account.myAccount.hotMoney),
-                    getMoney:true
-                },()=>{
+                    getMoney: true
+                }, () => {
                     this.isLoginType()
                 })
 
@@ -150,8 +153,8 @@ class SellOut extends PureComponent {
     };
 
     isLoginType = () => {
-        let { isLogin, coinCode } = this.state;
-        if(isLogin){
+        let {isLogin, coinCode} = this.state;
+        if (isLogin) {
             const currName = coinCode ? coinCode.split("_") : 'CNY';
             return (
                 <View style={{marginTop: p(20)}}>
@@ -167,11 +170,13 @@ class SellOut extends PureComponent {
                     </View>
                 </View>
             )
-        }else{
+        } else {
             return (
                 <TouchableOpacity
                     style={{alignItems: 'center', justifyContent: 'center', width: width * .45, height: height * .33}}
-                    onPress={() => {this.props.navigation.navigate('Login', {ISForm: true});}}
+                    onPress={() => {
+                        this.props.navigation.navigate('Login', {ISForm: true});
+                    }}
                     activeOpacity={.8}
                 >
                     <Image
@@ -185,48 +190,48 @@ class SellOut extends PureComponent {
     };
 
     purchase = () => {
-        const { toast } = this.refs;
+        const {toast} = this.refs;
 
-        if ( null == this.state.entrustPrice || '' === this.state.entrustPrice || this.state.entrustPrice === 0) {
+        if (null == this.state.entrustPrice || '' === this.state.entrustPrice || this.state.entrustPrice === 0) {
             toast.show('请输入卖出价格', DURATION.LENGTH_SHORT);
             return;
         }
         //验证价格
-        if(isNaN(this.state.entrustPrice) || this.state.entrustPrice<0){
+        if (isNaN(this.state.entrustPrice) || this.state.entrustPrice < 0) {
             toast.show('请输入正确的价格', DURATION.LENGTH_SHORT);
             return;
         }
 
-        if (null == this.state.entrustCount || ''  === this.state.entrustCount || this.state.entrustCount === 0) {
+        if (null == this.state.entrustCount || '' === this.state.entrustCount || this.state.entrustCount === 0) {
             toast.show('请输入卖出数量', DURATION.LENGTH_SHORT);
             return;
         }
 
-        if(isNaN(this.state.entrustCount) || this.state.entrustCount <= 0){
+        if (isNaN(this.state.entrustCount) || this.state.entrustCount <= 0) {
             toast.show('请输入正确的数量', DURATION.LENGTH_SHORT);
             return;
         }
 
-        if(this.state.isLogin){
-            const currName = this.state.coinCode ? this.state.coinCode.split("_"):'CNY';
+        if (this.state.isLogin) {
+            const currName = this.state.coinCode ? this.state.coinCode.split("_") : 'CNY';
             if (parseFloat(this.state.entrustCount) > parseFloat(this.state.available)) {
-                toast.show(currName[0]+'不足', DURATION.LENGTH_SHORT);
+                toast.show(currName[0] + '不足', DURATION.LENGTH_SHORT);
                 return;
             }
 
-            if(this.state.isTrade === "0" || this.state.isTrade === 0){
-                this.realNameJump(this.state.user.user,1);
-            }else{
+            if (this.state.isTrade === "0" || this.state.isTrade === 0) {
+                this.realNameJump(this.state.user.user, 1);
+            } else {
                 this.requestMethod();
             }
-        }else{
+        } else {
             this.props.navigation.navigate('Login', {ISForm: true});
         }
     };
 
-    requestMethod = ()=>{
+    requestMethod = () => {
         this.setState({
-            visible:true
+            visible: true
         }, () => {
             //地址
             let url = config.api.trades.trans;
@@ -238,27 +243,27 @@ class SellOut extends PureComponent {
                 coinCode: this.state.coinCode,
                 entrustWay: 1,
             };
-            console.log('url',url);
-            const { toast } = this.refs;
+            console.log('url', url);
+            const {toast} = this.refs;
 
             request.post(url, actions).then(responseText => {
 
-                if(responseText.ok){//判断接口是否请求成功
+                if (responseText.ok) {//判断接口是否请求成功
                     console.log('接口请求失败进入失败函数');
                     return;
                 }
 
-                request.manyLogin(this.props,responseText);
-                console.log('responseText',responseText);
-                const { success, msg } = responseText;
-                const { queryCoinEntrust } = this.props;
+                request.manyLogin(this.props, responseText);
+                console.log('responseText', responseText);
+                const {success, msg} = responseText;
+                const {queryCoinEntrust} = this.props;
 
-                if(success){
+                if (success) {
                     this.setState({
-                        balance:true,
-                        entrustPrice:'',
-                        entrustCount:'',
-                        visible:false
+                        balance: true,
+                        entrustPrice: '',
+                        entrustCount: '',
+                        visible: false
                     }, () => {
                         this.queryCoin();
                         const {dispatch} = this.props;
@@ -267,54 +272,72 @@ class SellOut extends PureComponent {
                     });
 
                     toast.show(msg, DURATION.LENGTH_SHORT);
-                }else{
+                } else {
                     this.setState({
-                        visible:false
+                        visible: false
                     });
 
                     toast.show(msg, DURATION.LENGTH_SHORT);
                 }
             }).catch(error => {
-                console.log('进入失败函数',error);
+                console.log('进入失败函数', error);
             });
         });
     };
 
     realNameJump = (memberInfo, type) => {
-        const { states } = memberInfo;
+        const {states} = memberInfo;
 
-        if(states === 0 || states === "0"){
+        if (states === 0 || states === "0") {
             Alert.alert(
                 '提示',
                 '请先实名认证',
-                [{text: '确认', onPress: () => this.props.navigation.navigate("realAuthentication",{member: memberInfo, infoAction: this.upState})}]
+                [{
+                    text: '确认',
+                    onPress: () => this.props.navigation.navigate("realAuthentication", {
+                        member: memberInfo,
+                        infoAction: this.upState
+                    })
+                }]
             );
-        }else if(states === 1 || states === "1"){
+        } else if (states === 1 || states === "1") {
             Alert.alert(
                 '提示',
                 '实名认证审核中',
-                [{text: '确认', onPress: () => {}}]
+                [{
+                    text: '确认', onPress: () => {
+                    }
+                }]
             );
-        }else if(states === 3 || states === "3"){
+        } else if (states === 3 || states === "3") {
             Alert.alert(
                 '提示',
                 '实名申请被拒绝，请重新认证',
-                [{text: '确认', onPress: () => this.props.navigation.navigate("realAuthentication", {member: memberInfo, infoAction: this.upState})}],
+                [{
+                    text: '确认',
+                    onPress: () => this.props.navigation.navigate("realAuthentication", {
+                        member: memberInfo,
+                        infoAction: this.upState
+                    })
+                }],
             )
-        }else{
-            if(type === 1){
+        } else {
+            if (type === 1) {
                 this.requestMethod();
-            }else{
+            } else {
                 this.props.navigation.navigate('RechargeRMB', {member: this.state.member})
             }
         }
     };
 
     sellButton = () => {
-        return(
+        return (
             <TouchableOpacity
-                onPress={() => {this.purchase()}}
-                style={{height: p(70),
+                onPress={() => {
+                    this.purchase()
+                }}
+                style={{
+                    height: p(70),
                     width: width * .44,
                     backgroundColor: '#018F67',
                     borderRadius: p(5),
@@ -322,19 +345,19 @@ class SellOut extends PureComponent {
                     justifyContent: 'center',
                 }}
             >
-                <Text style={{color:'#FFF'}}>{I18n.t("spotsell")}</Text>
+                <Text style={{color: '#FFF'}}>{I18n.t("spotsell")}</Text>
             </TouchableOpacity>
         )
     };
 
     render() {
-        let { sellData, buyData, tradingData, coinCode, user } = this.state;
+        let {sellData, buyData, tradingData, coinCode, user} = this.state;
         let currName = coinCode ? coinCode.split("_") : 'CNY';
-        const { toast } = this.refs;
+        const {toast} = this.refs;
 
         return (
             <ScrollView
-                ontentContainerStyle ={{marginBottom: p(100)}}
+                ontentContainerStyle={{marginBottom: p(100)}}
                 refreshControl={
                     <RefreshControl
                         refreshing={false}
@@ -354,9 +377,9 @@ class SellOut extends PureComponent {
                                 placeholderTextColor={'#565A5D'}
                                 selectionColor={"#D95411"}
                                 style={styles.inputTextView}
-                                value= {this.state.entrustPrice.toString()}
+                                value={this.state.entrustPrice.toString()}
                                 onChangeText={text => {
-                                    if(text === "" || text === null || /\s/.exec(text) !== null || isNaN(text)){
+                                    if (text === "" || text === null || /\s/.exec(text) !== null || isNaN(text)) {
                                         text = 0;
                                     }
                                     this.calculation(text);
@@ -374,14 +397,14 @@ class SellOut extends PureComponent {
                                 clearButtonMode={'while-editing'}
                                 placeholderTextColor={'#565A5D'}
                                 selectionColor={"#D95411"}
-                                value = {this.state.entrustCount.toString()}
+                                value={this.state.entrustCount.toString()}
                                 style={styles.inputTextView}
                                 onChangeText={text => {
-                                    if(text === "" || text === null || /\s/.exec(text) !== null || isNaN(text)){
+                                    if (text === "" || text === null || /\s/.exec(text) !== null || isNaN(text)) {
                                         text = 0;
                                     }
 
-                                    if(parseFloat(text) < 0){
+                                    if (parseFloat(text) < 0) {
                                         text = 0;
                                         toast.show("请输入正确的委托数量", DURATION.LENGTH_SHORT);
                                     }
@@ -394,13 +417,13 @@ class SellOut extends PureComponent {
                                         turnover: turnovers.toFixed(5),
                                         service: services.toFixed(5),
                                     }, () => {
-                                        if(this.state.turnover>0){
+                                        if (this.state.turnover > 0) {
                                             this.setState({
-                                                buttonColor:'#EA2000'
+                                                buttonColor: '#EA2000'
                                             })
-                                        }else{
+                                        } else {
                                             this.setState({
-                                                buttonColor:'#018F67'
+                                                buttonColor: '#018F67'
                                             })
                                         }
                                     });
@@ -422,10 +445,19 @@ class SellOut extends PureComponent {
                             <Text style={{fontSize: p(24)}}>{currName[1]}</Text>
                         </View>
 
-                        <Text style={{fontSize: p(22),marginVertical: p(20),width: width * .44}}>{I18n.t("jiaoyitishi")}</Text>
-                        {this.sellButton(coinCode,user)}
+                        <Text style={{
+                            fontSize: p(22),
+                            marginVertical: p(20),
+                            width: width * .44
+                        }}>{I18n.t("jiaoyitishi")}</Text>
+                        {this.sellButton(coinCode, user)}
 
-                        <View style={{backgroundColor: '#FFFFFF', width: width * .45, marginTop: p(20), height: height * .34}}>
+                        <View style={{
+                            backgroundColor: '#FFFFFF',
+                            width: width * .45,
+                            marginTop: p(20),
+                            height: height * .34
+                        }}>
                             {this.isLoginType()}
                         </View>
                     </View>
@@ -435,13 +467,13 @@ class SellOut extends PureComponent {
                             style={styles.panelView}
                         >
                             <View>
-                                <Text style={[styles.textPriceB,{color:'#5f5f5f'}]}>单价</Text>
+                                <Text style={[styles.textPriceB, {color: '#5f5f5f'}]}>单价</Text>
                             </View>
-                            <View style={{alignItems:'flex-end'}}>
-                                <Text style={[styles.textPriceB,{color:'#5f5f5f'}]}>数量</Text>
+                            <View style={{alignItems: 'flex-end'}}>
+                                <Text style={[styles.textPriceB, {color: '#5f5f5f'}]}>数量</Text>
                             </View>
                         </TouchableOpacity>
-                        <View style={{height:height * .31}}>
+                        <View style={{height: height * .31}}>
                             <FlatList
                                 horizontal={false}
                                 data={sellData}
@@ -452,7 +484,9 @@ class SellOut extends PureComponent {
                             />
                         </View>
                         <TouchableOpacity
-                            onPress={() => {this.calculation(tradingData.priceNew + "")}}
+                            onPress={() => {
+                                this.calculation(tradingData.priceNew + "")
+                            }}
                             style={{
                                 width: width * .44,
                                 height: p(70),
@@ -469,9 +503,9 @@ class SellOut extends PureComponent {
                                 </Text>
                             </Text>
                         </TouchableOpacity>
-                        <View style={{height:height * .31}}>
+                        <View style={{height: height * .31}}>
                             <FlatList
-                                horizontal={false }
+                                horizontal={false}
                                 data={buyData}
                                 renderItem={this.renderBuyRow}
                                 onEndReachedThreshold={1}
@@ -483,7 +517,7 @@ class SellOut extends PureComponent {
                     <Loading visible={this.state.visible}/>
                     <Toast
                         ref="toast"
-                        style={{backgroundColor:'rgba(0,0,0,.6)'}}
+                        style={{backgroundColor: 'rgba(0,0,0,.6)'}}
                         position='top'
                         textStyle={{color: 'white'}}
                     />
@@ -492,10 +526,10 @@ class SellOut extends PureComponent {
         )
     }
 
-    calculation = text =>{
-        const { toast } = this.refs;
+    calculation = text => {
+        const {toast} = this.refs;
 
-        if(parseFloat(text) < 0){
+        if (parseFloat(text) < 0) {
             text = 0;
             toast.show("请输入正确的委托价格", DURATION.LENGTH_SHORT);
         }
@@ -508,11 +542,11 @@ class SellOut extends PureComponent {
             turnover: turnovers.toFixed(5),
             service: services.toFixed(5)
         }, () => {
-            if(this.state.turnover > 0){
+            if (this.state.turnover > 0) {
                 this.setState({
                     buttonColor: '#EA2000'
                 })
-            }else{
+            } else {
                 this.setState({
                     buttonColor: '#018F67'
                 })
@@ -521,10 +555,12 @@ class SellOut extends PureComponent {
     };
 
     renderSellRow = ({item}) => {
-        if(item.value.price){
-            return(
+        if (item.value.price) {
+            return (
                 <TouchableOpacity
-                    onPress={() => {this.calculation(item.value.price + "")}}
+                    onPress={() => {
+                        this.calculation(item.value.price + "")
+                    }}
                     style={styles.panelView}
                 >
                     <View>
@@ -532,7 +568,7 @@ class SellOut extends PureComponent {
                             {item.value.price.toFixed(this.state.KeepDecimalForCoin)}
                         </Text>
                     </View>
-                    <View style={{alignItems:'flex-end'}}>
+                    <View style={{alignItems: 'flex-end'}}>
                         <Text style={styles.textPriceB}>{item.value.amount}</Text>
                     </View>
                 </TouchableOpacity>
@@ -541,10 +577,12 @@ class SellOut extends PureComponent {
     };
 
     renderBuyRow = ({item}) => {
-        if(item.value.price){
-            return(
+        if (item.value.price) {
+            return (
                 <TouchableOpacity
-                    onPress={()=>{this.calculation(item.value.price+"");}}
+                    onPress={() => {
+                        this.calculation(item.value.price + "");
+                    }}
                     style={styles.panelView}
                 >
                     <View>
@@ -552,7 +590,7 @@ class SellOut extends PureComponent {
                             {item.value.price.toFixed(this.state.KeepDecimalForCoin)}
                         </Text>
                     </View>
-                    <View style={{alignItems:'flex-end'}}>
+                    <View style={{alignItems: 'flex-end'}}>
                         <Text style={styles.textPriceR}>{item.value.amount}</Text>
                     </View>
                 </TouchableOpacity>
@@ -567,7 +605,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingHorizontal: p(20)
     },
-    inputView:{
+    inputView: {
         flexDirection: 'row',
         height: p(80),
         alignItems: 'center',
@@ -578,20 +616,20 @@ const styles = StyleSheet.create({
         width: width * .45,
         justifyContent: 'space-between'
     },
-    inputTextView:{
+    inputTextView: {
         width: width * .3,
         fontSize: p(24),
         height: p(80)
     },
-    textPriceB:{
+    textPriceB: {
         color: '#018F67',
         fontSize: p(20),
     },
-    textPriceR:{
+    textPriceR: {
         color: 'red',
         fontSize: p(20),
     },
-    panelView:{
+    panelView: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: width * .45,
@@ -600,7 +638,7 @@ const styles = StyleSheet.create({
 });
 
 export default connect((state) => {
-    const { HomeReducer } = state;
+    const {HomeReducer} = state;
     return {
         HomeReducer
     }

@@ -21,11 +21,13 @@ import Toast, {DURATION} from 'react-native-easy-toast';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {connect} from 'react-redux';
 
-import p from '../../utils/tranfrom';
-import config from '../../utils/config';
-import request from '../../utils/request';
-import {InitUserInfo} from '../../store/actions/HomeAction';
-import CheckModal from '../../components/checkModal';
+import p from '../../../utils/tranfrom';
+import config from '../../../utils/config';
+import Request from '../../../utils/request';
+import {InitUserInfo} from '../../../store/actions/HomeAction';
+import CheckModal from '../../../components/checkModal';
+
+const request = new Request();
 
 class TurnoutCurrencyQR extends PureComponent {
     // 构造
@@ -235,7 +237,7 @@ class TurnoutCurrencyQR extends PureComponent {
     render() {
         return (
             <View style={styles.defaultView}>
-
+                {/*扫码转币标题*/}
                 <View style={styles.header}>
                     <TouchableOpacity onPress={() => {
                         this.props.navigation.goBack()
@@ -251,14 +253,17 @@ class TurnoutCurrencyQR extends PureComponent {
                     <Text style={styles.headerTitle}>转出{this.state.intoData.coinName}</Text>
                     <View/>
                 </View>
+                {/*财产显示*/}
                 <View style={styles.blockSty}>
                     <View style={{marginLeft: p(20)}}>
+                        {/*可用*/}
                         <Text style={styles.textPrice}>
                             可用{this.state.intoData.coinName}：
                             <Text style={{color: '#018F67'}}>
                                 {this.state.intoData.hotMoney}
                             </Text>
                         </Text>
+                        {/*冻结*/}
                         <Text style={styles.textPrice}>
                             冻结{this.state.intoData.coinName}：
                             <Text style={{color: '#F6574D'}}>
@@ -266,8 +271,10 @@ class TurnoutCurrencyQR extends PureComponent {
                             </Text>
                         </Text>
                     </View>
+                    {/*钱包地址*/}
                     <View style={styles.reWithView}>
                         <Text style={styles.inputText}>钱包地址:</Text>
+                        {/*钱包地址*/}
                         <View style={styles.inputSty}>
                             <TextInput
                                 underlineColorAndroid='transparent'
@@ -279,6 +286,7 @@ class TurnoutCurrencyQR extends PureComponent {
                                 style={styles.inputTextView}
                                 onChangeText={(text) => this.setState({btcKey: text})}
                             />
+                            {/*扫描二维码组件*/}
                             <TouchableOpacity
                                 onPress={() => {
                                     this.props.navigation.navigate("CameraScanCode", {getQRValue: this.getQRValue})
@@ -287,11 +295,12 @@ class TurnoutCurrencyQR extends PureComponent {
                                 activeOpacity={.8}>
                                 <Image
                                     style={{width: p(40), height: p(40)}}
-                                    source={require('../../static/mySelf/scanning.png')}
+                                    source={require('../../../static/mySelf/scanning.png')}
                                 />
                             </TouchableOpacity>
                         </View>
                     </View>
+                    {/*转出数量*/}
                     <View style={styles.reWithView}>
                         <Text style={styles.inputText}>转出数量:</Text>
                         <View style={styles.inputSty}>
@@ -330,6 +339,7 @@ class TurnoutCurrencyQR extends PureComponent {
                     }
                 </View>
                 <View style={{marginHorizontal: p(20)}}>
+                    {/*确认*/}
                     <TouchableOpacity
                         onPress={this.currencyOut}
                         activeOpacity={0.8}
@@ -345,6 +355,7 @@ class TurnoutCurrencyQR extends PureComponent {
                     >
                         <Text style={{color: '#fff', fontSize: p(26)}}>确认转出</Text>
                     </TouchableOpacity>
+                    {/*说明*/}
                     <View style={{
                         borderWidth: 1,
                         borderColor: 'transparent',
@@ -361,12 +372,14 @@ class TurnoutCurrencyQR extends PureComponent {
                         </Text>
                     </View>
                 </View>
+                {/*提示窗*/}
                 <Toast
                     ref="toast"
                     style={{backgroundColor: 'rgba(0,0,0,.6)'}}
                     position='top'
                     textStyle={{color: 'white'}}
                 />
+                {/*二维码*/}
                 <CheckModal
                     checkOpen={this.state.checkOpen}
                     {...this.props}

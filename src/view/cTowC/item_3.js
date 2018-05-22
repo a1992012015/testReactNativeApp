@@ -19,12 +19,12 @@ import {
 
 import config from '../../utils/config';
 import p from '../../utils/tranfrom';
-import request from '../../utils/request';
+import Request from '../../utils/request';
 import Loading from '../../components/loading';
 import BuySellModal from './buySellModal';
 
 const {width} = Dimensions.get('window');
-
+const request = new Request();
 
 export default class Item_3 extends PureComponent {
     //构建

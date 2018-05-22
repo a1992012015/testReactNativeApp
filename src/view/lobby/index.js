@@ -28,7 +28,7 @@ import {connect} from 'react-redux';
 
 import p from '../../utils/tranfrom';
 import config from '../../utils/config';
-import request from '../../utils/request';
+import Request from '../../utils/request';
 import I18n from '../../utils/i18n';
 import Purchase from './trading/purchase';
 import SellOut from './trading/sellOut';
@@ -41,6 +41,7 @@ import {homeLoop} from '../../store/actions/IndexLoopAction';
 
 const {height} = Dimensions.get('window');
 const {PushCandlestickChart} = NativeModules;
+const request = new Request();
 
 class Business extends PureComponent {
 

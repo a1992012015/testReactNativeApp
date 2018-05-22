@@ -22,7 +22,7 @@ import ScrollableTabView from 'react-native-scrollable-tab-view';
 
 import config from '../../utils/config';
 import p from '../../utils/tranfrom';
-import request from '../../utils/request';
+import Request from '../../utils/request';
 import Loading from '../../components/loading';
 import Item_1 from './item_1';
 import Item_2 from './item_2';
@@ -31,6 +31,7 @@ import Item_4 from './item_4';
 import CTowModal from './cTowModal';
 
 const {height} = Dimensions.get('window');
+const request = new Request();
 
 export default class CTwoC extends PureComponent {
 

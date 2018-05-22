@@ -28,11 +28,13 @@ import store from 'react-native-simple-store';
 import I18n from '../../utils/i18n';
 import p from '../../utils/tranfrom';
 import config from '../../utils/config';
-import request from '../../utils/request';
+import Request from '../../utils/request';
 import md5 from '../../utils/hrymd5';
 import CheckModal from '../../components/checkModal';
 import SModal from '../../components/sModal';
 import MenuSelect, {MenuItem} from '../../components/MenuItem/index';
+
+const request = new Request();
 
 //返回图像大小
 const {width} = Dimensions.get('window');

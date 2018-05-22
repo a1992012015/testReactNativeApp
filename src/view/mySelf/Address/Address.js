@@ -22,10 +22,11 @@ import Toast, {DURATION} from 'react-native-easy-toast';
 
 import config from '../../../utils/config';
 import p from '../../../utils/tranfrom';
-import request from '../../../utils/request';
+import Request from '../../../utils/request';
 import Title from '../../../components/title';
 
 const {width, height} = Dimensions.get('window');
+const request = new Request();
 
 export default class Address extends PureComponent {
     constructor(props) {
@@ -88,7 +89,9 @@ export default class Address extends PureComponent {
         if (this.state.loadData) {
             return (
                 <View style={{flex: 1, backgroundColor: '#1F2229', paddingBottom: p(80)}}>
+                    {/*组件标题*/}
                     <Title titleName="钱包地址" canBack={true} {...this.props}/>
+                    {/*列表标题*/}
                     <View style={{
                         flexDirection: 'row',
                         alignItems: 'center',
@@ -100,6 +103,7 @@ export default class Address extends PureComponent {
                         <Text style={[styles.textRecord, {width: '15%'}]}>币的类</Text>
                         <Text style={[styles.textRecord, {width: '15%'}]}>操作</Text>
                     </View>
+                    {/*币账户列表*/}
                     <ListView
                         horizontal={false}
                         dataSource={this.state.dataSource}
@@ -124,6 +128,7 @@ export default class Address extends PureComponent {
                             source={require('../../../static/mySelf/plus.png')}
                         />
                     </TouchableOpacity>
+                    {/*提示框口*/}
                     <Toast
                         ref="toast"
                         style={{backgroundColor: 'rgba(0,0,0,.6)'}}
@@ -142,7 +147,7 @@ export default class Address extends PureComponent {
             )
         }
     }
-
+    //删除币账户
     deleteAddress = id => {
         const {toast} = this.refs;
 
@@ -175,7 +180,7 @@ export default class Address extends PureComponent {
             }
         ])
     };
-
+    //单个币账户的显示方式
     _quotRow = row => {
         const {publicKey, remark, created, currencyType, id} = row;
 

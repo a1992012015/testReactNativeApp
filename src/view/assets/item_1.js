@@ -18,9 +18,10 @@ import {
 
 import config from '../../utils/config';
 import p from '../../utils/tranfrom';
-import request from '../../utils/request';
+import Request from '../../utils/request';
 
 const {width, height} = Dimensions.get('window');
+const request = new Request();
 
 export default class Item_1 extends PureComponent {
     //构建

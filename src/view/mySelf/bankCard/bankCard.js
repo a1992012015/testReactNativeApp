@@ -22,10 +22,11 @@ import Toast, {DURATION} from 'react-native-easy-toast';
 
 import config from '../../../utils/config';
 import p from '../../../utils/tranfrom';
-import request from '../../../utils/request';
+import Request from '../../../utils/request';
 import Title from '../../../components/title';
 
 const {height} = Dimensions.get('window');
+const request = new Request();
 
 export default class BankCard extends PureComponent {
     //构建
@@ -52,9 +53,15 @@ export default class BankCard extends PureComponent {
     }
 
     getBankList = () => {
-        let url = `${config.api.main.bankCard}?offset=0&limit=10`;
+        //地址
+        let url = config.api.main.bankCard;
+        //参数
+        const actions = {
+            offset: 0,
+            limit: 10,
+        };
 
-        request.post(url).then(responseText => {
+        request.post(url, actions).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
@@ -128,7 +135,7 @@ export default class BankCard extends PureComponent {
             )
         }
     }
-
+    //银行卡删除函数
     deleteBank = id => {
         const {toast} = this.refs;
 
@@ -138,8 +145,13 @@ export default class BankCard extends PureComponent {
             [{
                 text: '确认',
                 onPress: () => {
-                    let URL = config.api.host + config.api.main.removeBank + id;
-                    request.post(URL).then(responseText => {
+                    let URL = config.api.main.removeBank + id;
+                    //参数
+                    const actions = {
+                        id,
+                    };
+
+                    request.post(URL, actions).then(responseText => {
 
                         if (responseText.ok) {//判断接口是否请求成功
                             console.log('接口请求失败进入失败函数');
@@ -165,7 +177,7 @@ export default class BankCard extends PureComponent {
             ]
         );
     };
-
+    //银行卡显示组件
     _quotRow = row => {
         const {cardBank, id, cardNumber, surName, cardName, trueName, bankProvince, bankAddress, subBank} = row;
         return (

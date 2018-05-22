@@ -9,8 +9,9 @@
 const urlConfig = {
     api: {
         //app请求路径
-        host: 'https://www.lockcoin.net/',//正式地址
+        //host: 'https://www.lockcoin.net/',//正式地址
         //host: 'http://192.168.1.254/',//测试地址 => 何彬
+        host: 'http://47.104.154.204/',//测试地址
         //交易大厅ioUrl
         socketIOUrl: 'wss://hq.lockcoin.net',
         //热更新下载最新app路径

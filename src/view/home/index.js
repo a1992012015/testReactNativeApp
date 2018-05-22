@@ -38,7 +38,7 @@ import p from '../../utils/tranfrom';
 import I18n from '../../utils/i18n';
 import config from '../../utils/config';
 import urlConfig from '../../utils/urlConfig';
-import request from '../../utils/request';
+import Request from '../../utils/request';
 import Title from '../../components/title';
 import RollingCaption from '../../components/rollingCaption';
 import SwiperBanner from '../../components/swiperBanner';
@@ -46,6 +46,7 @@ import {homeLoop} from '../../store/actions/IndexLoopAction';
 
 const {appKey} = urlConfig.api[Platform.OS];
 const {width} = Dimensions.get('window');
+const request = new Request();
 
 class Index extends PureComponent {
     constructor(props) {
@@ -290,7 +291,7 @@ class Index extends PureComponent {
     }
 
     //首页数据渲染函数
-    handleData = (homeData) => {
+    handleData = homeData => {
         let areaData = {};
         let headData = [];
 
@@ -317,7 +318,7 @@ class Index extends PureComponent {
                 }];
             }
         });
-
+        console.log(this);
         this.setState({
             areaList: areaData,
             headList: headData,
@@ -325,7 +326,7 @@ class Index extends PureComponent {
         })
     };
     /*首頁转换交易区的点击事件*/
-    handleCustomIndexSelect = (index) => {
+    handleCustomIndexSelect = index => {
         let {headList, areaList} = this.state;
 
         if (areaList) {

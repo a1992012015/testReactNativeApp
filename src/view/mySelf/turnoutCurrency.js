@@ -23,11 +23,13 @@ import {connect} from 'react-redux';
 
 import p from '../../utils/tranfrom';
 import config from '../../utils/config';
-import request from '../../utils/request';
+import Request from '../../utils/request';
 import {InitUserInfo} from '../../store/actions/HomeAction';
 import CheckModal from '../../components/checkModal';
 import Loading from '../../components/loading';
 import SelectApp from '../../components/selectApp';
+
+const request = new Request();
 
 class TurnoutCurrency extends PureComponent {
     // 构造

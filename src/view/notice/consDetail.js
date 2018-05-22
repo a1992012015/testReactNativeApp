@@ -74,7 +74,7 @@ export default class ConsDetail extends PureComponent {
                     <View style={{flex: 1, backgroundColor: '#FFFFFF'}}>
                         <Title titleName="资讯详情" canBack={true} {...this.props}/>
                         <WebView
-                            source={{html: newsBody}}
+                            source={{html: newsBody, baseUrl: ''}}
                             style={{flex: 1}}
                             contentInset={{top: 0, left: 0}}
                             onNavigationStateChange={title => {

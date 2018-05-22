@@ -12,6 +12,7 @@ import com.facebook.soloader.SoLoader;
 import cn.reactnative.modules.update.UpdateContext;//热更新添加
 import com.AlexanderZaytsev.RNI18n.RNI18nPackage; // <-- Add to ReactNativeI18n to the imports
 import com.oblador.vectoricons.VectorIconsPackage;//ioc
+import com.imagepicker.ImagePickerPackage; // <-- add this import
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,7 +38,8 @@ public class MainApplication extends Application implements ReactApplication {
               new RNI18nPackage(), // <-- Add it to the packages list
               new VectorIconsPackage(),//ioc
 
-              new KChartsPackage() //K线图
+              new KChartsPackage(), //K线图
+              new ImagePickerPackage()
       );
     }
 

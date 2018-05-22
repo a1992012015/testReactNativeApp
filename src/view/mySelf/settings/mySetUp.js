@@ -24,12 +24,13 @@ import {connect} from 'react-redux';
 
 import p from '../../../utils/tranfrom';
 import config from '../../../utils/config';
-import request from '../../../utils/request';
+import Request from '../../../utils/request';
 import I18n from '../../../utils/i18n';
 import Title from '../../../components/title';
 import {InitUserInfo} from '../../../store/actions/HomeAction';
 
 const {height} = Dimensions.get('window');
+const request = new Request();
 
 /*按钮组件*/
 class BottomMenu extends PureComponent {
@@ -100,7 +101,7 @@ class MySetUp extends PureComponent {
         if (route === null || route === '') {
             return;
         }
-
+        console.log('routeName =>', route);
         if (route === "RealAuthentications_2" || route === "TransPassword" || route === "RealAuthentications_1") {
             this.props.navigation.navigate(route, {
                 member: this.state.member,
@@ -184,13 +185,10 @@ class MySetUp extends PureComponent {
     //退出的方法
     signOut = () => {
         Alert.alert('温馨提醒', '确定退出吗?', [
-            {
-                text: '取消', onPress: () => {
-                }
-            },
-            {
-                text: '确定', onPress: () => {
+            {text: '取消', onPress: () => {}},
+            {text: '确定', onPress: () => {
                     store.delete('member');
+
                     const resetAction = StackActions.reset({
                         index: 0,
                         actions: [NavigationActions.navigate({routeName: 'TabBar'})],

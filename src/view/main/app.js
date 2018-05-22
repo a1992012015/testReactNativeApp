@@ -17,7 +17,7 @@ import {
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types'; // ES6
 
-import FirstStart from '../../components/startPage/firstStart'
+import FirstStart from '../../components/startPage/firstStart';
 import SecondStart from '../../components/startPage/secondStart';
 
 const {width, height} = Dimensions.get('window');

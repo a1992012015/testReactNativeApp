@@ -23,10 +23,11 @@ import store from 'react-native-simple-store';
 
 import config from '../../utils/config';
 import p from '../../utils/tranfrom';
-import request from '../../utils/request';
+import Request from '../../utils/request';
 import Title from '../../components/title';
 
 const {width, height} = Dimensions.get('window');
+const request = new Request();
 
 export default class SpotAssets extends PureComponent {
     //构建
@@ -315,7 +316,9 @@ export default class SpotAssets extends PureComponent {
                         <ScrollView style={{marginBottom: !this.state.canBack ? p(360) : p(1)}}>
                             {
                                 this.state.coinAccount.map((item, i) => {
+                                    console.log(item)
                                     const {moneyAndCoin, coinCode, name, hotMoney, coldMoney, keepDecimalForCoin, picturePath} = item;
+                                    console.log(keepDecimalForCoin)
                                     return (
                                         <View key={`ScrollView${i}`}>
                                             {

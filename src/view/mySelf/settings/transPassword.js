@@ -19,9 +19,11 @@ import Toast, {DURATION} from 'react-native-easy-toast';
 
 import p from '../../../utils/tranfrom';
 import config from '../../../utils/config';
-import request from '../../../utils/request';
+import Request from '../../../utils/request';
 import md5 from '../../../utils/hrymd5';
 import Title from '../../../components/title';
+
+const request = new Request();
 
 export default class TransPassword extends PureComponent {
     // 构造

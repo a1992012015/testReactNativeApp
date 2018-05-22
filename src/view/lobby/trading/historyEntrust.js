@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { PureComponent } from 'react'
+import React, {PureComponent} from 'react'
 import {
     View,
     Text,
@@ -16,57 +16,61 @@ import {
     Alert,
 } from 'react-native';
 import RadioModal from 'react-native-radio-master';
-import Toast, { DURATION } from 'react-native-easy-toast';
+import Toast, {DURATION} from 'react-native-easy-toast';
 
 import p from '../../../utils/tranfrom';
 import config from '../../../utils/config';
-import request from '../../../utils/request';
+import Request from '../../../utils/request';
 import I18n from '../../../utils/i18n';
 import Loading from '../../../components/loading';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
+const request = new Request();
 
-export default class HistoryEntrust extends PureComponent  {
+export default class HistoryEntrust extends PureComponent {
 
     static defaultProps = {};
+
     // 构造
     constructor(props) {
         super(props);
         // 初始状态
         this.state = {
-            initItem:'',
-            initId:'0',
-            data:true,
-            isLogin:false,
-            member:null,
-            tranDate:null,
-            killData:[],
-            balance:true,
-            visible:true,
-            KeepDecimalForCoin:4,
-            coinCode:null,
-            coinCodes:null,
-            offset:0,
-            total:10
+            initItem: '',
+            initId: '0',
+            data: true,
+            isLogin: false,
+            member: null,
+            tranDate: null,
+            killData: [],
+            balance: true,
+            visible: true,
+            KeepDecimalForCoin: 4,
+            coinCode: null,
+            coinCodes: null,
+            offset: 0,
+            total: 10
         };
     }
+
     //接收到一个新的props的时候调用
     componentWillReceiveProps(nextProps) {
-        let { coinCode, businessData } = nextProps;
-        const { price_keepDecimalFor } = businessData;
+        let {coinCode, businessData} = nextProps;
+        const {price_keepDecimalFor} = businessData;
 
-        if(coinCode !== this.state.coinCode){
+        if (coinCode !== this.state.coinCode) {
             let coinCodes = coinCode.split("_");
             this.setState({
-                coinCode: coinCode?coinCode:null,
+                coinCode: coinCode ? coinCode : null,
                 coinCodes: coinCodes[0] + "-" + coinCodes[1],
-            },() => this.queryKill(0));
+            }, () => this.queryKill(0));
         }
 
         this.setState({
             KeepDecimalForCoin: price_keepDecimalFor == null ? 4 : price_keepDecimalFor
         })
     }
+
     //加载列表
     queryKill = () => {
         this.setState({
@@ -85,28 +89,28 @@ export default class HistoryEntrust extends PureComponent  {
                 sortOrder: 'asc',
                 querypath: 'enter',
             };
-            const { toast } = this.refs;
+            const {toast} = this.refs;
 
             request.post(url, actions).then(responseText => {
 
-                if(responseText.ok){//判断接口是否请求成功
+                if (responseText.ok) {//判断接口是否请求成功
                     console.log('接口请求失败进入失败函数');
                     return;
                 }
 
                 this.setState({
-                    visible:false
+                    visible: false
                 });
 
-                request.manyLogin(this.props,responseText);
+                request.manyLogin(this.props, responseText);
 
-                if(responseText.obj){
+                if (responseText.obj) {
                     let rows = responseText.obj.rows;
                     let kill = [];
 
-                    if(rows.length > 0){
-                        rows.map((item, index)=>{
-                            if(item.coinCode === this.state.coinCodes){
+                    if (rows.length > 0) {
+                        rows.map((item, index) => {
+                            if (item.coinCode === this.state.coinCodes) {
                                 kill.push({
                                     key: index,
                                     value: item,
@@ -118,14 +122,14 @@ export default class HistoryEntrust extends PureComponent  {
                         offsets++;
 
                         this.setState({
-                            balance:false,
-                            killData:kill,
-                            total:responseText.obj.total,
-                            offset:offsets
+                            balance: false,
+                            killData: kill,
+                            total: responseText.obj.total,
+                            offset: offsets
                         })
-                    }else{
+                    } else {
                         this.setState({
-                            balance:false
+                            balance: false
                         })
                     }
                 }
@@ -140,10 +144,10 @@ export default class HistoryEntrust extends PureComponent  {
     };
 
 
-    reachedKill = () =>{
+    reachedKill = () => {
         let offsetValue = this.state.offset * 10;
 
-        if(offsetValue > this.state.total){
+        if (offsetValue > this.state.total) {
             return;
         }
         //地址
@@ -157,27 +161,27 @@ export default class HistoryEntrust extends PureComponent  {
             sortOrder: 'asc',
             querypath: 'enter',
         };
-        const { toast } = this.refs;
+        const {toast} = this.refs;
 
         request.post(url, actions).then(responseText => {
 
-            if(responseText.ok){//判断接口是否请求成功
+            if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            request.manyLogin(this.props,responseText);
+            request.manyLogin(this.props, responseText);
             this.setState({
                 visible: false,
             });
 
-            if(responseText.obj){
+            if (responseText.obj) {
                 let rows = responseText.obj.rows;
                 let kill = [];
 
-                if(rows.length > 0){
-                    rows.map((item,index)=>{
-                        if(item.coinCode === this.state.coinCodes){
+                if (rows.length > 0) {
+                    rows.map((item, index) => {
+                        if (item.coinCode === this.state.coinCodes) {
                             kill.push({
                                 key: offsetValue + index,
                                 value: item
@@ -195,9 +199,9 @@ export default class HistoryEntrust extends PureComponent  {
                         killData: arr,
                         offset: offsets
                     })
-                }else{
+                } else {
                     this.setState({
-                        balance:false
+                        balance: false
                     })
                 }
             }
@@ -217,36 +221,36 @@ export default class HistoryEntrust extends PureComponent  {
 
 
     killType = type => {
-        if(type === 1){
-            return(
-                <Text style={[styles.textPrice, {width: '15%', color:'#F6574D'}]}>买</Text>
+        if (type === 1) {
+            return (
+                <Text style={[styles.textPrice, {width: '15%', color: '#F6574D'}]}>买</Text>
             )
-        }else{
-            return(
-                <Text style={[styles.textPrice, {width: '15%', color:'#28D74E'}]}>卖</Text>
+        } else {
+            return (
+                <Text style={[styles.textPrice, {width: '15%', color: '#28D74E'}]}>卖</Text>
             )
         }
     };
 
     killStatus = status => {
-        if(status === 2){
-            return(
+        if (status === 2) {
+            return (
                 <Text style={[styles.textPrice, {width: '20%'}]}>已完成</Text>
             )
-        }else if(status === 3){
-            return(
+        } else if (status === 3) {
+            return (
                 <Text style={[styles.textPrice, {width: '20%'}]}>部分成交已撤销</Text>
             )
-        }else if(status === 4){
-            return(
+        } else if (status === 4) {
+            return (
                 <Text style={[styles.textPrice, {width: '20%'}]}>已撤销</Text>
             )
-        }else if(status === 1){
-            return(
+        } else if (status === 1) {
+            return (
                 <Text style={[styles.textPrice, {width: '20%'}]}>部分成交</Text>
             )
-        }else{
-            return(
+        } else {
+            return (
                 <Text style={[styles.textPrice, {width: '20%'}]}>未成交</Text>
             )
         }
@@ -255,38 +259,42 @@ export default class HistoryEntrust extends PureComponent  {
     revokeKill = entrustNum => {
 
         Alert.alert('温馨提醒', '是否撤销委托', [
-            {text: '取消', onPress: () => {}},
-            {text: '确定', onPress: () => {
+            {
+                text: '取消', onPress: () => {
+                }
+            },
+            {
+                text: '确定', onPress: () => {
                     this.setState({
-                        visible:true
+                        visible: true
                     });
                     //地址
                     let url = config.api.trades.exEntrust;
                     //参数
                     const actions = {
-                        entrustNums : entrustNum,
+                        entrustNums: entrustNum,
                     };
-                    const { toast } = this.refs;
+                    const {toast} = this.refs;
 
                     request.post(url, actions).then(responseText => {
 
-                        if(responseText.ok){//判断接口是否请求成功
+                        if (responseText.ok) {//判断接口是否请求成功
                             console.log('接口请求失败进入失败函数');
                             return;
                         }
 
-                        request.manyLogin(this.props,responseText);
+                        request.manyLogin(this.props, responseText);
 
                         this.setState({
-                            visible:false
+                            visible: false
                         });
 
-                        console.log("responseText",responseText);
-                        const { success, msg } = responseText;
+                        console.log("responseText", responseText);
+                        const {success, msg} = responseText;
 
-                        if(success){
+                        if (success) {
                             this.queryKill();
-                        }else{
+                        } else {
                             toast.show(msg, DURATION.LENGTH_SHORT);
                         }
                     }).catch(error => {
@@ -307,7 +315,7 @@ export default class HistoryEntrust extends PureComponent  {
         let num = new Number(item.value.entrustPrice);
         num = parseFloat(num).toFixed(this.state.KeepDecimalForCoin);
 
-        return(
+        return (
             <View style={styles.killView}>
                 <Text style={[styles.textPrice, {width: '25%'}]}>{time}</Text>
                 {this.killType(item.value.type)}
@@ -319,7 +327,7 @@ export default class HistoryEntrust extends PureComponent  {
     };
 
     renderEmpty = () => {
-        return(
+        return (
             <View style={styles.viewStyle3}>
                 <View style={styles.viewStyle4}>
                     <Text style={styles.textPrice}>亲,您还没有委托订单数据！</Text>
@@ -363,7 +371,7 @@ export default class HistoryEntrust extends PureComponent  {
                     </View>
                     <FlatList
                         style={{flex: 1, marginBottom: p(100)}}
-                        horizontal={false }
+                        horizontal={false}
                         data={this.state.killData}
                         renderItem={this.renderKillRow}
                         onEndReached={this.reachedKill}
@@ -377,9 +385,9 @@ export default class HistoryEntrust extends PureComponent  {
 
                 <Toast
                     ref="toast"
-                    style={{backgroundColor:'rgba(0,0,0,.6)'}}
+                    style={{backgroundColor: 'rgba(0,0,0,.6)'}}
                     position='top'
-                    textStyle={{color:'white'}}
+                    textStyle={{color: 'white'}}
                 />
 
                 <Loading visible={this.state.visible}/>
@@ -389,22 +397,22 @@ export default class HistoryEntrust extends PureComponent  {
 }
 
 const styles = StyleSheet.create({
-    viewStyle4:{
+    viewStyle4: {
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: p(200)
     },
-    viewStyle3:{
+    viewStyle3: {
         backgroundColor: '#e2e5ec',
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
     },
-    textStyle1:{
+    textStyle1: {
         color: '#FFF',
         fontSize: 12
     },
-    viewStyle2:{
+    viewStyle2: {
         width: p(140),
         height: p(40),
         backgroundColor: '#ff6722',
@@ -413,16 +421,16 @@ const styles = StyleSheet.create({
         borderRadius: p(10),
         marginBottom: p(20),
     },
-    textStyle:{
+    textStyle: {
         color: '#2d2d2d',
         fontSize: 12,
     },
-    viewStyle1:{
+    viewStyle1: {
         marginLeft: p(20),
         flexDirection: 'row',
         marginBottom: p(20),
     },
-    viewStyle0:{
+    viewStyle0: {
         justifyContent: 'space-between',
         flexDirection: 'row',
         width: width - p(20),
@@ -432,11 +440,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
-    textPrice:{
+    textPrice: {
         color: '#ACB3B9',
         textAlign: 'center'
     },
-    killView:{
+    killView: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
