@@ -1,9 +1,9 @@
 rootProject.name = 'testReactNativeApp'
 
-include ':react-native-update'
-project(':react-native-update').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-update/android')
-
 include ':app'
+
+include ':react-native-camera'
+project(':react-native-camera').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-camera/android')
 
 include ':react-native-i18n'
 project(':react-native-i18n').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-i18n/android')
@@ -13,3 +13,6 @@ project(':react-native-vector-icons').projectDir = new File(rootProject.projectD
 
 include ':react-native-image-picker'
 project(':react-native-image-picker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-image-picker/android')
+
+include ':react-native-update'
+project(':react-native-update').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-update/android')

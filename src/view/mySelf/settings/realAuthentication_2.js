@@ -108,7 +108,7 @@ export default class RealAuthentication_2 extends PureComponent {
                         <Text style={{marginTop: p(20), color: '#FFF'}}>
                             {I18n.t("zjleixing")}：
                             {
-                                this.state.cardType === 0 ?
+                                this.state.cardType === 0 || this.state.cardType === '0' ?
                                     I18n.t("shenfenzheng")
                                     :
                                     I18n.t("huzhao")

@@ -3,6 +3,7 @@ package com.testreactnativeapp;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.lwansbrough.RCTCamera.RCTCameraPackage;
 import cn.reactnative.modules.update.UpdatePackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -34,10 +35,10 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
               new MainReactPackage(),
-              new UpdatePackage(),
+            new RCTCameraPackage(),
+              new UpdatePackage(),//更新
               new RNI18nPackage(), // <-- Add it to the packages list
               new VectorIconsPackage(),//ioc
-
               new KChartsPackage(), //K线图
               new ImagePickerPackage()
       );

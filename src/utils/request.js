@@ -106,8 +106,12 @@ const request = function () {
         })
     };
     /*获取图片的函数*/
-    this.upImage = async function (url, formData) {
-        url = await this.joinParamsPost(url);
+    this.upImage = async function (url, formData, actions) {
+        url = await this.joinActionsPost(`${config.api.host}${url}`, actions);
+
+        console.log('图片获取地址 =>');
+        console.log(url);
+        console.log(actions);
 
         return fetch(url, {
             method: 'POST',
@@ -115,7 +119,15 @@ const request = function () {
                 'Content-Type': 'multipart/form-data',
             },
             body: formData,
-        }).then((response) => response.json()).catch(error => {
+        }).then((response) => {
+
+            if (!response.ok){
+                console.log('请求失败');
+                return {ok: true};
+            }
+
+            return response.json()
+        }).catch(error => {
             console.log(error);
             return {ok: true};
         })

@@ -16,8 +16,9 @@ import {
     Animated,
     Image
 } from 'react-native';
-import Camera from 'react-native-camera';
 import Icon from 'react-native-vector-icons/Ionicons';
+//import {RNCamera} from 'react-native-camera';
+import Camera from 'react-native-camera';
 
 import p from '../../../utils/tranfrom';
 
@@ -36,12 +37,8 @@ export default class CameraScanCode extends PureComponent {
 
     //真实的DOM加载完成后调用
     componentDidMount() {
-
         // this.animate();
-
         this.move();
-
-
     }
 
     //组件被移除后调用
@@ -84,16 +81,9 @@ export default class CameraScanCode extends PureComponent {
         ).start(() => this.move());
     }
 
-    callScan = data => {
-        let rsDate = data.data;
-        console.log("二维码扫描结果", rsDate);
-        const {params} = this.props.navigation.state;
-        params.getQRValue(rsDate);
-        this.props.navigation.goBack();
-    };
-
     // 渲染
     render() {
+        /*扫描二维码视图*/
         let scanArea = (
             <View style={styles.rectangleContainer}>
                 <View style={{
@@ -169,6 +159,7 @@ export default class CameraScanCode extends PureComponent {
 
         return (
             <View style={{flex: 1}}>
+                {/*标题*/}
                 <View style={styles.header}>
                     <TouchableOpacity
                         onPress={() => this.props.navigation.goBack(null)}
@@ -180,7 +171,7 @@ export default class CameraScanCode extends PureComponent {
                     <Text style={styles.headerTitle}>扫描二维码</Text>
                     <View style={styles.sty19}/>
                 </View>
-
+                {/*二维码扫描*/}
                 <Camera
                     aspect={Camera.constants.Aspect.fill}
                     barCodeTypes={[Camera.constants.BarCodeType.qr]}
@@ -189,9 +180,32 @@ export default class CameraScanCode extends PureComponent {
                 >
                     {scanArea}
                 </Camera>
+                {/*<RNCamera
+                    ref={ref => {
+                        this.camera = ref;
+                    }}
+                    style={styles.camera}
+                    permissionDialogTitle={'Permission to use camera'}
+                    permissionDialogMessage={'We need your permission to use your camera phone'}
+
+                    type={RNCamera.Constants.Type.back}
+                    flashMode={RNCamera.Constants.FlashMode.on}
+                    onBarCodeRead={this.onBarCodeRead}
+                >
+                    {scanArea}
+                </RNCamera>*/}
             </View>
         );
     }
+
+    //  识别二维码
+    onBarCodeRead = result => {
+        let {data} = result;
+        console.log("二维码扫描结果", data);
+        const {params} = this.props.navigation.state;
+        params.getQRValue(data);
+        this.props.navigation.goBack();
+    };
 }
 
 let styles = StyleSheet.create({

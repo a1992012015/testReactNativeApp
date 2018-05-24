@@ -191,6 +191,8 @@ class RealAuthentication_1 extends PureComponent {
 
         let url = '';
         let formData = new FormData();
+        let actions = {};
+        console.log('this.state.type', this.state.type);
 
         if (this.state.type === 1) {
             let picIDa2 = this.state.picIDa2;
@@ -204,11 +206,20 @@ class RealAuthentication_1 extends PureComponent {
             this.state.isCheck = true;
             for (let i = 0; i < picIDa2.length; i++) {
                 let file = {uri: picIDa2[i], type: 'multipart/form-data', name: 'image.jpg'};
-                formData.append('img' + (i + 1), file);
+                formData.append(`img(${i + 1})`, file);
             }
-
-            url = `${config.api.person.setRealName}?surname=${this.state.surname}&trueName=${this.state.trueName}&country=${this.state.country}&cardId=${this.state.cardId}&cardType=${this.state.type}&type=${this.state.type}&sex=${this.state.sex}`;
-
+            //地址
+            url = config.api.person.setRealName;
+            //参数
+            actions = {
+                surname: this.state.surname,
+                trueName: this.state.trueName,
+                country: this.state.country,
+                cardId: this.state.cardId,
+                cardType: this.state.type,
+                type: this.state.type,
+                sex: this.state.sex,
+            };
         } else {
             let picIDa1 = this.state.picIDa1;
 
@@ -221,28 +232,40 @@ class RealAuthentication_1 extends PureComponent {
 
             for (let i = 0; i < picIDa1.length; i++) {
                 let file = {uri: picIDa1[i], type: 'multipart/form-data', name: 'image.jpg'};
-                formData.append('img' + (i + 1), file);
+                //formData.append('img' + (i + 1), file);
+                formData.append(`img(${i + 1})`, file);
             }
-
-            url = `${config.api.person.setRealName}?surname=${this.state.surname}&trueName=${this.state.trueName}&country=${this.state.country0}&cardId=${this.state.cardId}&cardType=${this.state.type}&type=${this.state.type}`;
+            //地址
+            url = config.api.person.setRealName;
+            //参数
+            actions = {
+                surname: this.state.surname,
+                trueName: this.state.trueName,
+                country: this.state.country0,
+                cardId: this.state.cardId,
+                cardType: this.state.type,
+                type: this.state.type,
+                sex: null,
+            };
         }
 
         this.setState({
             visible: true
         });
 
-        request.upImage(url, formData).then(responseText => {
-
-            if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
-                return;
-            }
-
-            request.manyLogin(this.props, responseText);
+        request.upImage(url, formData, actions).then(responseText => {
 
             this.setState({
                 visible: false
             });
+
+            if (responseText.ok) {//判断接口是否请求成功
+                console.log('接口请求失败进入失败函数');
+                toast.show('提交失败', DURATION.LENGTH_SHORT);
+                return;
+            }
+
+            request.manyLogin(this.props, responseText);
 
             const {msg, success} = responseText;
 
@@ -272,7 +295,7 @@ class RealAuthentication_1 extends PureComponent {
         if (this.state.isCheck) {
             return;
         }
-        console.log('type=>', type,'step=>', step);
+        console.log('type=>', type, 'step=>', step);
         const options = {
             title: I18n.t('qxuanzhe'),
             cancelButtonTitle: I18n.t('quxiao'),

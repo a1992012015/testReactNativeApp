@@ -44,7 +44,7 @@ import Recommend from "./view/mySelf/recommend";
 import ConsDetail from "./view/notice/consDetail";
 import CodeBillFlow from "./view/assets/codeBillFlow";
 import TransQuotation from "./view/lobby/transQuotation";
-//import CameraScanCode from "./view/mySelf/currencyQR/cameraScanCode";
+import CameraScanCode from "./view/mySelf/currencyQR/cameraScanCode";
 
 const routeConfiguration = {
     /*入口*/
@@ -78,7 +78,7 @@ const routeConfiguration = {
     TurnoutCurrency: {screen: TurnoutCurrency},
     TurnoutCurrencyQRList: {screen: TurnoutCurrencyQRList},
     TurnoutCurrencyQR: {screen: TurnoutCurrencyQR},
-    //CameraScanCode: {screen: CameraScanCode},
+    CameraScanCode: {screen: CameraScanCode},
     Entrusted: {screen: Entrusted},
     ClosingRecord: {screen: ClosingRecord},
     CurrencyRen: {screen: CurrencyRen},
