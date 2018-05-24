@@ -224,14 +224,12 @@ class Business extends PureComponent {
             symbol: this.state.coinCode,
         };
 
-        request.post(url, actions).then(responseText => {
+        request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
-
-            request.manyLogin(this.props, responseText);
 
             if (responseText.obj) {
 
@@ -360,7 +358,7 @@ class Business extends PureComponent {
             period: this.state.time,
         };
 
-        request.post(url, actions).then(responseText => {
+        request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
@@ -417,7 +415,7 @@ class Business extends PureComponent {
         //地址
         let url = config.api.index.indexList;
 
-        request.post(url, {}).then(responseText => {
+        request.post(url, {}, this.props).then(responseText => {
 
             dispatch(homeLoop(responseText));
 
@@ -430,7 +428,7 @@ class Business extends PureComponent {
             period: this.state.time,
         };
 
-        request.post(url_K, actions).then(responseText => {
+        request.post(url_K, actions, this.props).then(responseText => {
 
             const {reqKLine} = responseText;
             let Kline = '';

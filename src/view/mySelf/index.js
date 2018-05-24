@@ -108,28 +108,25 @@ class myHome extends PureComponent {
     //
     upState = () => {
         let url = config.api.person.isRealUrl;
-        request.post(url).then(responseText => {
+
+        request.post(url, {}, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
             console.log('upState', responseText);
-            request.manyLogin(this.props, responseText).then(member => {
-                console.log('登陆判定结果', member);
-                if(member){
-                    const {obj} = responseText;
 
-                    store.update('member', {
-                        memberInfo: obj.user
-                    });
+            const {obj} = responseText;
 
-                    this.setState({
-                        memberInfo: obj.user,
-                        languageCode: obj.languageCode,
-                    })
-                }
+            store.update('member', {
+                memberInfo: obj.user
             });
+
+            this.setState({
+                memberInfo: obj.user,
+                languageCode: obj.languageCode,
+            })
         }).catch(error => {
             console.log('进入失败函数 =>', error);
         });

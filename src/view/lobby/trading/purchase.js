@@ -166,15 +166,13 @@ class Purchase extends PureComponent {
         };
         const {toast} = this.refs;
 
-        request.post(url, actions).then(responseText => {
+        request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 toast.show('接口请求失败', DURATION.LENGTH_SHORT);
                 return;
             }
-
-            request.manyLogin(this.props, responseText);
 
             if (responseText.obj) {
 
@@ -253,14 +251,13 @@ class Purchase extends PureComponent {
             };
             const {toast} = this.refs;
 
-            request.post(url, actions).then(responseText => {
+            request.post(url, actions, this.props).then(responseText => {
 
                 if (responseText.ok) {//判断接口是否请求成功
                     console.log('接口请求失败进入失败函数');
                     return;
                 }
 
-                request.manyLogin(this.props, responseText);
                 const {success, msg} = responseText;
 
                 if (success) {

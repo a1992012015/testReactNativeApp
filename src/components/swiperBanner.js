@@ -45,7 +45,7 @@ class SwiperBanner extends PureComponent {
         const {height} = this.props;
         const url = config.api.index.banner;
 
-        request.post(url, {}).then(response => {
+        request.post(url, {}, this.props).then(response => {
 
             if (response.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');

@@ -42,6 +42,7 @@ export default class IntoCurrency extends PureComponent {
     componentDidMount() {
         const {params} = this.props.navigation.state;
         console.log(params);
+
         this.setState({
             intoData: params.intoData,
             publicKey: params.intoData.publicKey
@@ -52,10 +53,16 @@ export default class IntoCurrency extends PureComponent {
 
     //生成币地址
     _createPublicKey = () => {
-        let url = `${config.api.currency.createPublicKey}?accountId=${this.state.intoData.id}`;
+        //地址
+        let url = config.api.currency.createPublicKey;
+        //参数
+        const actions = {
+            accountId: this.state.intoData.id,
+        };
+
         const {toast} = this.refs;
 
-        request.post(url).then(responseText => {
+        request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
@@ -63,7 +70,6 @@ export default class IntoCurrency extends PureComponent {
                 return;
             }
 
-            request.manyLogin(this.props, responseText);
             const {msg, obj, success} = responseText;
 
             if (success) {
@@ -77,18 +83,22 @@ export default class IntoCurrency extends PureComponent {
     };
     //获取币地址
     _getpublicKey = () => {
-        let url = `${config.api.currency.getPublicKey}?accountId=${this.state.intoData.id}`;
+        //地址
+        let url = config.api.currency.getPublicKey;
+        //参数
+        const actions = {
+            accountId: this.state.intoData.id,
+        };
+
         const {toast} = this.refs;
 
-        request.post(url).then(responseText => {
+        request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 toast.show('接口请求失败', DURATION.LENGTH_SHORT);
                 return;
             }
-
-            request.manyLogin(this.props, responseText);
         });
     };
 

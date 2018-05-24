@@ -16,37 +16,6 @@ import {NavigationActions, StackActions} from "react-navigation";
 import config from './config';
 
 const request = function () {
-    /*拼接post接口的参数*/
-    this.joinParamsPost = async function (params) {
-
-        let token = await store.get('member').then(member => member && member.token);
-        console.log('token=>', token);
-
-        let languages = await getLanguages().then(languages => languages);
-
-        if (languages[0].indexOf("zh") > -1) {
-            languages = 'zh_CN';
-        } else if (languages[0].indexOf("en") > -1) {
-            languages = 'en';
-        } else {
-            languages = 'en';
-        }
-        if (token) {
-            if (params.indexOf("?") >= 0) {
-                params += `&tokenId=${token}`;
-            } else {
-                params += `?tokenId=${token}`;
-
-            }
-        }
-        if (params.indexOf("?") >= 0) {
-            params += `&languages=${languages}`;
-        } else {
-            params += `?languages=${languages}`;
-        }
-
-        return params;
-    };
     /*POST参数拼接函数*/
     this.joinActionsPost = async function (url, actions) {
 
@@ -84,34 +53,49 @@ const request = function () {
         return url;
     };
     /*post请求*/
-    this.post = async function (url, actions) {
+    this.post = async function (url, actions, props) {
 
-        if (actions) {
-            console.log('进入参数拼接函数');
-            url = await this.joinActionsPost(`${config.api.host}${url}`, actions);
-        } else {
+        url = await this.joinActionsPost(`${config.api.host}${url}`, actions);
 
-            url = await this.joinParamsPost(`${config.api.host}${url}`);
-        }
         console.log(url);
+
         return fetch(url, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json;charset=utf-8',
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
-        }).then(response => response.json()).catch(error => {
+        }).then(response => {
+
+            if (!response.ok){
+                console.log('请求失败');
+                return {ok: true};
+            }
+
+            return response.json();
+        }).then(response => {
+
+            return this.manyLogin(props, response).then(msg => {
+
+                if(!msg){
+                    console.log('没有登陆！');
+                    return {ok: true};
+                }
+
+                return response;
+            }).catch(error => {
+                console.log(error);
+                return {ok: true};
+            });
+        }).catch(error => {
             console.log(error);
             return {ok: true};
         })
     };
     /*获取图片的函数*/
-    this.upImage = async function (url, formData, actions) {
-        url = await this.joinActionsPost(`${config.api.host}${url}`, actions);
+    this.upImage = async function (url, formData, actions, props) {
 
-        console.log('图片获取地址 =>');
-        console.log(url);
-        console.log(actions);
+        url = await this.joinActionsPost(`${config.api.host}${url}`, actions);
 
         return fetch(url, {
             method: 'POST',
@@ -126,7 +110,21 @@ const request = function () {
                 return {ok: true};
             }
 
-            return response.json()
+            return response.json();
+        }).then(response => {
+
+            return this.manyLogin(props, response).then(msg => {
+
+                if(!msg){
+                    console.log('没有登陆！');
+                    return {ok: true};
+                }
+
+                return response;
+            }).catch(error => {
+                console.log(error);
+                return {ok: true};
+            });
         }).catch(error => {
             console.log(error);
             return {ok: true};
@@ -137,11 +135,10 @@ const request = function () {
     this.manyLogin = async function (props, responseText) {
 
         console.log("服务器返回的数据------", responseText);
+        console.log("routeName------", routeName);
 
         let routeName = props.navigation.state.routeName;
         const {msg, success} = responseText;
-
-        console.log("routeName------", routeName);
 
         if (!success && (msg === "请先登录" || msg === "登录已超时" || msg === "未登录" || msg === "请登录或重新登录")) {
 

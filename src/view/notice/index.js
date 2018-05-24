@@ -73,7 +73,7 @@ export default class NewsList extends PureComponent {
             num: 999999,
         };
 
-        request.post(url, actions).then((responseText) => {
+        request.post(url, actions, this.props).then((responseText) => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
@@ -134,7 +134,7 @@ export default class NewsList extends PureComponent {
                 num: 999999,
             };
 
-            request.post(url, actions).then(responseText => {
+            request.post(url, actions, this.props).then(responseText => {
 
                 if (responseText.ok) {//判断接口是否请求成功
                     console.log('接口请求失败进入失败函数');

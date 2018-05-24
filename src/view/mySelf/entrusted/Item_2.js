@@ -68,7 +68,7 @@ export default class Item_2 extends PureComponent {
                 querypath: 'enter',
             };
 
-            request.post(url, actions).then(responseText => {
+            request.post(url, actions, this.props).then(responseText => {
 
                 if (responseText.ok) {//判断接口是否请求成功
                     console.log('接口请求失败进入失败函数');
@@ -79,7 +79,6 @@ export default class Item_2 extends PureComponent {
                 this.setState({
                     visible: false
                 });
-                request.manyLogin(this.props, responseText);
 
                 const {obj} = responseText;
 
@@ -138,15 +137,13 @@ export default class Item_2 extends PureComponent {
             querypath: 'enter',
         };
 
-        request.post(url, actions).then(responseText => {
+        request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 toast.show('接口请求失败', DURATION.LENGTH_SHORT);
                 return;
             }
-
-            request.manyLogin(this.props, responseText);
 
             this.setState({
                 visible: false

@@ -74,14 +74,13 @@ export default class MyNews extends PureComponent {
                 email: mobile,
             };
 
-            request.post(url, actions).then((responseText) => {
+            request.post(url, actions, this.props).then((responseText) => {
 
                 if (responseText.ok) {//判断接口是否请求成功
                     console.log('接口请求失败进入失败函数');
                     return;
                 }
 
-                request.manyLogin(this.props, responseText);
                 let data = responseText.rows;
                 if (data.length > 0) {
                     let dataBlob = [];
@@ -117,15 +116,15 @@ export default class MyNews extends PureComponent {
 
     pullUp = () => {
         if (this.pageIndex > 1) {
+            //地址
             let url = config.api.main.myMsg;
-            request.post(url).then((responseText) => {
+
+            request.post(url, {}, this.props).then((responseText) => {
 
                 if (responseText.ok) {//判断接口是否请求成功
                     console.log('接口请求失败进入失败函数');
                     return;
                 }
-
-                request.manyLogin(this.props, responseText);
 
                 const {obj, recordsTotal} = responseText;
 

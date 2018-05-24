@@ -68,15 +68,16 @@ export default class AddBankCard extends PureComponent {
             cityList: [],
             city: null
         });
+
         let url = config.api.main.province;
-        request.post(url).then(responseText => {
+
+        request.post(url, {}, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            request.manyLogin(this.props, responseText);
             console.log('responseText', responseText);
 
             const {obj} = responseText;
@@ -104,14 +105,14 @@ export default class AddBankCard extends PureComponent {
         }
 
         let url = `${config.api.main.city}${key}`;
-        request.post(url).then(responseText => {
+
+        request.post(url, {}, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            request.manyLogin(this.props, responseText);
             console.log('responseText', responseText);
 
             const {obj} = responseText;
@@ -138,14 +139,13 @@ export default class AddBankCard extends PureComponent {
         });
         let url = config.api.rmb.redisBank;
 
-        request.post(url).then(responseText => {
+        request.post(url, {}, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            request.manyLogin(this.props, responseText);
             console.log('responseTextBank', responseText);
 
             const {obj} = responseText;
@@ -213,17 +213,28 @@ export default class AddBankCard extends PureComponent {
         this.setState({
             visible: true
         });
-
-        let url = `${config.api.main.saveBank}?bankname=${this.state.bankName}&subBankNum=${this.state.subBank}&p1=${this.state.province}&c1=${this.state.city}&subBank=${this.state.subBank}&cardName=${this.state.cardName}&account=${this.state.account}&surName=${this.state.cardSurName}&trueName=${this.state.cardName}`;
-
-        request.post(url).then(responseText => {
+        //地址
+        let url = config.api.main.saveBank;
+        //参数
+        const actions = {
+            bankname: this.state.bankName,
+            subBankNum: this.state.subBank,
+            p1: this.state.province,
+            c1: this.state.city,
+            subBank: this.state.subBank,
+            cardName: this.state.cardName,
+            account: this.state.account,
+            surName: this.state.cardSurName,
+            trueName: this.state.cardName,
+        };
+        
+        request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            request.manyLogin(this.props, responseText);
             console.log('responseText', responseText);
             this.setState({
                 visible: false

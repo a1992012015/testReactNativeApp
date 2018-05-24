@@ -70,7 +70,7 @@ export default class ForgotPass extends PureComponent {
             email: this.state.email,
         };
 
-        request.post(url, actions).then((responseText) => {
+        request.post(url, actions, this.props).then((responseText) => {
 
             if (responseText.ok) {
                 console.log('请求接口失败');

@@ -46,9 +46,15 @@ export default class Address extends PureComponent {
     }
 
     getAddress = () => {
-        let url = `${config.api.currency.wallet}?offset=0&limit=10`;
+        //地址
+        let url = config.api.currency.wallet;
+        //参数
+        const actions = {
+            offset: 0,
+            limit: 0,
+        };
 
-        request.post(url).then(responseText => {
+        request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
@@ -57,8 +63,6 @@ export default class Address extends PureComponent {
                 this.props.navigation.goBack(null);
                 return;
             }
-
-            request.manyLogin(this.props, responseText);
 
             const {obj} = responseText;
 
@@ -158,15 +162,19 @@ export default class Address extends PureComponent {
             },
             {
                 text: '确定', onPress: () => {
-                    let url = `${config.api.currency.dlWallet}?id=${id}`;
-                    request.post(url).then(responseText => {
+                    //地址
+                    let url = config.api.currency.dlWallet;
+                    //参数
+                    const actions = {
+                        id: id,
+                    };
+
+                    request.post(url, actions, this.props).then(responseText => {
 
                         if (responseText.ok) {//判断接口是否请求成功
                             console.log('接口请求失败进入失败函数');
                             return;
                         }
-
-                        request.manyLogin(this.props, responseText);
 
                         const {msg} = responseText;
                         if (responseText.success) {

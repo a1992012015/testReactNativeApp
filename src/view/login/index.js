@@ -248,7 +248,7 @@ class Login extends PureComponent {
         console.log(this.state.pwd);
         console.log(actions);
 
-        request.post(loginURL, actions).then((responseText) => {
+        request.post(loginURL, actions, this.props).then((responseText) => {
 
             this.setState({//清除加载转圈
                 userIsLogin: false

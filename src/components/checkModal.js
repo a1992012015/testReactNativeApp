@@ -123,7 +123,7 @@ export default class CheckModal extends PureComponent {
         };
         console.log(actions);
 
-        request.post(url, actions).then((responseText) => {
+        request.post(url, actions, this.props).then((responseText) => {
             console.log("responseText", responseText);
 
             if (responseText.ok) {//判断接口是否请求成功
@@ -131,8 +131,6 @@ export default class CheckModal extends PureComponent {
                 toast.show('登陆失败', 5000);
                 return;
             }
-
-            request.manyLogin(this.props, responseText);
 
             if (responseText.success) {
                 this.setState({
@@ -161,16 +159,20 @@ export default class CheckModal extends PureComponent {
         if (!this.state.codeSent) {
             return;
         }
-
-        let url = `${config.api.login.getPhoneCode}?username=${this.state.username}&password=${this.state.password}&mobile=${this.state.telephone}`;
+        //地址
+        let url = config.api.login.getPhoneCode;
+        //参数
+        const actions = {
+            username: this.state.username,
+            password: this.state.password,
+            mobile: this.state.telephone,
+        };
 
         this.setState({
             flag: false,
         });
 
-        request.post(url).then((responseText) => {
-
-            request.manyLogin(this.props, responseText);
+        request.post(url, actions, this.props).then((responseText) => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
@@ -236,16 +238,20 @@ export default class CheckModal extends PureComponent {
             toast.show('请输入手机验证码', DURATION.LENGTH_SHORT);
             return;
         }
-        let url = "";
+        let url = '';
+        const actions = {};
         if (this.state.transPassURL) {
-            url = `${this.state.transPassURL}&valicode=${this.state.smsCode}`;
+            url = this.state.transPassURL;
+            //url = `${this.state.transPassURL}&valicode=${this.state.smsCode}`;
+            actions.valicode = this.state.smsCode;
         } else {
-            url = `${config.api.login.phoneAuth}?username=${this.state.username}&verifyCode=${this.state.smsCode}&password=${this.state.password}`;
+            url = config.api.login.phoneAuth;
+            actions.username = this.state.username;
+            actions.verifyCode = this.state.smsCode;
+            actions.password = this.state.password;
         }
 
-        request.post(url).then((responseText) => {
-
-            request.manyLogin(this.props, responseText);//验证登陆函数
+        request.post(url, actions, this.props).then((responseText) => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');

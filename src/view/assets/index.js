@@ -55,14 +55,12 @@ export default class SpotAssets extends PureComponent {
         //地址
         let url = config.api.person.isRealUrl;
 
-        request.post(url, {}).then(responseText => {
+        request.post(url, {}, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
-
-            request.manyLogin(this.props, responseText);
 
             console.log('获取资产=>', responseText);
 
@@ -127,17 +125,17 @@ export default class SpotAssets extends PureComponent {
         //地址
         let url = config.api.person.isRealUrl;
 
-        request.post(url, {}).then(responseText => {
+        request.post(url, {}, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            request.manyLogin(this.props, responseText);
             store.update('member', {
                 memberInfo: responseText.obj.user
             });
+
             this.setState({
                 member: responseText.obj.user,
                 languageCode: responseText.obj.languageCode,
@@ -155,14 +153,12 @@ export default class SpotAssets extends PureComponent {
             this.props.navigation.navigate('RechargeRMB', {member: this.state.member});
         } else {
             let url = config.api.currency.account;
-            request.post(url, {}).then(responseText => {
+            request.post(url, {}, this.props).then(responseText => {
 
                 if (responseText.ok) {//判断接口是否请求成功
                     console.log('接口请求失败进入失败函数');
                     return;
                 }
-
-                request.manyLogin(this.props, responseText);
 
                 let data = responseText.obj;
 
@@ -186,14 +182,12 @@ export default class SpotAssets extends PureComponent {
             //地址
             let url = config.api.currency.account;
 
-            request.post(url, {}).then(responseText => {
+            request.post(url, {}, this.props).then(responseText => {
 
                 if (responseText.ok) {//判断接口是否请求成功
                     console.log('接口请求失败进入失败函数');
                     return;
                 }
-
-                request.manyLogin(this.props, responseText);
 
                 let data = responseText.obj;
 

@@ -43,17 +43,23 @@ export default class CurrencyRen extends PureComponent {
     }
 
     getCurrencyRen = () => {
-        let url = `${config.api.currency.cunList}?transactionType=1&offset=0&limit=10`;
+        //地址
+        let url = config.api.currency.cunList;
         console.log('entrusURL', url);
+        //参数
+        const actions = {
+            transactionType: 1,
+            offset: 0,
+            limit: 10,
+        };
 
-        request.post(url).then(responseText => {
+        request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            request.manyLogin(this.props, responseText);
             console.log("responseText", responseText);
 
             const {obj} = responseText;
@@ -77,17 +83,22 @@ export default class CurrencyRen extends PureComponent {
 
     pullUP = () => {
         if (this.pageIndex > 1) {
-            let url = `${config.api.currency.cunList}?transactionType=1&offset=${(this.pageIndex - 1) * 10}&limit=10`;
+            //地址
+            let url = config.api.currency.cunList;
             console.log('ClosingURL', url);
+            //参数
+            const actions = {
+                transactionType: 1,
+                offset: (this.pageIndex - 1) * 10,
+                limit: 10,
+            };
 
-            request.post(url).then(responseText => {
+            request.post(url, actions, this.props).then(responseText => {
 
                 if (responseText.ok) {//判断接口是否请求成功
                     console.log('接口请求失败进入失败函数');
                     return;
                 }
-
-                request.manyLogin(this.props, responseText);
 
                 const {obj} = responseText;
                 let listLength = obj.rows.length;

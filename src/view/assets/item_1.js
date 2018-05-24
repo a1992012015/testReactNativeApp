@@ -80,14 +80,12 @@ export default class Item_1 extends PureComponent {
 
         console.log('entrusURL', url);
 
-        request.post(url, actions).then(responseText => {
+        request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
-
-            request.manyLogin(this.props, responseText);
 
             console.log("responseText", responseText);
 
@@ -121,14 +119,12 @@ export default class Item_1 extends PureComponent {
                 limit: 10,
             };
 
-            request.post(url, actions).then(responseText => {
+            request.post(url, actions, this.props).then(responseText => {
 
                 if (responseText.ok) {//判断接口是否请求成功
                     console.log('接口请求失败进入失败函数');
                     return;
                 }
-
-                request.manyLogin(this.props, responseText);
 
                 let listLength = responseText.obj.rows.length;
 
@@ -171,14 +167,12 @@ export default class Item_1 extends PureComponent {
             limit: 10,
             coinCode: this.state.coinCode,
         };
-        request.post(url, actions).then(responseText => {
+        request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
-
-            request.manyLogin(this.props, responseText);
 
             let data = responseText.obj.rows;
             let listLength = responseText.obj.rows.length;
@@ -211,14 +205,12 @@ export default class Item_1 extends PureComponent {
                 coinCode: this.state.coinCode,
             };
 
-            request.post(url, actions).then(responseText => {
+            request.post(url, actions, this.props).then(responseText => {
 
                 if (responseText.ok) {//判断接口是否请求成功
                     console.log('接口请求失败进入失败函数');
                     return;
                 }
-
-                request.manyLogin(this.props, responseText);
 
                 let listLength = responseText.obj.rows.length;
 

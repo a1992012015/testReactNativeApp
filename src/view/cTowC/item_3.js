@@ -75,9 +75,14 @@ export default class Item_3 extends PureComponent {
                 isType: 'sell',
             })
         }
-        let url = `${config.api.ctc.getc2cTransaction}?transactionNum=${transactionNum}`;
-        request.post(url).then(responseText => {
-            request.manyLogin(this.props, responseText);
+        //地址
+        let url = config.api.ctc.getc2cTransaction;
+        //参数
+        const actions = {
+            transactionNum: transactionNum,
+        };
+
+        request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');

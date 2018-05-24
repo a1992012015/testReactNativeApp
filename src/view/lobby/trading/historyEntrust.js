@@ -91,7 +91,7 @@ export default class HistoryEntrust extends PureComponent {
             };
             const {toast} = this.refs;
 
-            request.post(url, actions).then(responseText => {
+            request.post(url, actions, this.props).then(responseText => {
 
                 if (responseText.ok) {//判断接口是否请求成功
                     console.log('接口请求失败进入失败函数');
@@ -101,8 +101,6 @@ export default class HistoryEntrust extends PureComponent {
                 this.setState({
                     visible: false
                 });
-
-                request.manyLogin(this.props, responseText);
 
                 if (responseText.obj) {
                     let rows = responseText.obj.rows;
@@ -163,14 +161,13 @@ export default class HistoryEntrust extends PureComponent {
         };
         const {toast} = this.refs;
 
-        request.post(url, actions).then(responseText => {
+        request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            request.manyLogin(this.props, responseText);
             this.setState({
                 visible: false,
             });
@@ -276,14 +273,12 @@ export default class HistoryEntrust extends PureComponent {
                     };
                     const {toast} = this.refs;
 
-                    request.post(url, actions).then(responseText => {
+                    request.post(url, actions, this.props).then(responseText => {
 
                         if (responseText.ok) {//判断接口是否请求成功
                             console.log('接口请求失败进入失败函数');
                             return;
                         }
-
-                        request.manyLogin(this.props, responseText);
 
                         this.setState({
                             visible: false

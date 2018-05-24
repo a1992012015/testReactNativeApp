@@ -47,16 +47,16 @@ export default class IntoCurrencyList extends PureComponent {
     };
 
     pullDown = () => {
+        //地址
         let url = config.api.currency.account;
 
-        request.post(url).then(responseText => {
+        request.post(url, {}, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            request.manyLogin(this.props, responseText);
             console.log("responseText", responseText);
 
             let listData = [];

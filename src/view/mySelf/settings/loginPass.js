@@ -172,17 +172,21 @@ export default class LoginPass extends PureComponent {
             toast.show(I18n.t("newandold_no_null"), DURATION.LENGTH_SHORT);
             return;
         }
+        //地址
+        let url = config.api.person.loginPass;
+        //参数
+        const actions = {
+            oldPassWord: md5.md5(this.state.oldPassWord),
+            newPassWord: md5.md5(this.state.newPassWord),
+            reNewPassWord: md5.md5(this.state.reNewPassWord),
+        };
 
-        let url = `${config.api.person.loginPass}?oldPassWord=${md5.md5(this.state.oldPassWord)}&newPassWord=${md5.md5(this.state.newPassWord)}&reNewPassWord=${md5.md5(this.state.reNewPassWord)}`;
-
-        request.post(url).then(responseText => {
+        request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
-
-            request.manyLogin(this.props, responseText);
 
             if (responseText.success) {
                 Alert.alert(

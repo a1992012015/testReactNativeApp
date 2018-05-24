@@ -60,7 +60,8 @@ class SignUp extends PureComponent {
 
         //查询注册协议
         let url = config.api.login.regreg;
-        request.post(url).then(responseText => {
+
+        request.post(url, {}, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
@@ -124,15 +125,22 @@ class SignUp extends PureComponent {
             toast.show(I18n.t('agreement'), DURATION.LENGTH_SHORT);
             return;
         }
-
-        let signUrl = `${config.api.login.reg}?username=${this.state.data.telephone}&password=${md5.md5(this.state.data.password)}&registCode=${this.state.data.registCode}&referralCode=${this.state.data.referralCode}`;
+        //地址
+        let signUrl = config.api.login.reg;
         console.log('signUrl', signUrl);
+        //参数
+        const actions = {
+            username: this.state.data.telephone,
+            password: md5.md5(this.state.data.password),
+            registCode: this.state.data.registCode,
+            referralCode: this.state.data.referralCode,
+        };
 
         this.setState({
             userIsLogin: true
         });
 
-        request.post(signUrl).then(responseText => {
+        request.post(signUrl, actions, this.props).then(responseText => {
             console.log("responseText", responseText);
 
             if (responseText.ok) {

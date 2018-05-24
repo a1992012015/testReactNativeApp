@@ -44,14 +44,13 @@ export default class RealAuthentication_2 extends PureComponent {
     //真实结构渲染之后调用
     componentDidMount() {
         let url = config.api.person.realName;
-        request.post(url).then(responseText => {
+
+        request.post(url, {}, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
-
-            request.manyLogin(this.props, responseText);
 
             console.log('responseText', responseText);
             const {obj} = responseText;

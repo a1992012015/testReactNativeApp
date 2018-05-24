@@ -95,17 +95,22 @@ export default class Item_1 extends PureComponent {
         this.setState({
             loading: true
         });
+        //地址
+        let url = config.api.ctc.appCreateTransaction;
+        //参数
+        const actions = {
+            transactionType: 1,
+            transactionPrice: this.state.buyMoney,
+            transactionCount: this.state.buyNum,
+            coinCode: this.state.coinCode,
+        };
 
-        let url = `${config.api.ctc.appCreateTransaction}?transactionType=1&transactionPrice=${this.state.buyMoney}&transactionCount=${this.state.buyNum}&coinCode=${this.state.coinCode}`;
-
-        request.post(url).then(responseText => {
+        request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
-
-            request.manyLogin(this.props, responseText);
 
             this.setState({
                 loading: false

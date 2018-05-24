@@ -88,7 +88,7 @@ class Index extends PureComponent {
             this.handleData(IndexLoopReducer.homeData);
         }
 
-        this.pollingData();
+        //this.pollingData();
     }
 
     //组件接收到新的props时调用，并将其作为参数nextProps使用
@@ -113,7 +113,7 @@ class Index extends PureComponent {
         this.dexInter = setTimeout(() => {
             let URL = config.api.index.indexList;
 
-            request.post(URL, {}).then(responseText => {
+            request.post(URL, {}, this.props).then(responseText => {
 
                 if (responseText.ok) {//判断接口是否请求成功
                     console.log('接口请求失败进入失败函数');
@@ -318,7 +318,7 @@ class Index extends PureComponent {
                 }];
             }
         });
-        console.log(this);
+
         this.setState({
             areaList: areaData,
             headList: headData,
@@ -346,7 +346,7 @@ class Index extends PureComponent {
     queryIndex = () => {
         const {dispatch} = this.props;
         let URL = config.api.index.indexList;
-        request.post(URL, {}).then(responseText => {
+        request.post(URL, {}, this.props).then(responseText => {
 
             if (response.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
@@ -381,7 +381,7 @@ class Index extends PureComponent {
                 >
                     {/*首页轮播图*/}
                     <View style={{height: width * .45}}>
-                        <SwiperBanner height={width * .45}/>
+                        <SwiperBanner height={width * .45} {...this.props}/>
                     </View>
                     {/*公告信息*/}
                     <RollingCaption  {...this.props}/>

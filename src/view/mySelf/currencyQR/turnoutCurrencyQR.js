@@ -82,16 +82,19 @@ class TurnoutCurrencyQR extends PureComponent {
      * 获取提现费率
      */
     getTurCost = coinType => {
-        let url = `${config.api.currency.findCurry}?coinCode=${coinType}`;
+        //地址
+        let url = config.api.currency.findCurry;
+        //参数
+        const actions = {
+            coinCode: coinType,
+        };
 
-        request.post(url).then(responseText => {
+        request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
-
-            request.manyLogin(this.props, responseText);
 
             const {obj} = responseText;
             const {paceFeeRate, leastPaceNum, oneDayPaceNum} = obj;
@@ -140,21 +143,28 @@ class TurnoutCurrencyQR extends PureComponent {
             toast.show('单日转出最大限额' + this.state.maxTur + '个币', DURATION.LENGTH_SHORT);
             return;
         }
-
-        let url = `${config.api.currency.getbtc}?coinType=${this.state.coinType}&btcNum=${this.state.btcNum}&btcKey=${this.state.btcKey}&pacecurrecy=${this.state.feeTur}`;
+        //地址
+        let url = config.api.currency.getbtc;
+        //参数
+        const actions = {
+            coinType: this.state.coinType,
+            btcNum: this.state.btcNum,
+            btcKey: this.state.btcKey,
+            pacecurrecy: this.state.feeTur,
+        };
 
         if (this.state.valicode != null) {
-            url += `&valicode=${this.state.valicode}`;
+            //url += `&valicode=${this.state.valicode}`;
+            actions.valicode = this.state.valicode
         }
 
-        request.post(url).then(responseText => {
+        request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            request.manyLogin(this.props, responseText);
             const {success, obj, msg} = responseText;
 
             if (success) {

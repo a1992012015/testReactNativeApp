@@ -53,7 +53,7 @@ export default class AddAddress extends PureComponent {
 
         let typeUrl = config.api.currency.addAccount;
 
-        request.post(typeUrl).then(responseText => {
+        request.post(typeUrl, {}, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
@@ -63,7 +63,6 @@ export default class AddAddress extends PureComponent {
             this.setState({
                 visible: false
             });
-            request.manyLogin(this.props, responseText);
 
             const {obj} = responseText;
             let currencyList = [];
@@ -127,7 +126,7 @@ export default class AddAddress extends PureComponent {
             remark: this.state.remark,
         };
 
-        request.post(url, actions).then(responseText => {
+        request.post(url, actions, this.props).then(responseText => {
 
             this.setState({
                 visible: false
@@ -138,7 +137,6 @@ export default class AddAddress extends PureComponent {
                 return;
             }
 
-            request.manyLogin(this.props, responseText);
 
             const {msg} = responseText;
             if (responseText.success) {

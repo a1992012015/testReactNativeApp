@@ -84,19 +84,24 @@ export default class TransPassword extends PureComponent {
         if (!this.state.codeSent) {
             return;
         }
+        //地址
+        let url = config.api.person.transCode;
+        //参数
+        const actions = {
+            accountPassWord: md5.md5(this.state.accountPassWord),
+            reaccountPassWord: md5.md5(this.state.reaccountPassWord),
 
-        let url = `${config.api.person.transCode}?accountPassWord=${md5.md5(this.state.accountPassWord)}&reaccountPassWord=${md5.md5(this.state.reaccountPassWord)}`;
+        };
 
         console.log('获取验证码URL', url);
 
-        request.post(url).then((responseText) => {
+        request.post(url, actions, this.props).then((responseText) => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            request.manyLogin(this.props, responseText);
             console.log("responseText", responseText);
 
             const {msg} = responseText;
@@ -152,17 +157,22 @@ export default class TransPassword extends PureComponent {
             toast.show('请输入短信验证码', DURATION.LENGTH_SHORT);
             return;
         }
+        //地址
+        let url = config.api.person.transPass;
+        //参数
+        const actions = {
+            accountPassWord: md5.md5(this.state.accountPassWord),
+            reaccountPassWord: md5.md5(this.state.reaccountPassWord),
+            accountpwSmsCode: this.state.accountpwSmsCode,
+        };
 
-        let url = `${config.api.person.transPass}?accountPassWord=${md5.md5(this.state.accountPassWord)}&reaccountPassWord=${md5.md5(this.state.reaccountPassWord)}&accountpwSmsCode=${this.state.accountpwSmsCode}`;
-
-        request.post(url).then(responseText => {
+        request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            request.manyLogin(this.props, responseText);
             console.log('responseText', responseText);
             const {msg} = responseText;
 

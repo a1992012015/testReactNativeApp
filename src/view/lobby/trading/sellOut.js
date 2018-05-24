@@ -128,14 +128,13 @@ class SellOut extends PureComponent {
             symbol: this.state.coinCode,
         };
 
-        request.post(url, actions).then(responseText => {
+        request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            request.manyLogin(this.props, responseText);
             if (responseText.obj) {
                 let account = responseText.obj;
                 this.setState({
@@ -246,14 +245,13 @@ class SellOut extends PureComponent {
             console.log('url', url);
             const {toast} = this.refs;
 
-            request.post(url, actions).then(responseText => {
+            request.post(url, actions, this.props).then(responseText => {
 
                 if (responseText.ok) {//判断接口是否请求成功
                     console.log('接口请求失败进入失败函数');
                     return;
                 }
 
-                request.manyLogin(this.props, responseText);
                 console.log('responseText', responseText);
                 const {success, msg} = responseText;
                 const {queryCoinEntrust} = this.props;

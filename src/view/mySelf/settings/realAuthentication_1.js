@@ -253,7 +253,7 @@ class RealAuthentication_1 extends PureComponent {
             visible: true
         });
 
-        request.upImage(url, formData, actions).then(responseText => {
+        request.upImage(url, formData, actions, this.props).then(responseText => {
 
             this.setState({
                 visible: false
@@ -265,8 +265,6 @@ class RealAuthentication_1 extends PureComponent {
                 return;
             }
 
-            request.manyLogin(this.props, responseText);
-
             const {msg, success} = responseText;
 
             if (success) {
@@ -276,9 +274,10 @@ class RealAuthentication_1 extends PureComponent {
                     [{
                         text: I18n.t('queren'), onPress: () => {
                             const {params} = this.props.navigation.state;
+                            const {dispatch} = this.props;
+
                             params.infoAction();
                             this.props.navigation.goBack();
-                            const {dispatch} = this.props;
                             dispatch(InitUserInfo(this.props));
                         }
                     }]

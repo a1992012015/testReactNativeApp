@@ -52,7 +52,7 @@ export default class ClosingRecord extends PureComponent {
             phone: mobile,
         };
 
-        request.post(url, actions).then(responseText => {
+        request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
@@ -61,8 +61,6 @@ export default class ClosingRecord extends PureComponent {
                 //this.props.navigation.goBack(null);
                 return;
             }
-
-            request.manyLogin(this.props, responseText);
 
             let data = responseText.rows;
             let listLength = responseText.rows.length;
@@ -97,18 +95,22 @@ export default class ClosingRecord extends PureComponent {
     pullUP = () => {
         console.log("this.pageIndex", this.pageIndex);
         if (this.pageIndex > 1) {
-
-            let url = `${config.api.main.apptradeslist}?offset=${(this.pageIndex - 1) * 10}&limit=10`;
+            //地址
+            let url = config.api.main.apptradeslist;
             console.log('ClosingURL', url);
+            //参数
+            const actions = {
+                offset: (this.pageIndex - 1) * 10,
+                limit: 10,
+            };
 
-            request.post(url).then(responseText => {
+            request.post(url, actions, this.props).then(responseText => {
 
                 if (responseText.ok) {//判断接口是否请求成功
                     console.log('接口请求失败进入失败函数');
                     return;
                 }
 
-                request.manyLogin(this.props, responseText);
                 let listLength = responseText.rows.length;
 
                 console.log("responseText", responseText);

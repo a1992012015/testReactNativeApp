@@ -61,7 +61,7 @@ export default class CTwoC extends PureComponent {
         //查询币
         let url = config.api.ctc.c2c;
         console.log('================C2C页面数据=================');
-        request.post(url).then(responseText => {
+        request.post(url, {}, this.props).then(responseText => {
             console.log('================C2C页面数据=================');
             console.log(responseText);
 
@@ -69,8 +69,6 @@ export default class CTwoC extends PureComponent {
                 console.log('接口请求失败进入失败函数');
                 return;
             }
-
-            request.manyLogin(this.props, responseText);
 
             if (responseText.success) {
                 const {obj} = responseText;
@@ -90,10 +88,14 @@ export default class CTwoC extends PureComponent {
 
     //默认查询第一个币的信息
     c2cBuySellFunction = (coinCode) => {
-        let url = `${config.api.ctc.c2c}?coinCode=${coinCode}`;
+        //地址
+        let url = config.api.ctc.c2c;
+        //参数
+        const actions = {
+            coinCode: coinCode,
+        };
 
-        request.post(url).then(responseText => {
-            request.manyLogin(this.props, responseText);
+        request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');

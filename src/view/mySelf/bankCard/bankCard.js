@@ -61,14 +61,13 @@ export default class BankCard extends PureComponent {
             limit: 10,
         };
 
-        request.post(url, actions).then(responseText => {
+        request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            request.manyLogin(this.props, responseText);
             console.log("responseText", responseText);
 
             const {obj} = responseText;
@@ -151,7 +150,7 @@ export default class BankCard extends PureComponent {
                         id,
                     };
 
-                    request.post(URL, actions).then(responseText => {
+                    request.post(URL, actions, this.props).then(responseText => {
 
                         if (responseText.ok) {//判断接口是否请求成功
                             console.log('接口请求失败进入失败函数');
@@ -159,7 +158,6 @@ export default class BankCard extends PureComponent {
                         }
 
                         const {msg} = responseText;
-                        request.manyLogin(this.props, responseText);
 
                         if (!responseText.success) {
                             toast.show(msg, DURATION.LENGTH_SHORT);

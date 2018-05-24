@@ -12,19 +12,23 @@ import config from '../../utils/config';
 
 const request = new Request();
 
-export const InitUserInfo = (props) => {
+export const InitUserInfo = props => {
     return dispatch => {
-        let URL = `${config.api.person.isRealUrl}`;
+        let URL = config.api.person.isRealUrl;
+
         console.log(URL);
+
         dispatch(fetchIndexMiddleBanner());
-        request.post(URL).then((responseText) => {
+
+        request.post(URL, {}, props).then((responseText) => {
             console.log('用户资产', responseText);
-            request.manyLogin(props, responseText).then(member => {
-                console.log('登陆判定结果', member);
-                if(member){
-                    dispatch(myAssets(responseText))
-                }
-            });
+
+            if (responseText.ok) {
+                console.log('获取数据失败 => 地址 =>', URL);
+                return;
+            }
+
+            dispatch(myAssets(responseText));
         }).catch(error => {
             console.log(error);
         })

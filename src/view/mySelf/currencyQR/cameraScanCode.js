@@ -175,7 +175,7 @@ export default class CameraScanCode extends PureComponent {
                 <Camera
                     aspect={Camera.constants.Aspect.fill}
                     barCodeTypes={[Camera.constants.BarCodeType.qr]}
-                    onBarCodeRead={(data) => this.callScan(data)}
+                    onBarCodeRead={this.onBarCodeRead}
                     style={styles.camera}
                 >
                     {scanArea}

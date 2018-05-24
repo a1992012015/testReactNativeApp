@@ -94,14 +94,12 @@ class CurrentEntrust extends PureComponent {
             };
             const {toast} = this.refs;
 
-            request.post(url, actiosn).then(responseText => {
+            request.post(url, actiosn, this.props).then(responseText => {
 
                 if (responseText.ok) {//判断接口是否请求成功
                     console.log('接口请求失败进入失败函数');
                     return;
                 }
-
-                request.manyLogin(this.props, responseText);
 
                 this.setState({
                     visible: false,
@@ -165,14 +163,12 @@ class CurrentEntrust extends PureComponent {
         };
         const {toast} = this.refs;
 
-        request.post(url, actions).then(responseText => {
+        request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
-
-            request.manyLogin(this.props, responseText);
 
             this.setState({
                 visible: false
@@ -268,14 +264,12 @@ class CurrentEntrust extends PureComponent {
         };
         const {toast} = this.refs;
 
-        request.post(url, actions).then(responseText => {
+        request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 return;
             }
-
-            request.manyLogin(this.props, responseText);
 
             this.setState({
                 visible: false
@@ -342,18 +336,17 @@ class CurrentEntrust extends PureComponent {
                     };
                     const {toast} = this.refs;
 
-                    request.post(url, actions).then(responseText => {
+                    request.post(url, actions, this.props).then(responseText => {
 
                         if (responseText.ok) {//判断接口是否请求成功
                             console.log('接口请求失败进入失败函数');
                             return;
                         }
 
-                        request.manyLogin(this.props, responseText);
-
                         this.setState({
                             visible: false
                         });
+
                         const {queryCoinEntrust} = this.props;
                         const {msg} = responseText;
 
@@ -398,14 +391,13 @@ class CurrentEntrust extends PureComponent {
                     //地址
                     let url = config.api.trades.cancelAllExEntrust;
 
-                    request.post(url, {}).then(responseText => {
+                    request.post(url, {}, this.props).then(responseText => {
 
                         if (responseText.ok) {//判断接口是否请求成功
                             console.log('接口请求失败进入失败函数');
                             return;
                         }
 
-                        request.manyLogin(this.props, responseText);
                         const {success, msg} = responseText;
 
                         toast.show(msg, DURATION.LENGTH_SHORT);

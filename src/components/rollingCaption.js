@@ -50,7 +50,7 @@ export default class RollingCaption extends PureComponent {
             num: 10,
         };
 
-        request.post(url, actions).then(response => {
+        request.post(url, actions, this.props).then(response => {
 
             if (response.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');

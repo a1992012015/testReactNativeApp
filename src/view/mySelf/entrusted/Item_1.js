@@ -71,7 +71,7 @@ export default class Item_1 extends PureComponent {
 
             const {toast} = this.refs;
 
-            request.post(url, actions).then(responseText => {
+            request.post(url, actions, this.props).then(responseText => {
 
                 if (responseText.ok) {//判断接口是否请求成功
                     console.log('接口请求失败进入失败函数');
@@ -82,8 +82,6 @@ export default class Item_1 extends PureComponent {
                 this.setState({
                     visible: false
                 });
-
-                request.manyLogin(this.props, responseText);
 
                 const {obj} = responseText;
 
@@ -141,7 +139,7 @@ export default class Item_1 extends PureComponent {
             querypath: 'enter',
         };
 
-        request.post(url, actions).then(responseText => {
+        request.post(url, actions, this.props).then(responseText => {
 
 
             if (responseText.ok) {//判断接口是否请求成功
@@ -149,8 +147,6 @@ export default class Item_1 extends PureComponent {
                 toast.show('接口请求失败', DURATION.LENGTH_SHORT);
                 return;
             }
-
-            request.manyLogin(this.props, responseText);
 
             this.setState({
                 visible: false,
@@ -255,20 +251,26 @@ export default class Item_1 extends PureComponent {
      */
     refreshKill = () => {
         let offsetValue = this.state.offset * 10;
-
-        let url = `${config.api.trades.list}current&limit=${offsetValue}&offset=0&typeone=${this.state.initId}&sortOrder=asc&querypath=enter`;
         const {toast} = this.refs;
+        //地址
+        let url = config.api.trades.list;
+        //参数
+        const actions = {
+            type: 'current',
+            limit: offsetValue,
+            offset: 0,
+            typeone: this.state.initId,
+            sortOrder: 'asc',
+            querypath: 'enter',
+        };
 
-        request.post(url).then(responseText => {
+        request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 toast.show('接口请求失败', DURATION.LENGTH_SHORT);
                 return;
             }
-
-
-            request.manyLogin(this.props, responseText);
 
             this.setState({
                 visible: false,
@@ -323,10 +325,18 @@ export default class Item_1 extends PureComponent {
 
                     const {type, fixPriceCoinCode, coinCode, entrustPrice, entrustNum} = item;
                     const {toast} = this.refs;
+                    //地址
+                    let url = config.api.trades.cancelExEntrust;
+                    //参数
+                    const actions = {
+                        type: type,
+                        fixPriceCoinCode: fixPriceCoinCode,
+                        coinCode: coinCode,
+                        entrustPrice: entrustPrice,
+                        entrustNums: entrustNum,
+                    };
 
-                    let url = `${config.api.trades.cancelExEntrust}?type=${type}&fixPriceCoinCode=${fixPriceCoinCode}&coinCode=${coinCode}&entrustPrice=${entrustPrice}&entrustNums=${entrustNum}`;
-
-                    request.post(url).then(responseText => {
+                    request.post(url, actions, this.props).then(responseText => {
 
                         if (responseText.ok) {//判断接口是否请求成功
                             console.log('接口请求失败进入失败函数');
@@ -336,8 +346,8 @@ export default class Item_1 extends PureComponent {
 
                         const {msg, success} = responseText;
 
-                        request.manyLogin(this.props, responseText);
                         toast.show(msg, DURATION.LENGTH_SHORT);
+
                         if (success) {
                             this.refreshKill();
                         }
