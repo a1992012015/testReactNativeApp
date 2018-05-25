@@ -75,7 +75,7 @@ class SwiperBanner extends PureComponent {
                 <Swiper
                     autoplay={true}                                 //是否自动播放
                     dot={<View style={styles.dot}/>}                //未选中的圆点样式
-                    activeDot={<View style={styles.activeDot}/>}   //选中的小圆点样式
+                    activeDot={<View style={styles.activeDot}/>}    //选中的小圆点样式
                     loop={loop}                                     //滑动到最后一张是否继续滑动
                     autoplayTimeout={4}                             //每隔4秒切换
                     paginationStyle={{                              //小圆点的位置：距离底部10px
@@ -87,7 +87,7 @@ class SwiperBanner extends PureComponent {
                     {
                         images.map((item, index) => {
                             const {picturePath} = item;
-                            console.log(`${config.api.host}${picturePath}`);
+
                             return <Image
                                 key={index}
                                 source={{uri: `${config.api.host}${picturePath}`}}

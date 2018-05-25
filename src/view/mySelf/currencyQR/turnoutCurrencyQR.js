@@ -115,7 +115,7 @@ class TurnoutCurrencyQR extends PureComponent {
         const {toast} = this.refs;
 
         if (null === this.state.btcKey || '' === this.state.btcKey) {
-            toast.show('请选择钱包地址', DURATION.LENGTH_SHORT);
+            toast.show('请输入钱包地址', DURATION.LENGTH_SHORT);
             return;
         }
 
@@ -130,7 +130,7 @@ class TurnoutCurrencyQR extends PureComponent {
         }
 
         if (parseFloat(this.state.btcNum) > parseFloat(this.state.intoData.hotMoney)) {
-            toast.show('提现币不能大于可用币', DURATION.LENGTH_SHORT);
+            toast.show('提币不能大于可用币', DURATION.LENGTH_SHORT);
             return;
         }
 
@@ -316,7 +316,7 @@ class TurnoutCurrencyQR extends PureComponent {
                         <View style={styles.inputSty}>
                             <TextInput
                                 underlineColorAndroid='transparent'
-                                placeholder={'请输入提现数量'}
+                                placeholder={'请输入提币数量'}
                                 clearButtonMode={'while-editing'}
                                 placeholderTextColor={'#B0B0B0'}
                                 selectionColor={"#D95411"}

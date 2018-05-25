@@ -51,7 +51,6 @@ class Business extends PureComponent {
     constructor(props) {
         super(props);
         // 初始状态
-        console.log('输出怀疑变量0');
         this.state = {
             areaList: [],
             headList: [],
@@ -65,7 +64,8 @@ class Business extends PureComponent {
             itemText: 'CNY',
             businessData: null,
             isLogin: false,
-            coinCode: null,
+            coinCode: null,//默认显示的界面
+            //coinCode: 'BTC_LOCK',//默认显示的界面
             balance: true,
             personal: {
                 available: 0.00,
@@ -98,6 +98,7 @@ class Business extends PureComponent {
 
         if (this.props.tabTitle) {
             let coinCodes = this.props.tabTitle.split("_");
+
             this.setState({
                 coinCode: this.props.tabTitle,
                 itemText: coinCodes[1],
@@ -147,7 +148,7 @@ class Business extends PureComponent {
 
         const {TradingReducer, IndexLoopReducer, HomeReducer} = props;
 
-        if (!IndexLoopReducer.homeLoading && IndexLoopReducer.homeData) {
+        if (!IndexLoopReducer.homeLoading && IndexLoopReducer.homeData) {//修改默认显示
             this.coreData(IndexLoopReducer.homeData);
         }
 
@@ -176,6 +177,7 @@ class Business extends PureComponent {
                 let sell = [];
                 let buy = [];
 
+                //计算卖的数据
                 if (asks.price) {
                     let sellLength = asks.price.length < 5 ? asks.price.length : 7;
                     for (let i = sellLength; i >= 0; i--) {
@@ -185,6 +187,7 @@ class Business extends PureComponent {
                         });
                     }
                 }
+                //计算买的数据
                 if (bids.price) {
                     let buyLength = bids.price.length < 5 ? bids.price.length : 7;
                     for (let j = 0; j <= buyLength; j++) {
@@ -206,6 +209,8 @@ class Business extends PureComponent {
                     totalAmount: this.state.businessData && parseFloat(this.splitData(this.state.businessData)),
                     priceHigh: coinData.priceHigh,//最高
                 });
+            } else {
+
             }
         }
     }
@@ -264,6 +269,7 @@ class Business extends PureComponent {
 
                 if (index === 0 && this.twoLoad === 1) {
                     coinCodeArray = item.coinCode.split("_");
+
                     this.state.coinCode = item.coinCode;
                 }
 
@@ -273,13 +279,13 @@ class Business extends PureComponent {
                     headData.push(coinCode);
                 }
 
-                if (areaData[`${coinCode}`]) {
-                    areaData[`${coinCode}`].push({
+                if (areaData[coinCode]) {
+                    areaData[coinCode].push({
                         key: item.coinCode,
                         value: item
                     });
                 } else {
-                    areaData[`${coinCode}`] = [{
+                    areaData[coinCode] = [{
                         key: item.coinCode,
                         value: item
                     }];
@@ -298,9 +304,9 @@ class Business extends PureComponent {
         }
 
         this.setState({
-            areaList: areaData,
-            headList: headData,
-            indexData: areaData[this.state.itemText],
+            areaList: areaData,//顶部切换币种列表
+            headList: headData,//顶部切换币种列表 => 大类
+            //indexData: areaData[this.state.itemText],
             businessData: businessData,
         });
     };
@@ -502,7 +508,7 @@ class Business extends PureComponent {
                                     (() => {
                                         const {KCharts} = NativeModules;
                                         const {kchart} = KCharts;
-                                        console.log(this.state.coinCode);
+
                                         kchart(this.state.coinCode, page => {
                                             this.setState({
                                                 page: page,

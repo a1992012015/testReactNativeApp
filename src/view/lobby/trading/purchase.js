@@ -347,6 +347,7 @@ class Purchase extends PureComponent {
             >
                 <View style={styles.container}>
                     <View style={{marginRight: p(20), alignItems: 'center'}}>
+                        {/*委托价格*/}
                         <View style={styles.inputView}>
                             <TextInput
                                 ref="ref_price"
@@ -360,7 +361,7 @@ class Purchase extends PureComponent {
                                 value={this.state.entrustPrice.toString()}
                                 onChangeText={text => {
                                     if (text === "" || text === null || /\s/.exec(text) !== null || isNaN(text)) {
-                                        text = 0;
+                                        text = '';
                                     }
 
                                     this.calculation(text);
@@ -368,6 +369,7 @@ class Purchase extends PureComponent {
                             />
                             <Text style={{fontSize: p(24)}}>{currName[1]}</Text>
                         </View>
+                        {/*委托数量*/}
                         <View style={styles.inputView}>
                             <TextInput
                                 ref="ref_count"
@@ -382,15 +384,21 @@ class Purchase extends PureComponent {
                                 style={styles.inputTextView}
                                 onChangeText={(text) => {
                                     if (text === "" || text === null || /\s/.exec(text) !== null || isNaN(text)) {
-                                        text = 0;
+                                        text = '';
                                     }
 
                                     if (parseFloat(text) < 0) {
-                                        text = 0;
+                                        text = '';
                                         toast.show("请输入正确的委托数量", DURATION.LENGTH_SHORT);
                                     }
 
-                                    let turnovers = parseFloat(text) * parseFloat(this.state.entrustPrice);
+                                    let turnovers;
+                                    if (text === '' || this.state.entrustPrice === '') {
+                                        turnovers = 0;
+                                    } else {
+                                        turnovers = parseFloat(text) * parseFloat(this.state.entrustPrice);
+                                    }
+
                                     let services = turnovers * parseFloat(this.state.buyFeeRate) / 100;
 
                                     this.setState({
@@ -412,6 +420,7 @@ class Purchase extends PureComponent {
                             />
                             <Text style={{fontSize: p(24)}}>{currName[0]}</Text>
                         </View>
+                        {/*总价*/}
                         <View style={styles.inputView}>
                             <TextInput
                                 underlineColorAndroid='transparent'
@@ -426,12 +435,13 @@ class Purchase extends PureComponent {
                             />
                             <Text style={{fontSize: p(24)}}>{currName[1]}</Text>
                         </View>
+                        {/*提示文字*/}
                         <Text style={{
                             fontSize: p(22),
                             marginVertical: p(20),
                             width: width * .44
                         }}>{I18n.t("jiaoyitishi")}</Text>
-
+                        {/*交易按钮*/}
                         <TouchableOpacity
                             onPress={() => {
                                 this.purchase()
@@ -447,7 +457,7 @@ class Purchase extends PureComponent {
                         >
                             <Text style={{color: '#FFF'}}>{I18n.t("spotbuy")}</Text>
                         </TouchableOpacity>
-
+                        {/*显示资产*/}
                         <View style={{
                             backgroundColor: '#FFFFFF',
                             width: width * .45,
@@ -458,7 +468,9 @@ class Purchase extends PureComponent {
                         </View>
                     </View>
                     <View style={{height: height * .8, backgroundColor: '#ccc', width: StyleSheet.hairlineWidth}}/>
+
                     <View style={{marginLeft: p(20), alignItems: 'center', paddingVertical: p(10)}}>
+                        {/*单价和数量的标题*/}
                         <TouchableOpacity
                             style={styles.panelView}
                         >
@@ -469,6 +481,7 @@ class Purchase extends PureComponent {
                                 <Text style={[styles.textPriceB, {color: '#5f5f5f'}]}>数量</Text>
                             </View>
                         </TouchableOpacity>
+                        {/*卖出*/}
                         <View style={{height: height * .31}}>
                             <FlatList
                                 horizontal={false}
@@ -479,6 +492,7 @@ class Purchase extends PureComponent {
                                 keyExtractor={(item, index) => index.toString()}
                             />
                         </View>
+                        {/*中间价*/}
                         <TouchableOpacity
                             onPress={() => {
                                 this.calculation(tradingData.priceNew + "")
@@ -500,6 +514,7 @@ class Purchase extends PureComponent {
                                 {tradingData ? tradingData.priceNew.toFixed(this.state.KeepDecimalForCoin) : ''}
                             </Text>
                         </TouchableOpacity>
+                        {/*买入*/}
                         <View style={{height: height * .31}}>
                             <FlatList
                                 horizontal={false}
@@ -511,7 +526,9 @@ class Purchase extends PureComponent {
                             />
                         </View>
                     </View>
+                    {/*加载动画*/}
                     <Loading visible={this.state.visible}/>
+                    {/*提示窗*/}
                     <Toast
                         ref="toast"
                         style={{backgroundColor: 'rgba(0,0,0,.6)'}}
@@ -527,11 +544,17 @@ class Purchase extends PureComponent {
         const {toast} = this.refs;
 
         if (parseFloat(text) < 0) {
-            text = 0;
+            text = '';
             toast.show("请输入正确的委托价格", DURATION.LENGTH_SHORT);
         }
 
-        let turnovers = parseFloat(text) * parseFloat(this.state.entrustCount);
+        let turnovers;
+        if (text === '' || this.state.entrustCount === '') {
+            turnovers = 0;
+        } else {
+            turnovers = parseFloat(text) * parseFloat(this.state.entrustCount);
+        }
+
         let services = turnovers * parseFloat(this.state.buyFeeRate) / 100;
 
         this.setState({

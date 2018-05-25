@@ -378,8 +378,9 @@ class SellOut extends PureComponent {
                                 value={this.state.entrustPrice.toString()}
                                 onChangeText={text => {
                                     if (text === "" || text === null || /\s/.exec(text) !== null || isNaN(text)) {
-                                        text = 0;
+                                        text = '';
                                     }
+
                                     this.calculation(text);
                                 }}
                             />
@@ -399,15 +400,21 @@ class SellOut extends PureComponent {
                                 style={styles.inputTextView}
                                 onChangeText={text => {
                                     if (text === "" || text === null || /\s/.exec(text) !== null || isNaN(text)) {
-                                        text = 0;
+                                        text = '';
                                     }
 
                                     if (parseFloat(text) < 0) {
-                                        text = 0;
+                                        text = '';
                                         toast.show("请输入正确的委托数量", DURATION.LENGTH_SHORT);
                                     }
 
-                                    let turnovers = parseFloat(text) * parseFloat(this.state.entrustPrice);
+                                    let turnovers;
+                                    if (text === '' || this.state.entrustPrice === '') {
+                                        turnovers = 0;
+                                    } else {
+                                        turnovers = parseFloat(text) * parseFloat(this.state.entrustPrice);
+                                    }
+
                                     let services = turnovers * parseFloat(this.state.buyFeeRate) / 100;
 
                                     this.setState({
@@ -528,11 +535,17 @@ class SellOut extends PureComponent {
         const {toast} = this.refs;
 
         if (parseFloat(text) < 0) {
-            text = 0;
+            text = '';
             toast.show("请输入正确的委托价格", DURATION.LENGTH_SHORT);
         }
 
-        let turnovers = parseFloat(text) * parseFloat(this.state.entrustCount);
+        let turnovers;
+        if (text === '' || this.state.entrustCount === '') {
+            turnovers = 0;
+        } else {
+            turnovers = parseFloat(text) * parseFloat(this.state.entrustCount);
+        }
+
         let services = turnovers * parseFloat(this.state.buyFeeRate) / 100;
 
         this.setState({

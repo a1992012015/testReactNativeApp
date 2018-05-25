@@ -79,7 +79,7 @@ export default {
     baocun: '提交',
     exception: '服务器异常，请稍后访问！',
     exceptionLogin: '请登录后访问！',
-    agreement: '请先阅读注册服务协议！',
+    agreement: '请先阅读用户服务协议！',
     xingshi: '姓氏',
     xingshishuru: '请输入姓氏',
     mingzi: '名字',
