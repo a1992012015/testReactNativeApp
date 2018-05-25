@@ -97,7 +97,6 @@ export default class IntoCurrency extends PureComponent {
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
                 toast.show('接口请求失败', DURATION.LENGTH_SHORT);
-                return;
             }
         });
     };
@@ -143,7 +142,7 @@ export default class IntoCurrency extends PureComponent {
                         borderWidth: StyleSheet.hairlineWidth,
                         borderColor: '#565A5D',
                         padding: p(20),
-                        backgroundColor: '#313840'
+                        backgroundColor: '#313840',
                     }}>
                         <Text style={styles.textPrice}>钱包地址:</Text>
 
@@ -181,12 +180,19 @@ export default class IntoCurrency extends PureComponent {
                                         <Text style={styles.textPrice}>{I18n.t('fuzhi')}</Text>
                                     </TouchableOpacity>
                                     {/*显示二维码*/}
-                                    <QRCode
-                                        value={this.state.publicKey}
-                                        size={p(300)}
-                                        bgColor='#252932'
-                                        fgColor='white'
-                                    />
+                                    <View style={{
+                                        width: p(310),
+                                        borderColor: '#FFFFFF',
+                                        borderWidth: p(5),
+                                    }}>
+                                        <QRCode
+                                            value={this.state.publicKey}
+                                            size={p(300)}
+                                            bgColor='#000000'
+                                            fgColor='white'
+                                        />
+                                    </View>
+
                                 </View>
                         }
                     </View>
@@ -264,5 +270,6 @@ let styles = StyleSheet.create({
         width: p(100),
         alignItems: 'center',
         borderRadius: p(10),
+        marginBottom: p(10),
     }
 });

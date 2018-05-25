@@ -14,7 +14,7 @@ import {
     TouchableOpacity,
     TextInput,
     Alert
-} from 'react-native' ;
+} from 'react-native';
 import store from 'react-native-simple-store';
 import {NavigationActions, StackActions} from 'react-navigation';
 import Toast, {DURATION} from 'react-native-easy-toast';
@@ -50,6 +50,7 @@ export default class LoginPass extends PureComponent {
             type: 0,
             user: '',
             transPassURL: null,//验证码请求地址
+            actions: null,//需要传递下去的参数
         };
     }
 
@@ -94,7 +95,7 @@ export default class LoginPass extends PureComponent {
         });
     };
     //修改配置
-    _toMain = (responseText, transPassURL) => {
+    _toMain = (responseText, transPassURL, actions) => {
 
         const {obj, msg} = responseText;
         const {toast} = this.refs;
@@ -107,7 +108,8 @@ export default class LoginPass extends PureComponent {
                     checkOpen: true,
                     type: 2,
                     user: obj,
-                    transPassURL: transPassURL
+                    transPassURL: transPassURL,
+                    actions: actions,
                 })
             } else if (phoneState === 1 && googleState === 0) {
                 //手机认证
@@ -115,7 +117,8 @@ export default class LoginPass extends PureComponent {
                     checkOpen: true,
                     type: 0,
                     user: obj,
-                    transPassURL: transPassURL
+                    transPassURL: transPassURL,
+                    actions: actions,
                 })
             } else if (phoneState === 0 && googleState === 1) {
                 //谷歌认证
@@ -123,7 +126,8 @@ export default class LoginPass extends PureComponent {
                     checkOpen: true,
                     type: 1,
                     user: obj,
-                    transPassURL: transPassURL
+                    transPassURL: transPassURL,
+                    actions: actions,
                 })
             } else {
                 toast.show(msg, DURATION.LENGTH_SHORT);
@@ -188,15 +192,26 @@ export default class LoginPass extends PureComponent {
                 console.log('接口请求失败进入失败函数');
                 return;
             }
-
-            if (responseText.success) {
+            console.log(responseText);
+            if (responseText.success) {//false 需要验证 teur 不需要验证
                 Alert.alert(
                     '提示',
                     '登录密码修改成功',
-                    [{text: '确认', onPress: () => this.saveUser()}]
+                    [{
+                        text: '确认', onPress: () => {
+                            store.delete('member');
+
+                            const resetAction = StackActions.reset({
+                                index: 0,
+                                actions: [NavigationActions.navigate({routeName: 'TabBar'})],
+                            });
+
+                            this.props.navigation.dispatch(resetAction);
+                        }
+                    }]
                 );
             } else {
-                this._toMain(responseText, url);
+                this._toMain(responseText, url, actions);
             }
         });
     };
@@ -296,6 +311,7 @@ export default class LoginPass extends PureComponent {
                     saveUser={this.saveUser}
                     click={this._click}
                     transPassURL={this.state.transPassURL}
+                    action={this.state.actions}
                 />
                 {/*提示窗组件*/}
                 <Toast

@@ -87,8 +87,8 @@ class Index extends PureComponent {
         if (!IndexLoopReducer.homeLoading) {
             this.handleData(IndexLoopReducer.homeData);
         }
-
-        this.pollingData();
+        //轮询拿到首页数据
+        //this.pollingData();
     }
 
     //组件接收到新的props时调用，并将其作为参数nextProps使用

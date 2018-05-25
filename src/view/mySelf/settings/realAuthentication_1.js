@@ -123,6 +123,18 @@ class RealAuthentication_1 extends PureComponent {
             picIDa23: config.api.host + 'static/dist/img/idetify/passport-h.jpg',
             isCheck: false,
             visible: false,
+            actions: {
+                within: {//国内
+                    just: false,//正面
+                    Back: false,//背面
+                    hold: false,//手持
+                },
+                abroad: {//国外
+                    just: false,
+                    Back: false,
+                    hold: false,
+                }
+            },
         };
 
         this.realtype = [{
@@ -141,7 +153,7 @@ class RealAuthentication_1 extends PureComponent {
             value: I18n.t('nv'),
         }]
     }
-
+    //提交按钮
     _tarnAuthentication = () => {
         const {toast} = this.refs;
 
@@ -198,10 +210,9 @@ class RealAuthentication_1 extends PureComponent {
             let picIDa2 = this.state.picIDa2;
 
             if (picIDa2.length < 3) {
-                toast.show(I18n.t('xztupian'), DURATION.LENGTH_SHORT);
+                this.magShow(1);
                 return;
             }
-
 
             this.state.isCheck = true;
             for (let i = 0; i < picIDa2.length; i++) {
@@ -224,7 +235,7 @@ class RealAuthentication_1 extends PureComponent {
             let picIDa1 = this.state.picIDa1;
 
             if (picIDa1.length < 3) {
-                toast.show(I18n.t('xztupian'), DURATION.LENGTH_SHORT);
+                this.magShow(0);
                 return;
             }
 
@@ -288,6 +299,33 @@ class RealAuthentication_1 extends PureComponent {
             this.state.isCheck = false;
         })
     };
+    //图片是否上传的提示方式
+    magShow = picIDa => {
+        const {toast} = this.refs;
+        if(picIDa === 0){
+            const {actions} = this.state;
+            const {within} = actions;
+            const {just, Back, hold} = within;
+            if(!just){
+                toast.show('请上传证件正面照', DURATION.LENGTH_SHORT);
+            }else if(!Back){
+                toast.show('请上传证件背面照', DURATION.LENGTH_SHORT);
+            }else if(!hold){
+                toast.show('请上传证件手持照', DURATION.LENGTH_SHORT);
+            }
+        }else{
+            const {actions} = this.state;
+            const {abroad} = actions;
+            const {just, Back, hold} = abroad;
+            if(!just){
+                toast.show('请上传证件正面照', DURATION.LENGTH_SHORT);
+            }else if(!Back){
+                toast.show('请上传证件背面照', DURATION.LENGTH_SHORT);
+            }else if(!hold){
+                toast.show('请上传证件手持照', DURATION.LENGTH_SHORT);
+            }
+        }
+    };
     //图片提交方法
     choiceImage = (type, step) => {
 
@@ -326,16 +364,25 @@ class RealAuthentication_1 extends PureComponent {
                 if (type === 0) {
 
                     if (step === 1) {
+                        const {actions} = this.state;
+                        actions.within.just = true;
                         this.setState({
-                            picIDa11: source
+                            picIDa11: source,
+                            actions,
                         });
                     } else if (step === 2) {
+                        const {actions} = this.state;
+                        actions.within.Back = true;
                         this.setState({
-                            picIDa12: source
+                            picIDa12: source,
+                            actions,
                         });
                     } else {
+                        const {actions} = this.state;
+                        actions.within.hold = true;
                         this.setState({
-                            picIDa13: source
+                            picIDa13: source,
+                            actions,
                         });
                     }
 
@@ -348,14 +395,20 @@ class RealAuthentication_1 extends PureComponent {
                 } else {
 
                     if (step === 1) {
+                        const {actions} = this.state;
+                        actions.abroad.just = true;
                         this.setState({
                             picIDa21: source
                         });
                     } else if (step === 2) {
+                        const {actions} = this.state;
+                        actions.abroad.Back = true;
                         this.setState({
                             picIDa22: source
                         });
                     } else {
+                        const {actions} = this.state;
+                        actions.abroad.hold = true;
                         this.setState({
                             picIDa23: source
                         });
@@ -369,6 +422,7 @@ class RealAuthentication_1 extends PureComponent {
                 }
             }
 
+            console.log(this.state.actions);
             this.state.isCheck = false;
         });
 

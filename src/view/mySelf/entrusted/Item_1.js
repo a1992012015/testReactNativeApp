@@ -234,6 +234,7 @@ export default class Item_1 extends PureComponent {
                     ListEmptyComponent={this.renderEmpty}
                     refreshing={false}
                     onRefresh={() => this.entrustList}
+                    keyExtractor={(item, index) => index.toString()}
                 />
                 <Toast
                     ref="toast"
@@ -313,10 +314,7 @@ export default class Item_1 extends PureComponent {
     //撤销委托
     revokeKill = (item) => {
         Alert.alert('温馨提醒', '是否撤销委托', [
-            {
-                text: '取消', onPress: () => {
-                }
-            },
+            {text: '取消', onPress: () => {}},
             {
                 text: '确定', onPress: () => {
                     this.setState({

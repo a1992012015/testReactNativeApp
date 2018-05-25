@@ -245,8 +245,9 @@ export default class CheckModal extends PureComponent {
 
         if (this.state.transPassURL) {
             url = this.state.transPassURL;
-            //url = `${this.state.transPassURL}&valicode=${this.state.smsCode}`;
+            const {action} = this.props;
             actions.valicode = this.state.smsCode;
+            Object.assign(actions, action);
         } else {
             url = config.api.login.phoneAuth;
             actions.username = this.state.username;
