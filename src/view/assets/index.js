@@ -310,9 +310,9 @@ export default class SpotAssets extends PureComponent {
                         <ScrollView style={{marginBottom: !this.state.canBack ? p(360) : p(1)}}>
                             {
                                 this.state.coinAccount.map((item, i) => {
-                                    console.log(item)
-                                    const {moneyAndCoin, coinCode, name, hotMoney, coldMoney, keepDecimalForCoin, picturePath} = item;
-                                    console.log(keepDecimalForCoin)
+                                    const {moneyAndCoin, coinCode, name, hotMoney, coldMoney, picturePath} = item;
+                                    const keepDecimalForCoin = 8;
+                                    console.log('item对象的属性，作用为保留几位小数 => 因为没有数据 => 全部暂时显示为8 =>', keepDecimalForCoin);
                                     return (
                                         <View key={`ScrollView${i}`}>
                                             {

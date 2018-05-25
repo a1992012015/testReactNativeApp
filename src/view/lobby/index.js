@@ -65,7 +65,6 @@ class Business extends PureComponent {
             businessData: null,
             isLogin: false,
             coinCode: null,//默认显示的界面
-            //coinCode: 'BTC_LOCK',//默认显示的界面
             balance: true,
             personal: {
                 available: 0.00,
@@ -82,7 +81,6 @@ class Business extends PureComponent {
             priceHigh: null,//最高
             time: '1day',
             page: 0,
-
         };
 
         this.socket = io(config.api.socketIOUrl, {
