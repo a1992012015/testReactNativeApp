@@ -238,8 +238,11 @@ export default class CheckModal extends PureComponent {
             toast.show('请输入手机验证码', DURATION.LENGTH_SHORT);
             return;
         }
+        //地址
         let url = '';
+        //参数
         const actions = {};
+
         if (this.state.transPassURL) {
             url = this.state.transPassURL;
             //url = `${this.state.transPassURL}&valicode=${this.state.smsCode}`;

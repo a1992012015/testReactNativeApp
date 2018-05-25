@@ -38,8 +38,7 @@ export default class ForgotPass extends PureComponent {
             visible: false,
         };
     }
-
-
+    //忘记密码提交
     fotOne = () => {
         const {toast, emailInput} = this.refs;
 
@@ -61,7 +60,8 @@ export default class ForgotPass extends PureComponent {
         emailInput.blur();
 
         this.setState({
-            visible: true
+            fotSent: false,
+            visible: true,
         });
         //地址
         let url = config.api.login.stepOne;
@@ -81,12 +81,16 @@ export default class ForgotPass extends PureComponent {
             if (responseText.success) {
                 this.setState({
                     isOpen: true,
-                    fotSent: false,
+                    fotSent: true,
                     visible: false
                 });
             } else {
                 const {msg} = responseText;
                 toast.show(msg, DURATION.LENGTH_SHORT);
+                this.setState({
+                    fotSent: true,//能否重复提交
+                    visible: false,//加载特效
+                });
             }
         });
     };

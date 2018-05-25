@@ -48,7 +48,8 @@ export default class LoginPass extends PureComponent {
             timeId: '',
             checkOpen: false,
             type: 0,
-            user: ''
+            user: '',
+            transPassURL: null,//验证码请求地址
         };
     }
 

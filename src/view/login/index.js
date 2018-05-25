@@ -174,7 +174,7 @@ class Login extends PureComponent {
                 actions: [NavigationActions.navigate({routeName: 'TabBar'})],
             });
 
-            navigation.dispatch(resetAction);
+            this.props.navigation.dispatch(resetAction);
         }
     };
     //ref节点
@@ -371,10 +371,12 @@ class Login extends PureComponent {
             <View style={{backgroundColor: '#1F2229', flex: 1}}>
                 {/*顶部标签组件*/}
                 <View style={styles.header}>
+                    {/*注册*/}
                     <Text style={styles.titleStyL}
                           onPress={() => navigate('SignUp')}
                     >{I18n.t('signUp')}</Text>
                     <Text style={styles.headerTitle}>{I18n.t('Login')}</Text>
+                    {/*关闭*/}
                     <Text style={styles.titleStyR}
                           onPress={() => this._closeLogin()}
                     >{I18n.t('close')}</Text>

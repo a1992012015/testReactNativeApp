@@ -11,11 +11,10 @@ import {
 } from 'react-native';
 import store from 'react-native-simple-store';
 import {getLanguages} from 'react-native-i18n';
-import {NavigationActions, StackActions} from "react-navigation";
 
 import config from './config';
 
-const request = function () {
+export default function () {
     /*POST参数拼接函数*/
     this.joinActionsPost = async function (url, actions) {
 
@@ -67,7 +66,7 @@ const request = function () {
             },
         }).then(response => {
 
-            if (!response.ok){
+            if (!response.ok) {
                 console.log('请求失败');
                 return {ok: true};
             }
@@ -77,7 +76,7 @@ const request = function () {
 
             return this.manyLogin(props, response).then(msg => {
 
-                if(!msg){
+                if (!msg) {
                     console.log('没有登陆！');
                     return {ok: true};
                 }
@@ -105,7 +104,7 @@ const request = function () {
             body: formData,
         }).then((response) => {
 
-            if (!response.ok){
+            if (!response.ok) {
                 console.log('请求失败');
                 return {ok: true};
             }
@@ -115,7 +114,7 @@ const request = function () {
 
             return this.manyLogin(props, response).then(msg => {
 
-                if(!msg){
+                if (!msg) {
                     console.log('没有登陆！');
                     return {ok: true};
                 }
@@ -134,10 +133,10 @@ const request = function () {
     let loginIndex = 1;
     this.manyLogin = async function (props, responseText) {
 
+        let routeName = props.navigation.state.routeName;
         console.log("服务器返回的数据------", responseText);
         console.log("routeName------", routeName);
 
-        let routeName = props.navigation.state.routeName;
         const {msg, success} = responseText;
 
         if (!success && (msg === "请先登录" || msg === "登录已超时" || msg === "未登录" || msg === "请登录或重新登录")) {
@@ -156,16 +155,16 @@ const request = function () {
                         {text: '取消', onPress: () => loginIndex = 1},
                         {
                             text: '确定', onPress: () => {
-                                loginIndex = 1;
 
                                 store.delete('member');
 
-                                const resetAction = StackActions.reset({
+                                /*const resetAction = StackActions.reset({
                                     index: 0,
                                     actions: [NavigationActions.navigate({routeName: 'Login'})],
                                 });
 
-                                props.navigation.dispatch(resetAction);
+                                props.navigation.dispatch(resetAction);*/
+                                props.navigation.navigate('Login');
                             }
                         }
                     ]);
@@ -181,8 +180,6 @@ const request = function () {
                                 if (routeName !== "Login") {
                                     props.navigation.navigate('Login');
                                 }
-
-                                loginIndex = 1;
                             }
                         }
                     ]);
@@ -205,13 +202,19 @@ const request = function () {
                         if (routeName !== "Login") {
                             props.navigation.navigate('Login');
                         }
-
-                        loginIndex = 1;
                     }
                 }
             ]);
 
             return false;
+        } else if (responseText.obj) {
+
+            const {UUID} = responseText.obj;
+
+            if(UUID){
+                console.log('==============================登陆成功，初始化弹窗变量==============================');
+                loginIndex = 1;
+            }
         }
 
         return true;
@@ -219,10 +222,3 @@ const request = function () {
 
     return this;
 };
-
-export default request;
-
-
-
-
-

@@ -35,7 +35,7 @@ const config = {
         main: {
             entrust: 'mobile/user/appCenter/appentrustlist?type=',// history历史委托  current当前委托
             apptradeslist: 'mobile/user/appCenter/apptradeslist.do',//交易记录
-            rechargeRMBList: 'user/rmbdeposit/list.do?order=asc&mycolumn=transactionTime',//交易记录
+            rechargeRMBList: 'user/rmbdeposit/list.do',//交易记录 //?order=asc&mycolumn=transactionTime
             myAccount: 'mobile/user/appCenter/myAccount.do',//用户资产
             bankCard: 'mobile/user/appbankcode/findBankCard.do',//查询当前账户下的银行卡
             removeBank: 'mobile/user/appbankcode/removeBankCard.do',//删除银行卡 => 修改
