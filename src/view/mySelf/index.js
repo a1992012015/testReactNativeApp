@@ -172,9 +172,7 @@ class myHome extends PureComponent {
             Alert.alert(
                 '提示',
                 '请先实名认证',
-                [{
-                    text: '确认',
-                    onPress: () => this.props.navigation.navigate("realAuthentication", {
+                [{text: '确认', onPress: () => this.props.navigation.navigate("realAuthentication", {
                         member: memberInfo,
                         infoAction: this.upState
                     })

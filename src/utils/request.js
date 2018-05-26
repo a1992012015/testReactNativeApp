@@ -161,8 +161,7 @@ export default function () {
 
                     Alert.alert('温馨提示', '登录已超时，请重新登录！', [
                         {text: '取消', onPress: () => store.save('loginIndex', 1)},
-                        {
-                            text: '确定', onPress: () => {
+                        {text: '确定', onPress: () => {
 
                                 store.delete('member');
 
@@ -177,8 +176,7 @@ export default function () {
 
                     Alert.alert('温馨提示', '是否前往登录', [
                         {text: '取消', onPress: () => store.save('loginIndex', 1)},
-                        {
-                            text: '确定', onPress: () => {
+                        {text: '确定', onPress: () => {
                                 if (routeName !== "Login") {
                                     props.navigation.navigate('Login');
                                 }
@@ -198,8 +196,7 @@ export default function () {
 
             Alert.alert('温馨提示', '是否前往登录', [
                 {text: '取消', onPress: () => store.save('loginIndex', 1)},
-                {
-                    text: '确定', onPress: () => {
+                {text: '确定', onPress: () => {
                         if (routeName !== "Login") {
                             props.navigation.navigate('Login');
                         }

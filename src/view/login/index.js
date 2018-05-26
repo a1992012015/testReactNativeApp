@@ -182,7 +182,7 @@ class Login extends PureComponent {
     //ref节点
     menu = null;
     //自动显示之前登录过的账号
-    showMenu = (type) => {
+    showMenu = type => {
         console.log('自动显示之前登录过的账号');
         if (type === 1 && this.state.strName.length > 0) {
             this.menu.show();
@@ -460,17 +460,15 @@ class Login extends PureComponent {
                         style={{width: width - p(40), backgroundColor: '#313840'}}
                     >
                         <ScrollView>
-                            {
-                                this.state.strName.length && this.state.strName.map((item, index) =>
+                            {this.state.strName.length && this.state.strName.map((item, index) =>
 
-                                    <MenuItem
-                                        key={index}
-                                        onPress={() => this._selectPerson(1, item)}
-                                    >
-                                        {item.text}
-                                    </MenuItem>
-                                )
-                            }
+                                <MenuItem
+                                    key={index}
+                                    onPress={() => this._selectPerson(1, item)}
+                                >
+                                    {item.text}
+                                </MenuItem>
+                            )}
                         </ScrollView>
                     </MenuSelect>
                     {/*密码输入框*/}

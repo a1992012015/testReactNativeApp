@@ -11,19 +11,20 @@ import {StyleSheet, Text, TouchableHighlight} from 'react-native';
 import PropTypes from 'prop-types';
 
 const MenuItem = props => {
-    console.log(props);
     return (
-        <TouchableHighlight disabled={props.disabled}
-                            onPress={props.onPress}
-                            style={[styles.container, props.style]}
-                            underlayColor={props.underlayColor}
+        <TouchableHighlight
+            disabled={props.disabled}
+            onPress={props.onPress}
+            style={[styles.container, props.style]}
+            underlayColor={props.underlayColor}
         >
-            <Text numberOfLines={1}
-                  style={[
-                      styles.title,
-                      props.disabled && {color: props.disabledTextColor},
-                      props.textStyle,
-                  ]}
+            <Text
+                numberOfLines={1}
+                style={[
+                    styles.title,
+                    props.disabled && {color: props.disabledTextColor},
+                    props.textStyle,
+                ]}
             >
                 {props.children}
             </Text>
@@ -50,9 +51,8 @@ MenuItem.defaultProps = {
 const styles = StyleSheet.create({
     container: {
         height: 48,
+        width: '100%',
         justifyContent: 'center',
-        maxWidth: 248,
-        minWidth: 124,
     },
     title: {
         fontSize: 14,

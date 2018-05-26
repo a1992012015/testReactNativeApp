@@ -74,10 +74,9 @@ export default class LoginPass extends PureComponent {
         Alert.alert(
             '提示',
             '登录密码修改成功',
-            [{
-                text: '确认', onPress: () => {
+            [{text: '确认', onPress: () => {
                     store.delete('member');
-
+                    store.save('loginIndex', 1);
                     const resetAction = StackActions.reset({
                         index: 0,
                         actions: [NavigationActions.navigate({routeName: 'TabBar'})],
@@ -194,22 +193,10 @@ export default class LoginPass extends PureComponent {
             }
             console.log(responseText);
             if (responseText.success) {//false 需要验证 teur 不需要验证
-                Alert.alert(
-                    '提示',
-                    '登录密码修改成功',
-                    [{
-                        text: '确认', onPress: () => {
-                            store.delete('member');
-
-                            const resetAction = StackActions.reset({
-                                index: 0,
-                                actions: [NavigationActions.navigate({routeName: 'TabBar'})],
-                            });
-
-                            this.props.navigation.dispatch(resetAction);
-                        }
-                    }]
-                );
+                store.save('loginIndex', 2).then(value => {
+                    console.log('loginIndex => value =>', value);
+                    this.saveUser();
+                });
             } else {
                 this._toMain(responseText, url, actions);
             }

@@ -37,16 +37,12 @@ class MenuSelect extends PureComponent {
         // 初始状态
         this.state = {
             menuState: STATES.HIDDEN,
-
             top: 0,
             left: 0,
-
             menuWidth: 0,
             menuHeight: 0,
-
             buttonWidth: 0,
             buttonHeight: 0,
-
             menuSizeAnimation: new Animated.ValueXY({x: 0, y: 0}),
             opacityAnimation: new Animated.Value(0),
         };
@@ -54,7 +50,6 @@ class MenuSelect extends PureComponent {
 
     //类型验证
     static propTypes = {
-        /*button: PropTypes.node.isRequired,*/
         children: PropTypes.node.isRequired,
         style: ViewPropTypes.style,
     };
