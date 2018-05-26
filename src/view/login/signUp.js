@@ -71,6 +71,7 @@ class SignUp extends PureComponent {
 
             if (responseText.success) {
                 const {obj} = responseText;
+                console.log(obj.regreg);
                 this.setState({
                     content: obj.regreg,
                 })

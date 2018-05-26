@@ -90,6 +90,8 @@ class myHome extends PureComponent {
         const {HomeReducer} = nextProps;
         const {obj} = HomeReducer.userAssets;
         const myAccount = obj && obj.myAccount;
+        console.log(HomeReducer);
+
         if (!HomeReducer.userLoading) {
             this.setState({
                 userInfo: obj,
@@ -182,20 +184,15 @@ class myHome extends PureComponent {
             Alert.alert(
                 '提示',
                 '实名认证审核中',
-                [{
-                    text: '确认', onPress: () => {
-                    }
-                }]
+                [{text: '确认', onPress: () => {}}]
             );
         } else if (states === 3 || states === "3") {
             Alert.alert(
                 '提示',
                 '实名申请被拒绝，请重新认证',
-                [{
-                    text: '确认',
-                    onPress: () => this.props.navigation.navigate("realAuthentication", {
+                [{text: '确认', onPress: () => this.props.navigation.navigate("realAuthentication", {
                         member: memberInfo,
-                        infoAction: this.upState
+                        infoAction: this.upState,
                     })
                 }]
             );

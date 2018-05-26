@@ -166,6 +166,8 @@ class Login extends PureComponent {
     //关闭登陆界面
     _closeLogin = () => {
         console.log('关闭登陆界面');
+        store.save('loginIndex', 1);//是否打开登陆提示窗的标记
+
         if (this.state.ISForm) {
             this.props.navigation.goBack();
         } else {
@@ -372,13 +374,15 @@ class Login extends PureComponent {
                 {/*顶部标签组件*/}
                 <View style={styles.header}>
                     {/*注册*/}
-                    <Text style={styles.titleStyL}
-                          onPress={() => navigate('SignUp')}
+                    <Text
+                        style={styles.titleStyL}
+                        onPress={() => navigate('SignUp')}
                     >{I18n.t('signUp')}</Text>
                     <Text style={styles.headerTitle}>{I18n.t('Login')}</Text>
                     {/*关闭*/}
-                    <Text style={styles.titleStyR}
-                          onPress={() => this._closeLogin()}
+                    <Text
+                        style={styles.titleStyR}
+                        onPress={() => this._closeLogin()}
                     >{I18n.t('close')}</Text>
                 </View>
                 {/*中间的主体*/}
@@ -414,9 +418,11 @@ class Login extends PureComponent {
                             this.state.name != null && this.state.name !== '' && Platform.OS === 'android' ?
                                 <Text
                                     onPress={() => this._cleanText()}
-                                    style={{marginRight: p(15)}}>
-                                    <Image source={require('../../static/login/clean.png')}
-                                           style={{width: p(80), height: p(85)}}
+                                    style={{marginRight: p(15)}}
+                                >
+                                    <Image
+                                        source={require('../../static/login/clean.png')}
+                                        style={{width: p(80), height: p(85)}}
                                     />
                                 </Text>
                                 :
@@ -426,19 +432,23 @@ class Login extends PureComponent {
                         {
                             /*用户名右侧按钮，点击显示登陆过的用户名*/
                             Platform.OS === 'android' ?
-                                <Text onPress={() => this.showMenu(1)}
-                                      style={{marginRight: p(15)}}
+                                <Text
+                                    onPress={() => this.showMenu(1)}
+                                    style={{marginRight: p(15)}}
                                 >
-                                    <Image source={require('../../static/login/Flip.png')}
-                                           style={{width: p(120), height: p(120)}}
+                                    <Image
+                                        source={require('../../static/login/Flip.png')}
+                                        style={{width: p(120), height: p(120)}}
                                     />
                                 </Text>
                                 :
-                                <Text onPress={() => this.showMenu(1)}
-                                      style={{marginRight: p(15), marginTop: p(14)}}
+                                <Text
+                                    onPress={() => this.showMenu(1)}
+                                    style={{marginRight: p(15), marginTop: p(14)}}
                                 >
-                                    <Image source={require('../../static/login/Flip.png')}
-                                           style={{width: p(35), height: p(35)}}
+                                    <Image
+                                        source={require('../../static/login/Flip.png')}
+                                        style={{width: p(35), height: p(35)}}
                                     />
                                 </Text>
                         }
@@ -466,23 +476,24 @@ class Login extends PureComponent {
                     {/*密码输入框*/}
                     <View style={styles.inputSty}>
                         <Icon name="ios-unlock" size={25} color={'#565A5D'} style={{marginLeft: p(20)}}/>
-                        <TextInput secureTextEntry
-                                   underlineColorAndroid='transparent'
-                                   clearButtonMode={'while-editing'}
-                                   placeholder={I18n.t('please_write_pwd')}
-                                   placeholderTextColor={'#565A5D'}
-                                   selectionColor={"#D95411"}
-                                   value={this.state.pwd}
-                                   style={{
-                                       marginLeft: p(6),
-                                       fontSize: p(28),
-                                       height: p(70),
-                                       flex: 1,
-                                       lineHeight: p(90),
-                                       padding: 0,
-                                       color: '#FFFFFF'
-                                   }}
-                                   onChangeText={(text) => this.setState({pwd: text})}
+                        <TextInput
+                            secureTextEntry
+                            underlineColorAndroid='transparent'
+                            clearButtonMode={'while-editing'}
+                            placeholder={I18n.t('please_write_pwd')}
+                            placeholderTextColor={'#565A5D'}
+                            selectionColor={"#D95411"}
+                            value={this.state.pwd}
+                            style={{
+                                marginLeft: p(6),
+                                fontSize: p(28),
+                                height: p(70),
+                                flex: 1,
+                                lineHeight: p(90),
+                                padding: 0,
+                                color: '#FFFFFF'
+                            }}
+                            onChangeText={(text) => this.setState({pwd: text})}
                         />
                         {
                             /*刪除用戶輸入的用戶密码图标显示*/
@@ -511,8 +522,9 @@ class Login extends PureComponent {
                         )
                     })}
                     {/*忘记密码*/}
-                    <Text onPress={() => navigate('ForgotPass')}
-                          style={{fontSize: p(28), marginTop: p(15), color: '#D95411', textAlign: 'right'}}
+                    <Text
+                        onPress={() => navigate('ForgotPass')}
+                        style={{fontSize: p(28), marginTop: p(15), color: '#D95411', textAlign: 'right'}}
                     >
                         {I18n.t('forgotpassword')}
                     </Text>
@@ -527,10 +539,11 @@ class Login extends PureComponent {
                     saveUser={this.saveUser}
                     click={this._click}
                 />
-                <Toast ref="toast"
-                       style={{backgroundColor: 'rgba(0,0,0,.6)'}}
-                       position='top'
-                       textStyle={{color: 'white'}}
+                <Toast
+                    ref="toast"
+                    style={{backgroundColor: 'rgba(0,0,0,.6)'}}
+                    position='top'
+                    textStyle={{color: 'white'}}
                 />
                 <SModal hasLoading={this.state.userIsLogin}/>
             </View>

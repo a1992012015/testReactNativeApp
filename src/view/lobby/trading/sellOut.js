@@ -138,8 +138,8 @@ class SellOut extends PureComponent {
             if (responseText.obj) {
                 let account = responseText.obj;
                 this.setState({
-                    availableMoney: parseFloat(account.coinAccount.hotMoney),
-                    frozenMoney: parseFloat(account.myAccount.hotMoney),
+                    availableMoney: account.coinAccount ? parseFloat(account.coinAccount.hotMoney) : 0,
+                    frozenMoney: account.coinAccount ? parseFloat(account.myAccount.hotMoney) : 0,
                     getMoney: true
                 }, () => {
                     this.isLoginType()

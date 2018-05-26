@@ -88,7 +88,7 @@ class Index extends PureComponent {
             this.handleData(IndexLoopReducer.homeData);
         }
         //轮询拿到首页数据
-        //this.pollingData();
+        this.pollingData();
     }
 
     //组件接收到新的props时调用，并将其作为参数nextProps使用
@@ -318,7 +318,7 @@ class Index extends PureComponent {
                 }];
             }
         });
-
+        console.log(this);
         this.setState({
             areaList: areaData,
             headList: headData,

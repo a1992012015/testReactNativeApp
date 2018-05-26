@@ -13,7 +13,9 @@ import {
     WebView,
     Text,
     Dimensions,
+    ScrollView,
 } from 'react-native';
+import HTMLView from 'react-native-htmlview';
 
 import p from '../../utils/tranfrom';
 import Title from '../../components/title';
@@ -73,7 +75,7 @@ export default class ConsDetail extends PureComponent {
                 return (
                     <View style={{flex: 1, backgroundColor: '#FFFFFF'}}>
                         <Title titleName="资讯详情" canBack={true} {...this.props}/>
-                        <WebView
+                        {/*<WebView
                             source={{html: newsBody, baseUrl: ''}}
                             style={{flex: 1}}
                             contentInset={{top: 0, left: 0}}
@@ -85,7 +87,13 @@ export default class ConsDetail extends PureComponent {
                                 }
                             }}
                         >
-                        </WebView>
+                        </WebView>*/}
+                        <ScrollView style={{flex: 1}}>
+                            <HTMLView
+                                value={newsBody}
+                                style={{padding: 10}}
+                            />
+                        </ScrollView>
                     </View>
                 )
             }

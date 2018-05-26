@@ -130,14 +130,22 @@ export default function () {
         })
     };
     /*判断登陆函数*/
-    let loginIndex = 1;
     this.manyLogin = async function (props, responseText) {
 
+        const {msg, success} = responseText;
         let routeName = props.navigation.state.routeName;
+        let loginIndex = await store.get('loginIndex').then(loginIndex => {
+            if (!loginIndex) {
+                store.save('loginIndex', 1);
+                return 1;
+            } else {
+                return loginIndex;
+            }
+        });
+
         console.log("服务器返回的数据------", responseText);
         console.log("routeName------", routeName);
-
-        const {msg, success} = responseText;
+        console.log('loginIndex', loginIndex);
 
         if (!success && (msg === "请先登录" || msg === "登录已超时" || msg === "未登录" || msg === "请登录或重新登录")) {
 
@@ -145,25 +153,19 @@ export default function () {
                 return;
             }
 
-            loginIndex++;
+            await store.save('loginIndex', 2);
 
-            await store.get('member').then((member) => {
+            return await store.get('member').then((member) => {
                 console.log('getMember', member);
                 if (member) {
 
                     Alert.alert('温馨提示', '登录已超时，请重新登录！', [
-                        {text: '取消', onPress: () => loginIndex = 1},
+                        {text: '取消', onPress: () => store.save('loginIndex', 1)},
                         {
                             text: '确定', onPress: () => {
 
                                 store.delete('member');
 
-                                /*const resetAction = StackActions.reset({
-                                    index: 0,
-                                    actions: [NavigationActions.navigate({routeName: 'Login'})],
-                                });
-
-                                props.navigation.dispatch(resetAction);*/
                                 props.navigation.navigate('Login');
                             }
                         }
@@ -174,7 +176,7 @@ export default function () {
                     }
 
                     Alert.alert('温馨提示', '是否前往登录', [
-                        {text: '取消', onPress: () => loginIndex = 1},
+                        {text: '取消', onPress: () => store.save('loginIndex', 1)},
                         {
                             text: '确定', onPress: () => {
                                 if (routeName !== "Login") {
@@ -186,17 +188,16 @@ export default function () {
                 }
                 return false;
             });
-
-            return false;
         } else if (msg === "未登录" || msg === "请先登录") {
+
             if (routeName === "Login" || loginIndex > 1) {
-                return false;
+                return;
             }
 
-            loginIndex++;
+            await store.save('loginIndex', 2);
 
             Alert.alert('温馨提示', '是否前往登录', [
-                {text: '取消', onPress: () => loginIndex = 1},
+                {text: '取消', onPress: () => store.save('loginIndex', 1)},
                 {
                     text: '确定', onPress: () => {
                         if (routeName !== "Login") {
@@ -211,9 +212,9 @@ export default function () {
 
             const {UUID} = responseText.obj;
 
-            if(UUID){
+            if (UUID) {
                 console.log('==============================登陆成功，初始化弹窗变量==============================');
-                loginIndex = 1;
+                await store.save('loginIndex', 1);
             }
         }
 

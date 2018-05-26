@@ -357,8 +357,10 @@ export default class SpotAssets extends PureComponent {
                                                                 onPress={() => this.isRealName(1, this.state.member, item)}
                                                                 style={{
                                                                     width: width * .3,
+                                                                    height: '100%',
                                                                     flexDirection: "row",
-                                                                    justifyContent: 'center'
+                                                                    justifyContent: 'center',
+                                                                    alignItems: 'center',
                                                                 }}
                                                             >
                                                                 <Image
@@ -384,8 +386,10 @@ export default class SpotAssets extends PureComponent {
                                                                 onPress={() => this.isRealName(2, this.state.member, item)}
                                                                 style={{
                                                                     width: width * .3,
+                                                                    height: '100%',
                                                                     flexDirection: "row",
-                                                                    justifyContent: 'center'
+                                                                    justifyContent: 'center',
+                                                                    alignItems: 'center',
                                                                 }}
                                                             >
                                                                 <Image
@@ -411,8 +415,10 @@ export default class SpotAssets extends PureComponent {
                                                                 onPress={() => this.isRealName(3, this.state.member, item)}
                                                                 style={{
                                                                     width: width * .3,
+                                                                    height: '100%',
                                                                     flexDirection: "row",
-                                                                    justifyContent: 'center'
+                                                                    justifyContent: 'center',
+                                                                    alignItems: 'center',
                                                                 }}
                                                             >
                                                                 <Image
