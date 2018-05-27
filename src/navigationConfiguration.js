@@ -7,7 +7,7 @@
 'use strict';
 
 import React from 'react'
-import {StackNavigator} from 'react-navigation';
+import {createStackNavigator} from 'react-navigation';
 
 import App from './view/main/app';
 import TabBar from './view/main/tabBar';
@@ -98,13 +98,8 @@ const stackNavigatorConfiguration = {
     headerMode: 'none',
     mode: 'card',
     initialRouteName: 'App',
-    navigationOptions: {
-        cardStack: {
-            gesturesEnabled: true
-        }
-    }
 };
 
-const AppNavigator = StackNavigator(routeConfiguration, stackNavigatorConfiguration);
+const AppNavigator = createStackNavigator(routeConfiguration, stackNavigatorConfiguration);
 
 export default AppNavigator

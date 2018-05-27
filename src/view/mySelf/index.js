@@ -74,6 +74,7 @@ class myHome extends PureComponent {
     //真是的结构被渲染出来之后调用
     componentDidMount() {
         const {dispatch} = this.props;
+        console.log('进入个人信息页面，开始获取个人信息');
         dispatch(InitUserInfo(this.props));
         let that = this;
         store.get('member').then(member => {
@@ -90,7 +91,7 @@ class myHome extends PureComponent {
         const {HomeReducer} = nextProps;
         const {obj} = HomeReducer.userAssets;
         const myAccount = obj && obj.myAccount;
-        console.log(HomeReducer);
+        console.log('接收到新的props');
 
         if (!HomeReducer.userLoading) {
             this.setState({
