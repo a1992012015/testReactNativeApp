@@ -6,12 +6,18 @@
  * */
 'use strict';
 
+import {Platform} from "react-native";
+
+import upDate from '../../update';
+
+const androdi = upDate[Platform.OS];
+
 const urlConfig = {
     api: {
         //app请求路径
-        host: 'https://www.lockcoin.net/',//正式地址
+        //host: 'https://www.lockcoin.net/',//正式地址
         //host: 'http://192.168.1.254/',//测试地址 => 何彬
-        //host: 'http://47.104.154.204/',//测试地址
+        host: 'http://47.104.154.204/',//测试地址
         //交易大厅ioUrl
         socketIOUrl: 'wss://hq.lockcoin.net',
         //热更新下载最新app路径
@@ -27,8 +33,10 @@ const urlConfig = {
         ],
         //热更新appID
         android: {
-            "appId": 11534,
-            "appKey": "_LH2pJOAncZC96MxMcnIl7ivZojRy0Dw"
+            //"appId": 11534,//正式
+            "appId": androdi.appId,//测试
+            //"appKey": "_LH2pJOAncZC96MxMcnIl7ivZojRy0Dw"//正式
+            "appKey": androdi.appKey//测试
         },
         ios: {
             "appId": 11534,

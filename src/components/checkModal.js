@@ -121,6 +121,25 @@ export default class CheckModal extends PureComponent {
             username: this.state.username,
             password: this.state.password,
         };
+
+        /*//地址
+        let url = '';
+        //参数
+        const actions = {};
+
+        if (this.state.transPassURL) {
+            url = config.api.person.passCode;
+            const {action} = this.props;
+            actions.valicode = this.state.smsCode;
+            Object.assign(actions, action);
+        } else {
+            url = config.api.login.googleAuth;
+            actions.username = this.state.username;
+            actions.verifyCode = this.state.googleCode;
+            actions.password = this.state.password;
+        }*/
+
+
         console.log(actions);
 
         request.post(url, actions, this.props).then((responseText) => {
@@ -143,6 +162,7 @@ export default class CheckModal extends PureComponent {
             }
         });
     };
+
     //获取手机验证码
     getCurrencyCode = () => {
         if (!this.state.flag) {

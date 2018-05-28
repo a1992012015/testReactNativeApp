@@ -67,7 +67,7 @@ export default function () {
         }).then(response => {
 
             if (!response.ok) {
-                console.log('请求失败');
+                console.log('接口请求失败');
                 return {ok: true};
             }
 

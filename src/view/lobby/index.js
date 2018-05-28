@@ -87,6 +87,7 @@ class Business extends PureComponent {
             transports: ['websocket', 'polling'], // you need to explicitly tell it to use websockets
             secure: true
         });
+
         this.twoLoad = 1;
     }
 
@@ -111,7 +112,10 @@ class Business extends PureComponent {
                 })
             } else {
                 const {dispatch} = this.props;
-                dispatch(InitUserInfo(this.props));
+                dispatch(InitUserInfo(this.props));//获取用户资产数据
+
+                console.log(member.memberInfo);
+
                 this.setState({
                     username: member.memberInfo.username,
                     memberInfo: member.memberInfo,
@@ -146,7 +150,7 @@ class Business extends PureComponent {
 
         const {TradingReducer, IndexLoopReducer, HomeReducer} = props;
 
-        if (!IndexLoopReducer.homeLoading && IndexLoopReducer.homeData) {//修改默认显示
+        if (!IndexLoopReducer.homeLoading && IndexLoopReducer.homeData) {//修改默认显示//首页的列表数据
             this.coreData(IndexLoopReducer.homeData);
         }
 
@@ -219,6 +223,7 @@ class Business extends PureComponent {
         return transactionSum;
     };
 
+    //刷新
     queryCoin = () => {
         //地址
         let url = config.api.trades.appgetAccountInfo;
@@ -300,11 +305,10 @@ class Business extends PureComponent {
             this.state.busTitle = coinCodeArray[0] + '/' + coinCodeArray[1];
             this.twoLoad++;
         }
-
+        console.log(areaData);
         this.setState({
             areaList: areaData,//顶部切换币种列表
             headList: headData,//顶部切换币种列表 => 大类
-            //indexData: areaData[this.state.itemText],
             businessData: businessData,
         });
     };
@@ -330,7 +334,7 @@ class Business extends PureComponent {
         });
 
         this.socket.on("index", function (data) {
-            dispatch(tradingHall(data));
+            dispatch(tradingHall(data));//处理交易大厅推送的数据
         });
 
         this.socket.connect();
@@ -393,24 +397,27 @@ class Business extends PureComponent {
 
     componentWillMount() {
         let that = this;
-        Platform.OS === 'android' ? this.timeName = DeviceEventEmitter.addListener('TimeName', function (msg) {
-            if (msg) {
-                that.setState({
-                    time: msg
-                }, () => that.getKlineData())
-            } else {
-                that.getKlineData();
-            }
-        }) : new NativeEventEmitter(PushCandlestickChart).addListener('EventReminder', reminder => {
-                if (reminder.name) {
+        Platform.OS === 'android' ?
+            this.timeName = DeviceEventEmitter.addListener('TimeName', function (msg) {
+                if (msg) {
                     that.setState({
-                        time: reminder.name,
-                    }, () => that.toIOS())
+                        time: msg
+                    }, () => that.getKlineData())
                 } else {
-                    that.toIOS();
+                    that.getKlineData();
                 }
-            }
-        );
+            })
+            :
+            new NativeEventEmitter(PushCandlestickChart).addListener('EventReminder', reminder => {
+                    if (reminder.name) {
+                        that.setState({
+                            time: reminder.name,
+                        }, () => that.toIOS())
+                    } else {
+                        that.toIOS();
+                    }
+                }
+            );
     }
 
     getKlineData = () => {

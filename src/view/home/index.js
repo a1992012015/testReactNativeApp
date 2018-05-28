@@ -43,6 +43,7 @@ import Title from '../../components/title';
 import RollingCaption from '../../components/rollingCaption';
 import SwiperBanner from '../../components/swiperBanner';
 import {homeLoop} from '../../store/actions/IndexLoopAction';
+import store from "react-native-simple-store";
 
 const {appKey} = urlConfig.api[Platform.OS];
 const {width} = Dimensions.get('window');
@@ -87,8 +88,9 @@ class Index extends PureComponent {
         if (!IndexLoopReducer.homeLoading) {
             this.handleData(IndexLoopReducer.homeData);
         }
+        //store.save('loginIndex', 1);
         //轮询拿到首页数据
-        this.pollingData();
+        //this.pollingData();
     }
 
     //组件接收到新的props时调用，并将其作为参数nextProps使用

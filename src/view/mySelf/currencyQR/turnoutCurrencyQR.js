@@ -294,7 +294,11 @@ class TurnoutCurrencyQR extends PureComponent {
                                 selectionColor="#D95411"
                                 value={this.state.btcKey}
                                 style={styles.inputTextView}
-                                onChangeText={(text) => this.setState({btcKey: text})}
+                                onChangeText={(text) => {
+                                    text = text.split(' ');
+                                    text = text.join('');
+                                    this.setState({btcKey: text})
+                                }}
                             />
                             {/*扫描二维码组件*/}
                             <TouchableOpacity

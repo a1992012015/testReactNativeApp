@@ -193,11 +193,12 @@ class Purchase extends PureComponent {
         })
     };
 
+    //提交订单
     purchase = () => {
         const {toast} = this.refs;
 
         if (null == this.state.entrustPrice || '' === this.state.entrustPrice || this.state.entrustPrice === 0) {
-            toast.show('请输入买入价格', DURATION.LENGTH_SHORT);
+            toast.show('请输入委托价格', DURATION.LENGTH_SHORT);
             return;
         }
         //验证价格
@@ -209,7 +210,7 @@ class Purchase extends PureComponent {
         }
 
         if (null == this.state.entrustCount || '' === this.state.entrustCount || this.state.entrustCount === 0) {
-            toast.show('请输入买入数量', DURATION.LENGTH_SHORT);
+            toast.show('请输入委托数量', DURATION.LENGTH_SHORT);
             return;
         }
 
@@ -217,6 +218,7 @@ class Purchase extends PureComponent {
             toast.show('请输入正确的数量', DURATION.LENGTH_SHORT);
             return;
         }
+
         if (this.state.isLogin) {
             const currName = this.state.coinCode ? this.state.coinCode.split("_") : 'CNY';
 

@@ -151,7 +151,7 @@ class CurrentEntrust extends PureComponent {
             return;
         }
         //地址
-        let url = config.api.trades.list + "current&limit=10&offset=" + offsetValue + "&typeone=" + this.state.initId + "&sortOrder=asc&querypath=enter";
+        let url = config.api.trades.list;
         //参数
         const actions = {
             type: 'current',
@@ -161,6 +161,7 @@ class CurrentEntrust extends PureComponent {
             sortOrder: 'asc',
             querypath: 'enter',
         };
+
         const {toast} = this.refs;
 
         request.post(url, actions, this.props).then(responseText => {
@@ -310,20 +311,19 @@ class CurrentEntrust extends PureComponent {
             })
         });
     };
+
     //撤销委托0.2
     revokeKill = item => {
         Alert.alert('温馨提醒', '是否撤销委托', [
-            {
-                text: '取消', onPress: () => {
-                }
-            },
-            {
-                text: '确定', onPress: () => {
+            {text: '取消', onPress: () => {}},
+            {text: '确定', onPress: () => {
                     this.setState({
                         visible: true
                     });
+
                     //地址
                     let url = config.api.trades.cancelExEntrust;
+
                     const {type, fixPriceCoinCode, coinCode, entrustPrice, entrustNum} = item;
 
                     //参数
@@ -332,8 +332,9 @@ class CurrentEntrust extends PureComponent {
                         fixPriceCoinCode: fixPriceCoinCode,
                         coinCode: coinCode,
                         entrustPrice: entrustPrice,
-                        entrustNums: +entrustNum,
+                        entrustNums: entrustNum,
                     };
+
                     const {toast} = this.refs;
 
                     request.post(url, actions, this.props).then(responseText => {
@@ -343,19 +344,22 @@ class CurrentEntrust extends PureComponent {
                             return;
                         }
 
-                        this.setState({
+                        this.setState({//清除加载特效
                             visible: false
                         });
 
                         const {queryCoinEntrust} = this.props;
-                        const {msg} = responseText;
+                        const {msg, success} = responseText;
 
                         toast.show(msg, DURATION.LENGTH_SHORT);
 
-                        if (responseText.success) {
+                        if (success) {
                             const {dispatch} = this.props;
+
                             dispatch(InitUserInfo(this.props));
-                            this._setInterval();
+
+                            this._setInterval();//撤销完成刷新数据
+
                             queryCoinEntrust();
                         }
                     }).catch(error => {
@@ -421,10 +425,11 @@ class CurrentEntrust extends PureComponent {
 
     };
 
+    /*每条数据的显示方式*/
     renderKillRow = ({item}) => {
-        let time = item.value.entrustTime.substring(5);
-        let num = new Number(item.value.entrustPrice);
-        num = parseFloat(num).toFixed(this.state.KeepDecimalForCoin);
+        const {entrustTime, entrustPrice} = item.value;
+        const time = entrustTime.substring(5);
+        const num = parseFloat(entrustPrice).toFixed(this.state.KeepDecimalForCoin);
 
         return (
             <View style={styles.killView}>
@@ -462,6 +467,7 @@ class CurrentEntrust extends PureComponent {
         return (
             <View style={styles.container}>
                 <View style={styles.viewStyle0}>
+                    {/*买入卖出的切换选择*/}
                     <View style={styles.viewStyle1}>
                         <RadioModal
                             selectedValue={this.state.initId}
@@ -481,6 +487,8 @@ class CurrentEntrust extends PureComponent {
                             <Text value="2" style={styles.textStyle}>卖出</Text>
                         </RadioModal>
                     </View>
+
+                    {/*全部撤单选项*/}
                     <TouchableOpacity
                         onPress={() => this.cancelAllExEntrust()}
                         style={styles.viewStyle2}
@@ -489,6 +497,7 @@ class CurrentEntrust extends PureComponent {
                     </TouchableOpacity>
                 </View>
 
+                {/*显示列表*/}
                 <View style={styles.viewStyle3}>
                     <View style={styles.killView}>
                         <Text style={[styles.textPrice, {width: '25%'}]}>时间</Text>

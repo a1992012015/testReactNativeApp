@@ -192,7 +192,7 @@ class SellOut extends PureComponent {
         const {toast} = this.refs;
 
         if (null == this.state.entrustPrice || '' === this.state.entrustPrice || this.state.entrustPrice === 0) {
-            toast.show('请输入卖出价格', DURATION.LENGTH_SHORT);
+            toast.show('请输入委托价格', DURATION.LENGTH_SHORT);
             return;
         }
         //验证价格
@@ -202,7 +202,7 @@ class SellOut extends PureComponent {
         }
 
         if (null == this.state.entrustCount || '' === this.state.entrustCount || this.state.entrustCount === 0) {
-            toast.show('请输入卖出数量', DURATION.LENGTH_SHORT);
+            toast.show('请输入委托数量', DURATION.LENGTH_SHORT);
             return;
         }
 
@@ -228,6 +228,7 @@ class SellOut extends PureComponent {
         }
     };
 
+    /*提交订单*/
     requestMethod = () => {
         this.setState({
             visible: true
@@ -236,13 +237,13 @@ class SellOut extends PureComponent {
             let url = config.api.trades.trans;
             //参数
             const actions = {
-                typs: 2,
+                type: 2,
                 entrustPrice: this.state.entrustPrice,
                 entrustCount: this.state.entrustCount,
                 coinCode: this.state.coinCode,
                 entrustWay: 1,
             };
-            console.log('url', url);
+
             const {toast} = this.refs;
 
             request.post(url, actions, this.props).then(responseText => {
@@ -283,6 +284,7 @@ class SellOut extends PureComponent {
         });
     };
 
+    /*没有实名制的判断*/
     realNameJump = (memberInfo, type) => {
         const {states} = memberInfo;
 
@@ -365,6 +367,7 @@ class SellOut extends PureComponent {
             >
                 <View style={styles.container}>
                     <View style={{marginRight: p(20), alignItems: 'center'}}>
+                        {/*卖出价格输入*/}
                         <View style={styles.inputView}>
                             <TextInput
                                 ref="ref_price"
@@ -386,6 +389,7 @@ class SellOut extends PureComponent {
                             />
                             <Text style={{fontSize: p(24)}}>{currName[1]}</Text>
                         </View>
+                        {/*卖出数量输入*/}
                         <View style={styles.inputView}>
                             <TextInput
                                 ref="ref_count"
@@ -436,6 +440,7 @@ class SellOut extends PureComponent {
                             />
                             <Text style={{fontSize: p(24)}}>{currName[0]}</Text>
                         </View>
+                        {/*总价显示*/}
                         <View style={styles.inputView}>
                             <TextInput
                                 underlineColorAndroid='transparent'
@@ -449,14 +454,15 @@ class SellOut extends PureComponent {
                                 style={styles.inputTextView}/>
                             <Text style={{fontSize: p(24)}}>{currName[1]}</Text>
                         </View>
-
+                        {/*说明*/}
                         <Text style={{
                             fontSize: p(22),
                             marginVertical: p(20),
                             width: width * .44
                         }}>{I18n.t("jiaoyitishi")}</Text>
+                        {/*提交*/}
                         {this.sellButton(coinCode, user)}
-
+                        {/*拥有数量*/}
                         <View style={{
                             backgroundColor: '#FFFFFF',
                             width: width * .45,
