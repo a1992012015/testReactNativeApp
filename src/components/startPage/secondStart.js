@@ -61,8 +61,9 @@ class SecondStart extends PureComponent {
     render() {
         return (
             <View style={styles.bootPage}>
-                <Image style={styles.page}
-                       source={appUrl.api.splash[0]}
+                <Image
+                    style={styles.page}
+                    source={appUrl.api.splash[0]}
                 />
             </View>
         );

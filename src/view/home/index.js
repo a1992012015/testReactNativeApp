@@ -320,7 +320,7 @@ class Index extends PureComponent {
                 }];
             }
         });
-        console.log(this);
+
         this.setState({
             areaList: areaData,
             headList: headData,

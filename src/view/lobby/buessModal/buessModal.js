@@ -46,6 +46,7 @@ export default class BuessModal extends PureComponent {
 
     render() {
         let {headList, areaList, isOpen} = this.state;
+
         return (
             <Modal
                 style={[styles.modal, styles.modal3]}

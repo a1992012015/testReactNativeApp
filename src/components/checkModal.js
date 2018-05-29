@@ -20,6 +20,7 @@ import {
 import Modal from 'react-native-modalbox';
 import Toast, {DURATION} from 'react-native-easy-toast';
 import SegmentedControlTab from 'react-native-segmented-control-tab';
+import {SegmentedBar} from 'teaset';
 
 import p from '../utils/tranfrom';
 import Request from '../utils/request';
@@ -297,8 +298,10 @@ export default class CheckModal extends PureComponent {
             }
         });
     };
+
     //谷歌验证码特有函数，作用存疑？
-    handleSelect = (index) => {
+    handleSelect = index => {
+        console.log(index);
         this.setState({
             customStyleIndex: index,
         });
@@ -308,16 +311,20 @@ export default class CheckModal extends PureComponent {
         const {type, keyboardSpace} = this.state;
         console.log("keyboardSpace", keyboardSpace);
         return (
-            <Modal style={[styles.modal, styles.modal3, {
-                position: 'absolute',
-                bottom: 0,
-                top: keyboardSpace ? keyboardSpace - p(450) : -10,
-            }]}
-                   position={"center"}
-                   backButton={false}
-                   backdropPressToClose={false}
-                   swipeToClose={false}
-                   isOpen={this.state.isOpen}>
+            <Modal
+                position={"center"}
+                backButton={false}
+                backdropPressToClose={false}
+                swipeToClose={false}
+                isOpen={this.state.isOpen}
+                style={[
+                    styles.modal,
+                    styles.modal3, {
+                        position: 'absolute',
+                        bottom: 0,
+                        top: keyboardSpace ? keyboardSpace - p(450) : -10,
+                    }]}
+            >
                 {/*关闭验证码弹窗组件*/}
                 <TouchableOpacity
                     style={styles.imageView}
@@ -325,7 +332,10 @@ export default class CheckModal extends PureComponent {
                     <Image source={require('../static/login/clean.png')}
                            style={styles.imageType}/>
                 </TouchableOpacity>
+
+                {/*不同验真规则ui*/}
                 {this.checkType(type)}
+
                 <Toast
                     ref="toast"
                     style={{backgroundColor: 'rgba(0,0,0,.6)'}}
@@ -338,8 +348,10 @@ export default class CheckModal extends PureComponent {
     }
 
     //生成不同验证规则下的UI界面
-    checkType = (state) => {
+    checkType = state => {
+        console.log(state);
         let {customStyleIndex} = this.state;
+
         if (state === 0) {//短信验证
             return (
                 <View style={{flex: 1, alignItems: 'center'}}>
@@ -378,7 +390,7 @@ export default class CheckModal extends PureComponent {
                     </TouchableOpacity>
                 </View>
             )
-        } else if (state === 1) {
+        } else if (state === 1) {//谷歌验证
             return (
                 <View style={{flex: 1, alignItems: 'center'}}>
                     <Text style={{fontSize: p(30), marginVertical: p(60)}}>谷歌认证</Text>
@@ -404,82 +416,106 @@ export default class CheckModal extends PureComponent {
                     </TouchableOpacity>
                 </View>
             )
-        } else {
+        } else {//二次验证
             return (
                 <View style={{flex: 1, alignItems: 'center'}}>
                     <Text style={{fontSize: p(30), marginVertical: p(40)}}>二次验证</Text>
-                    <View style={{height: p(70)}}>
-                        <SegmentedControlTab
-                            multiple={false}
-                            values={['谷歌验证', '手机验证']}
-                            selectedIndex={customStyleIndex}
-                            onTabPress={this.handleSelect}
-                            borderRadius={0}
-                            tabsContainerStyle={{backgroundColor: '#D95411'}}
-                            tabStyle={{
-                                backgroundColor: '#313840',
-                                borderWidth: StyleSheet.hairlineWidth,
-                                borderColor: '#313840',
-                                width: p(160)
-                            }}
-                            activeTabStyle={{backgroundColor: '#D95411'}}
-                            tabTextStyle={{color: '#FFFFFF', fontWeight: 'bold'}}
-                            activeTabTextStyle={{color: '#FFFFFF'}}/>
-                    </View>
-                    {customStyleIndex === 0 ?
-                        <View style={{marginTop: p(30)}}>
-                            <View style={styles.reWithView}>
-                                <TextInput
-                                    underlineColorAndroid='transparent'
-                                    placeholder='请输入谷歌验证码'
-                                    clearButtonMode={'while-editing'}
-                                    placeholderTextColor={'#B0B0B0'}
-                                    value={this.state.googleCode}
-                                    style={styles.inputTextView}
-                                    onChangeText={(text) => this.setState({googleCode: text})}
-                                />
-                            </View>
-                            <TouchableOpacity
-                                onPress={this.googleKey}
-                                activeOpacity={.8}
-                                style={{
-                                    height: p(80), backgroundColor: '#D95411', width: width - p(200), marginTop: p(30),
-                                    alignItems: 'center', justifyContent: 'center', borderRadius: p(10)
-                                }}>
-                                <Text style={{color: '#fff', fontSize: p(26)}}>{I18n.t("baocun")}</Text>
-                            </TouchableOpacity>
-                        </View>
-                        : <View style={{marginTop: p(30)}}>
-                            <View style={styles.reWithView}>
-                                <TextInput
-                                    underlineColorAndroid='transparent'
-                                    placeholder='请输入短信验证码'
-                                    clearButtonMode={'while-editing'}
-                                    placeholderTextColor={'#B0B0B0'}
-                                    value={this.state.smsCode}
-                                    style={styles.inputTextView}
-                                    onChangeText={(text) => this.setState({smsCode: text})}
-                                />
+                    <SegmentedBar
+                        indicatorType='none'
+                        activeIndex={customStyleIndex}
+                        onChange={this.handleSelect}
+                        style={{
+                            backgroundColor: '#ffffff',
+                            width: p(400),
+                        }}
+                    >
+                        {
+                            ['谷歌验证', '手机验证'].map((item, index) => {
+                                return (
+                                    <SegmentedBar.Item
+                                        key={index}
+                                        title={item}
+                                        activeTitleStyle={{
+                                            color: '#FFFFFF',
+                                            fontSize: p(28),
+                                        }}
+                                        titleStyle={{
+                                            color: '#FFFFFF',
+                                            fontSize: p(28)
+                                        }}
+                                        style={{
+                                            width: p(200),
+                                            color: '#000',
+                                            borderWidth: StyleSheet.hairlineWidth,
+                                            borderColor: '#ffffff',
+                                            backgroundColor: customStyleIndex === index ? '#D95411' : '#B0B0B0',
+                                        }}
+                                    />
+                                )
+                            })
+                        }
+                    </SegmentedBar>
+
+                    {
+                        customStyleIndex === 0 ?
+                            <View style={{marginTop: p(30)}}>
+                                <View style={styles.reWithView}>
+                                    <TextInput
+                                        underlineColorAndroid='transparent'
+                                        placeholder='请输入谷歌验证码'
+                                        clearButtonMode={'while-editing'}
+                                        placeholderTextColor={'#B0B0B0'}
+                                        value={this.state.googleCode}
+                                        style={styles.inputTextView}
+                                        onChangeText={(text) => this.setState({googleCode: text})}
+                                    />
+                                </View>
+
                                 <TouchableOpacity
-                                    onPress={() => {
-                                        this.getCurrencyCode()
-                                    }}
-                                    style={this.state.codeStyle}
-                                    activeOpacity={.8}>
-                                    <Text
-                                        style={{color: '#FFF'}}>{this.state.checkCodeText}</Text>
+                                    onPress={this.googleKey}
+                                    activeOpacity={.8}
+                                    style={{
+                                        height: p(80), backgroundColor: '#D95411', width: width - p(200), marginTop: p(30),
+                                        alignItems: 'center', justifyContent: 'center', borderRadius: p(10)
+                                    }}>
+                                    <Text style={{color: '#fff', fontSize: p(26)}}>{I18n.t("baocun")}</Text>
                                 </TouchableOpacity>
                             </View>
-                            <TouchableOpacity
-                                onPress={this.savePhone}
-                                activeOpacity={.8}
-                                style={{
-                                    height: p(80), backgroundColor: '#D95411', marginTop: p(30), width: width - p(200),
-                                    alignItems: 'center', justifyContent: 'center', borderRadius: p(10)
-                                }}>
-                                <Text style={{color: '#fff', fontSize: p(26)}}>{I18n.t("baocun")}</Text>
-                            </TouchableOpacity>
-                        </View>}
+                            :
+                            <View style={{marginTop: p(30)}}>
+                                <View style={styles.reWithView}>
+                                    <TextInput
+                                        underlineColorAndroid='transparent'
+                                        placeholder='请输入短信验证码'
+                                        clearButtonMode={'while-editing'}
+                                        placeholderTextColor={'#B0B0B0'}
+                                        value={this.state.smsCode}
+                                        style={styles.inputTextView}
+                                        onChangeText={(text) => this.setState({smsCode: text})}
+                                    />
+
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            this.getCurrencyCode()
+                                        }}
+                                        style={this.state.codeStyle}
+                                        activeOpacity={.8}>
+                                        <Text
+                                            style={{color: '#FFF'}}>{this.state.checkCodeText}</Text>
+                                    </TouchableOpacity>
+                                </View>
+
+                                <TouchableOpacity
+                                    onPress={this.savePhone}
+                                    activeOpacity={.8}
+                                    style={{
+                                        height: p(80), backgroundColor: '#D95411', marginTop: p(30), width: width - p(200),
+                                        alignItems: 'center', justifyContent: 'center', borderRadius: p(10)
+                                    }}>
+                                    <Text style={{color: '#fff', fontSize: p(26)}}>{I18n.t("baocun")}</Text>
+                                </TouchableOpacity>
+                            </View>
+                    }
                 </View>
             )
         }

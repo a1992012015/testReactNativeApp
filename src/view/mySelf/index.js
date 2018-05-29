@@ -108,6 +108,7 @@ class myHome extends PureComponent {
     onClickChange = (route, member) => {
         this.props.navigation.navigate(route, {member: member, onClose: () => this.pageCloses()});
     };
+
     //
     upState = () => {
         let url = config.api.person.isRealUrl;

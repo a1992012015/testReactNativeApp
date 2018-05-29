@@ -38,8 +38,7 @@ class App extends PureComponent {
 
     //在完成首次渲染之前调用
     componentWillMount() {
-        console.log(this.props.StartPage.pageFlag);
-        console.log(this.props.navigation.state);
+
     }
 
     //真实的DOM被渲染出来后调用

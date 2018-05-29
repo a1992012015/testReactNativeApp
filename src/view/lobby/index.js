@@ -91,6 +91,32 @@ class Business extends PureComponent {
         this.twoLoad = 1;
     }
 
+    //在完成首次渲染之前调用
+    componentWillMount() {
+        let that = this;
+        Platform.OS === 'android' ?
+            this.timeName = DeviceEventEmitter.addListener('TimeName', function (msg) {//监听原生事件的回调
+                if (msg) {
+                    that.setState({
+                        time: msg
+                    }, () => that.getKlineData())
+                } else {
+                    that.getKlineData();
+                }
+            })
+            :
+            new NativeEventEmitter(PushCandlestickChart).addListener('EventReminder', reminder => {
+                    if (reminder.name) {
+                        that.setState({
+                            time: reminder.name,
+                        }, () => that.toIOS())
+                    } else {
+                        that.toIOS();
+                    }
+                }
+            );
+    }
+
     //真实的DOM渲染出来之后调用
     componentDidMount() {
         this.getSocket();
@@ -119,7 +145,7 @@ class Business extends PureComponent {
                 this.setState({
                     username: member.memberInfo.username,
                     memberInfo: member.memberInfo,
-                    isLogin: true,
+                    isLogin: true,//是否登录
                 })
             }
         });
@@ -172,9 +198,7 @@ class Business extends PureComponent {
                 let coinData = marketDetail[trans][0].payload;
                 const {asks, bids} = coinData;
 
-                //let asks = coinData.asks.price;
                 let amount = asks.amount;
-                //let bids = coinData.bids.price;
                 let bidsAM = bids.amount;
                 let sell = [];
                 let buy = [];
@@ -189,6 +213,7 @@ class Business extends PureComponent {
                         });
                     }
                 }
+
                 //计算买的数据
                 if (bids.price) {
                     let buyLength = bids.price.length < 5 ? bids.price.length : 7;
@@ -305,7 +330,7 @@ class Business extends PureComponent {
             this.state.busTitle = coinCodeArray[0] + '/' + coinCodeArray[1];
             this.twoLoad++;
         }
-        console.log(areaData);
+
         this.setState({
             areaList: areaData,//顶部切换币种列表
             headList: headData,//顶部切换币种列表 => 大类
@@ -340,6 +365,7 @@ class Business extends PureComponent {
         this.socket.connect();
     };
 
+    //显示头部切换币种列表
     setOpen = isOpen => {
         console.log("isOpen", isOpen);
         this.setState({
@@ -394,31 +420,6 @@ class Business extends PureComponent {
         let that = this;
         that.getKlineData();
     };
-
-    componentWillMount() {
-        let that = this;
-        Platform.OS === 'android' ?
-            this.timeName = DeviceEventEmitter.addListener('TimeName', function (msg) {
-                if (msg) {
-                    that.setState({
-                        time: msg
-                    }, () => that.getKlineData())
-                } else {
-                    that.getKlineData();
-                }
-            })
-            :
-            new NativeEventEmitter(PushCandlestickChart).addListener('EventReminder', reminder => {
-                    if (reminder.name) {
-                        that.setState({
-                            time: reminder.name,
-                        }, () => that.toIOS())
-                    } else {
-                        that.toIOS();
-                    }
-                }
-            );
-    }
 
     getKlineData = () => {
         //获取首页数据  进入原生页面后定时器暂停了 只能重新获取
@@ -500,6 +501,7 @@ class Business extends PureComponent {
         })
     };
 
+    //渲染
     render() {
         if (this.state.isLoading) {
             return (
@@ -536,10 +538,12 @@ class Business extends PureComponent {
                                 source={require('../../static/lobby/trend.png')}
                             />
                         </TouchableOpacity>
+
                         {/*中间切换币种*/}
                         <TouchableOpacity
                             style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}
-                            onPress={() => this.setOpen(true)}>
+                            onPress={() => this.setOpen(true)}
+                        >
                             <Text style={styles.headerTitle}>{this.state.busTitle}</Text>
                             <Image
                                 style={{width: p(32), height: p(32), marginLeft: p(5)}}
@@ -549,6 +553,7 @@ class Business extends PureComponent {
                                     require('../../static/cTowC/lower.png')}
                             />
                         </TouchableOpacity>
+
                         {/*查看交易详情*/}
                         <TouchableOpacity
                             onPress={() => {
@@ -563,6 +568,7 @@ class Business extends PureComponent {
                             />
                         </TouchableOpacity>
                     </View>
+
                     {/*顶部切换币种组件*/}
                     <BuessModal
                         isOpen={this.state.isOpen}
@@ -572,6 +578,7 @@ class Business extends PureComponent {
                         setOpen={this.setOpen}
                         setItemText={this.setItemText}
                     />
+
                     {/*选项卡组件*/}
                     <ScrollableTabView
                         locked={false}

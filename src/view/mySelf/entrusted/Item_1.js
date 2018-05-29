@@ -1,7 +1,7 @@
 /**
  * Created by 圆环之理 on 2018/5/17.
  *
- * 功能：当前委托组件
+ * 功能：我的委托 => 当前委托组件
  *
  */
 'use strict';
@@ -14,7 +14,7 @@ import {
     TouchableOpacity,
     Dimensions,
     FlatList,
-    Alert
+    Alert,
 } from 'react-native';
 import Toast, {DURATION} from 'react-native-easy-toast';
 
@@ -38,94 +38,97 @@ export default class Item_1 extends PureComponent {
             member: null,
             tranDate: null,
             killData: [],
-            balance: true,
             visible: true,
             offset: 0,
-            total: 10
+            total: 10,
+            isRefreshing: false,
         }
     }
 
     //真实结构被渲染出来后调用
     componentDidMount() {
-
-        this.entrustList(0);
+        this.entrustList();
     }
 
+    //首次获取数据
     entrustList = () => {
         this.setState({
-            visible: true,
-            killData: [],
-            offset: 0
-        }, () => {
-            //地址
-            let url = config.api.trades.list;
-            //参数
-            const actions = {
-                type: 'current',
-                limit: 10,
-                offset: 0,
-                typeone: 0,
-                sortOrder: 'asc',
-                querypath: 'enter',
-            };
+            isRefreshing: true,
+        });
 
-            const {toast} = this.refs;
+        //地址 => 委托记录
+        let url = config.api.trades.list;
+        //参数
+        const actions = {
+            type: 'current',
+            limit: 10,
+            offset: 0,
+            typeone: 0,
+            sortOrder: 'asc',
+            querypath: 'enter',
+        };
 
-            request.post(url, actions, this.props).then(responseText => {
+        const {toast} = this.refs;
 
-                if (responseText.ok) {//判断接口是否请求成功
-                    console.log('接口请求失败进入失败函数');
-                    toast.show('接口请求失败', DURATION.LENGTH_SHORT);
-                    return;
-                }
+        request.post(url, actions, this.props).then(responseText => {
 
-                this.setState({
-                    visible: false
+            if (responseText.ok) {//判断接口是否请求成功
+                console.log('接口请求失败进入失败函数');
+                toast.show('接口请求失败', DURATION.LENGTH_SHORT);
+                return;
+            }
+
+            this.setState({//关闭加载特效
+                visible: false
+            });
+
+            const {obj} = responseText;
+
+            let kill = [];
+
+            if (obj.rows.length > 0) {
+                obj.rows.map((item, index) => {
+                    kill.push({
+                        key: index,
+                        value: item
+                    });
                 });
 
-                const {obj} = responseText;
+                let offsets = this.state.offset;
+                offsets++;
 
-                let kill = [];
-
-                if (obj.rows.length > 0) {
-                    obj.rows.map((item, index) => {
-                        kill.push({
-                            key: index,
-                            value: item
-                        });
-                    });
-
-                    let offsets = this.state.offset;
-                    offsets++;
-
-                    this.setState({
-                        balance: false,
-                        killData: kill,
-                        total: obj.total,
-                        offset: offsets,
-                    })
-                } else {
-                    this.setState({
-                        balance: false
-                    })
-                }
-
-            }).catch(error => {
-                console.log('进入失败函数 =>', error);
-                toast.show(I18n.t("exception"), DURATION.LENGTH_SHORT);
                 this.setState({
-                    visible: false
+                    killData: kill,
+                    total: obj.total,
+                    offset: offsets,
+                    isRefreshing: false,
                 })
-            });
+            }else{
+                this.setState({
+                    isRefreshing: false,
+                    killData: [],
+                });
+            }
+
+        }).catch(error => {
+            console.log('进入失败函数 =>', error);
+            toast.show(I18n.t("exception"), DURATION.LENGTH_SHORT);
+
+            this.setState({
+                visible: false
+            })
         });
     };
 
+    //滚动到界面最底部时回调
     reachedKill = () => {
+        console.log('12321321312321321312313123-=============');
         let offsetValue = this.state.offset * 10;
         if (offsetValue > this.state.total) {
             return;
         }
 
+        console.log(112123);
         const {toast} = this.refs;
         //地址
         let url = config.api.trades.list;
@@ -171,13 +174,8 @@ export default class Item_1 extends PureComponent {
                     offsets++;
 
                     this.setState({
-                        balance: false,
                         killData: arr,
                         offset: offsets
-                    })
-                } else {
-                    this.setState({
-                        balance: false
                     })
                 }
             }
@@ -191,6 +189,7 @@ export default class Item_1 extends PureComponent {
 
     };
 
+    /*列表为空时渲染的组件*/
     renderEmpty = () => {
         return (
             <View style={styles.viewStyle3}>
@@ -224,24 +223,30 @@ export default class Item_1 extends PureComponent {
                     <Text style={[styles.textRecord, {width: '15%'}]}>状态</Text>
                     <Text style={[styles.textRecord, {flex: 1}]}>操作</Text>
                 </View>
+
+                {/*每条数据的显示方式*/}
                 <FlatList
                     style={{marginBottom: p(10)}}
                     horizontal={false}
                     data={this.state.killData}
                     renderItem={this.renderKillRow}
-                    onEndReached={this.reachedKill}
+                    onEndReached={this.reachedKill}//上拉加载
                     onEndReachedThreshold={1}
-                    ListEmptyComponent={this.renderEmpty}
-                    refreshing={false}
-                    onRefresh={() => this.entrustList}
+                    ListEmptyComponent={this.renderEmpty}//列表为空时渲染该组件
                     keyExtractor={(item, index) => index.toString()}
+                    refreshing={this.state.isRefreshing}
+                    onRefresh={this.entrustList}//下拉刷新事件回调
                 />
+
+                {/*提示窗口*/}
                 <Toast
                     ref="toast"
                     style={{backgroundColor: 'rgba(0,0,0,.6)'}}
                     position='top'
                     textStyle={{color: 'white'}}
                 />
+
+                {/*加载特效*/}
                 <Loading visible={this.state.visible}/>
             </View>
         )
@@ -273,7 +278,7 @@ export default class Item_1 extends PureComponent {
                 return;
             }
 
-            this.setState({
+            this.setState({//关闭特效
                 visible: false,
             });
 
@@ -289,14 +294,16 @@ export default class Item_1 extends PureComponent {
                             value: item,
                         });
                     });
+
+                    console.log(kill);
+                    console.log(obj.total);
+
                     this.setState({
-                        balance: false,
                         killData: kill,
                         total: obj.total,
                     })
                 } else {
                     this.setState({
-                        balance: false,
                         killData: []
                     })
                 }
@@ -310,58 +317,59 @@ export default class Item_1 extends PureComponent {
         });
     };
 
-
     //撤销委托
-    revokeKill = (item) => {
-        Alert.alert('温馨提醒', '是否撤销委托', [
-            {text: '取消', onPress: () => {}},
-            {
-                text: '确定', onPress: () => {
-                    this.setState({
-                        visible: true
-                    });
+    revokeKill = item => {
+        Alert.alert(
+            '温馨提醒',
+            '是否撤销委托',
+            [
+                {text: '取消', onPress: () => {}},
+                {text: '确定', onPress: () => {
+                        this.setState({//开启等待特效
+                            visible: true
+                        });
 
-                    const {type, fixPriceCoinCode, coinCode, entrustPrice, entrustNum} = item;
-                    const {toast} = this.refs;
-                    //地址
-                    let url = config.api.trades.cancelExEntrust;
-                    //参数
-                    const actions = {
-                        type: type,
-                        fixPriceCoinCode: fixPriceCoinCode,
-                        coinCode: coinCode,
-                        entrustPrice: entrustPrice,
-                        entrustNums: entrustNum,
-                    };
+                        const {type, fixPriceCoinCode, coinCode, entrustPrice, entrustNum} = item;
+                        const {toast} = this.refs;
+                        //地址
+                        let url = config.api.trades.cancelExEntrust;
+                        //参数
+                        const actions = {
+                            type: type,
+                            fixPriceCoinCode: fixPriceCoinCode,
+                            coinCode: coinCode,
+                            entrustPrice: entrustPrice,
+                            entrustNums: entrustNum,
+                        };
 
-                    request.post(url, actions, this.props).then(responseText => {
+                        request.post(url, actions, this.props).then(responseText => {
+                            if (responseText.ok) {//判断接口是否请求成功
+                                console.log('接口请求失败进入失败函数');
+                                toast.show('接口请求失败', DURATION.LENGTH_SHORT);
+                                return;
+                            }
 
-                        if (responseText.ok) {//判断接口是否请求成功
-                            console.log('接口请求失败进入失败函数');
-                            toast.show('接口请求失败', DURATION.LENGTH_SHORT);
-                            return;
-                        }
+                            const {msg, success} = responseText;
 
-                        const {msg, success} = responseText;
+                            toast.show(msg, DURATION.LENGTH_SHORT);
 
-                        toast.show(msg, DURATION.LENGTH_SHORT);
-
-                        if (success) {
-                            this.refreshKill();
-                        }
-                    }).catch((error) => {
-                        console.log('进入失败函数 =>', error);
-                        toast.show(I18n.t("exception"), DURATION.LENGTH_SHORT);
-                        this.setState({
-                            visible: false,
-                        })
-                    });
+                            if (success) {//撤销成功
+                                this.refreshKill();
+                            }
+                        }).catch((error) => {
+                            console.log('进入失败函数 =>', error);
+                            toast.show(I18n.t("exception"), DURATION.LENGTH_SHORT);
+                            this.setState({
+                                visible: false,
+                            })
+                        });
+                    }
                 }
-            }
-        ])
-
+            ]
+        )
     };
 
+    /*显示数据的类型*/
     killType = type => {
         if (type === 1) {
             return (
@@ -374,6 +382,7 @@ export default class Item_1 extends PureComponent {
         }
     };
 
+    /*显示是否成交*/
     killStatus = status => {
         if (status === 0) {
             return (
@@ -386,12 +395,11 @@ export default class Item_1 extends PureComponent {
         }
     };
 
+    /*每条数据的显示方式*/
     renderKillRow = ({item}) => {
         let {entrustTime, entrustPrice, entrustCount, coinCode} = item.value;
         let time = entrustTime.substring(5);
-
-        let num = new Number(entrustPrice);
-        num = parseFloat(num).toFixed(8);
+        entrustPrice = parseFloat(entrustPrice).toFixed(8);
 
         return (
             <View style={{
@@ -404,7 +412,7 @@ export default class Item_1 extends PureComponent {
                 <Text style={[styles.textRecord, {width: '16%'}]}>{time}</Text>
                 {this.killType(item.value.type)}
                 <Text style={[styles.textRecord, {width: '15%'}]}>{coinCode}</Text>
-                <Text style={[styles.textRecord, {width: '15%'}]}>{num}</Text>
+                <Text style={[styles.textRecord, {width: '15%'}]}>{entrustPrice}</Text>
                 <Text style={[styles.textRecord, {width: '15%'}]}>{parseFloat(entrustCount)}</Text>
                 {this.killStatus(item.value.status)}
                 <TouchableOpacity
