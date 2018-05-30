@@ -22,26 +22,9 @@ const {width} = Dimensions.get('window');
 
 export default class Currency extends PureComponent {
 
-    static defaultProps = {};
-
-    // 构造
-    constructor(props) {
-        super(props);
-        // 初始状态
-        this.state = {
-            currDate: []
-        };
-
-    }
-
-    //接收到一个新的props之后调用
-    componentWillReceiveProps(props) {
-        let {currList} = props;
-
-        this.setState({
-            currDate: currList
-        })
-    }
+    static defaultProps = {
+        currList: [],
+    };
 
     ListClick = value => {
         this.props.setOpen(false);
@@ -49,12 +32,15 @@ export default class Currency extends PureComponent {
     };
 
     render() {
+        const {currList} = this.props;
+        console.log(currList);
+
         return (
             <FlatList
                 style={{paddingHorizontal: p(20)}}
                 horizontal={false}
                 numColumns={4}
-                data={this.state.currDate}
+                data={currList}
                 renderItem={this.renderCurrency}
                 onEndReachedThreshold={1}
                 refreshing={false}

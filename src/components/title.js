@@ -36,9 +36,11 @@ export default class Title extends PureComponent {
             }]}>
                 <TouchableOpacity style={{flex: 1}} onPress={() => goBack(null)}>
                     {canBack === true ?
-                        <Icon name="ios-arrow-back-outline" size={25}
-                              color={backColor ? backColor : '#fff'}
-                              style={{paddingHorizontal: p(20)}}/>
+                        <Icon
+                            name="ios-arrow-back-outline" size={25}
+                            color={backColor ? backColor : '#fff'}
+                            style={{paddingHorizontal: p(20)}}
+                        />
                         :
                         <View/>}
                 </TouchableOpacity>

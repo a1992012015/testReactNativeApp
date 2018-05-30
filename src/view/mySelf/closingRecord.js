@@ -15,6 +15,7 @@ import {
     Dimensions,
     ActivityIndicator
 } from 'react-native';
+import {Toast} from "teaset";
 
 import config from '../../utils/config';
 import p from '../../utils/tranfrom';
@@ -56,6 +57,8 @@ export default class ClosingRecord extends PureComponent {
 
             if (responseText.ok) {//判断接口是否请求成功
                 console.log('接口请求失败进入失败函数');
+                Toast.fail('接口请求失败');
+                this.props.navigation.goBack(null);
                 console.log(responseText);
                 return;
             }

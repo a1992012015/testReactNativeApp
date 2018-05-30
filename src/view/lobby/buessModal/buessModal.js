@@ -21,31 +21,14 @@ const {width} = Dimensions.get('window');
 
 export default class BuessModal extends PureComponent {
 
-    static defaultProps = {};
-
-    // 构造
-    constructor(props) {
-        super(props);
-        // 初始状态
-        this.state = {
-            isOpen: false,
-            headList: [],
-            areaList: []
-        };
-    }
-
-    //接收到一个新的props之后调用
-    componentWillReceiveProps(props) {
-        let {isOpen, headList, areaList} = props;
-        this.setState({
-            isOpen: isOpen,
-            headList: headList,
-            areaList: areaList
-        });
-    }
+    static defaultProps = {
+        isOpen: false,
+        headList: [],
+        areaList: [],
+    };
 
     render() {
-        let {headList, areaList, isOpen} = this.state;
+        const {isOpen, headList, areaList} = this.props;
 
         return (
             <Modal

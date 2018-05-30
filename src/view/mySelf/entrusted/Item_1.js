@@ -16,6 +16,7 @@ import {
     FlatList,
     Alert,
 } from 'react-native';
+import {connect} from 'react-redux';
 import Toast, {DURATION} from 'react-native-easy-toast';
 
 import config from '../../../utils/config';
@@ -23,11 +24,12 @@ import p from '../../../utils/tranfrom';
 import Request from '../../../utils/request';
 import I18n from '../../../utils/i18n';
 import Loading from '../../../components/loading';
+import {InitUserInfo} from "../../../store/actions/HomeAction";
 
 const {width, height} = Dimensions.get('window');
 const request = new Request();
 
-export default class Item_1 extends PureComponent {
+class Item_1 extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -270,51 +272,58 @@ export default class Item_1 extends PureComponent {
             querypath: 'enter',
         };
 
-        request.post(url, actions, this.props).then(responseText => {
+        let strD = new Date().getTime();
+        setTimeout(() => {
 
-            if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
-                toast.show('接口请求失败', DURATION.LENGTH_SHORT);
-                return;
-            }
+            let endD = new Date().getTime();
+            console.log((endD- strD) / 1000);
+            console.log('延迟执行');
+            request.post(url, actions, this.props).then(responseText => {
 
-            this.setState({//关闭特效
-                visible: false,
-            });
+                this.setState({//关闭特效
+                    visible: false,
+                });
 
-            const {obj} = responseText;
-
-            if (obj) {
-                let rows = obj.rows;
-                let kill = [];
-                if (rows.length > 0) {
-                    rows.map((item, index) => {
-                        kill.push({
-                            key: index,
-                            value: item,
-                        });
-                    });
-
-                    console.log(kill);
-                    console.log(obj.total);
-
-                    this.setState({
-                        killData: kill,
-                        total: obj.total,
-                    })
-                } else {
-                    this.setState({
-                        killData: []
-                    })
+                if (responseText.ok) {//判断接口是否请求成功
+                    console.log('接口请求失败进入失败函数');
+                    toast.show('接口请求失败', DURATION.LENGTH_SHORT);
+                    return;
                 }
-            }
-        }).catch((error) => {
-            console.log('进入失败函数 =>', error);
-            toast.show(I18n.t("exception"), DURATION.LENGTH_SHORT);
-            this.setState({
-                visible: false,
-            })
-        });
+
+                const {obj} = responseText;
+
+                if (obj) {
+                    let rows = obj.rows;
+                    let kill = [];
+                    if (rows.length > 0) {
+                        rows.map((item, index) => {
+                            kill.push({
+                                key: index,
+                                value: item,
+                            });
+                        });
+
+                        console.log(kill);
+                        console.log(obj.total);
+
+                        this.setState({
+                            killData: kill,
+                            total: obj.total,
+                        })
+                    } else {
+                        this.setState({
+                            killData: []
+                        })
+                    }
+                }
+            }).catch((error) => {
+                console.log('进入失败函数 =>', error);
+                toast.show(I18n.t("exception"), DURATION.LENGTH_SHORT);
+                this.setState({
+                    visible: false,
+                })
+            });
+        }, 0)
     };
 
     //撤销委托
@@ -350,11 +359,14 @@ export default class Item_1 extends PureComponent {
                             }
 
                             const {msg, success} = responseText;
+                            const {dispatch} = this.props;
 
                             toast.show(msg, DURATION.LENGTH_SHORT);
 
                             if (success) {//撤销成功
                                 this.refreshKill();
+
+                                dispatch(InitUserInfo(this.props));//获取用户资产数据
                             }
                         }).catch((error) => {
                             console.log('进入失败函数 =>', error);
@@ -465,3 +477,10 @@ let styles = StyleSheet.create({
         justifyContent: 'center',
     },
 });
+
+export default connect((state) => {
+    const {HomeReducer} = state;
+    return {
+        HomeReducer
+    }
+})(Item_1);

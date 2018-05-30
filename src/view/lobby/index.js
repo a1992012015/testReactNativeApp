@@ -161,6 +161,10 @@ class Business extends PureComponent {
     //接受到一个新的props调用
     componentWillReceiveProps(props) {
 
+        this.setState({
+            balance: true,
+        });
+
         if (props.tabTitle) {
             let coinCodes = props.tabTitle.split("_");
             this.setState({
