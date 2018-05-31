@@ -209,6 +209,7 @@ class TabBarView extends PureComponent {
                         borderWidth: 0,
                         borderColor: 'transparent'
                     }}>
+
                     {
                         TAB_ITEMS.map((item, index) => {
                             let Component = item.component;

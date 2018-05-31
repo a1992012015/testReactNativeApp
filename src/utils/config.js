@@ -57,6 +57,7 @@ const config = {
             stepTow: 'mobile/nouser/secondstep',//找回密码第二步
             regreg: 'mobile/nouser/regreg',//注册协议
             googleAuth: 'mobile/user/apppersondetail/googleAuth',//google二次认证
+            googlePass: 'user/setpw',//google二次认证
             phoneAuth: '/mobile/user/apppersondetail/PhoneAuth',//手机二次认证
             getPhoneCode: '/mobile/user/apppersondetail/getPhone',//手机认证短信
             resetPwdByPhone: "/mobile/nouser/resetPwdByPhone",//手机重置密码

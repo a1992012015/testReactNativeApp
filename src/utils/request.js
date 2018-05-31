@@ -159,30 +159,40 @@ export default function () {
                 console.log('getMember', member);
                 if (member) {
 
-                    Alert.alert('温馨提示', '登录已超时，请重新登录！', [
-                        {text: '取消', onPress: () => store.save('loginIndex', 1)},
-                        {text: '确定', onPress: () => {
+                    Alert.alert(
+                        '温馨提示',
+                        '登录已超时，请重新登录！',
+                        [
+                            {text: '取消', onPress: () => store.save('loginIndex', 1)},
+                            {text: '确定', onPress: () => {
 
-                                store.delete('member');
+                                    store.delete('member');
 
-                                props.navigation.navigate('Login');
+                                    props.navigation.navigate('Login');
+                                }
                             }
-                        }
-                    ]);
+                        ],
+                        {cancelable: false}
+                    );
                 } else {
                     if (props.index === 0) {
                         return false;
                     }
 
-                    Alert.alert('温馨提示', '是否前往登录', [
-                        {text: '取消', onPress: () => store.save('loginIndex', 1)},
-                        {text: '确定', onPress: () => {
-                                if (routeName !== "Login") {
-                                    props.navigation.navigate('Login');
+                    Alert.alert(
+                        '温馨提示',
+                        '是否前往登录',
+                        [
+                            {text: '取消', onPress: () => store.save('loginIndex', 1)},
+                            {text: '确定', onPress: () => {
+                                    if (routeName !== "Login") {
+                                        props.navigation.navigate('Login');
+                                    }
                                 }
                             }
-                        }
-                    ]);
+                        ],
+                        {cancelable: false}
+                    );
                 }
                 return false;
             });
@@ -194,15 +204,20 @@ export default function () {
 
             await store.save('loginIndex', 2);
 
-            Alert.alert('温馨提示', '是否前往登录', [
-                {text: '取消', onPress: () => store.save('loginIndex', 1)},
-                {text: '确定', onPress: () => {
-                        if (routeName !== "Login") {
-                            props.navigation.navigate('Login');
+            Alert.alert(
+                '温馨提示',
+                '是否前往登录',
+                [
+                    {text: '取消', onPress: () => store.save('loginIndex', 1)},
+                    {text: '确定', onPress: () => {
+                            if (routeName !== "Login") {
+                                props.navigation.navigate('Login');
+                            }
                         }
                     }
-                }
-            ]);
+                ],
+                {cancelable: false}
+            );
 
             return false;
         } else if (responseText.obj) {

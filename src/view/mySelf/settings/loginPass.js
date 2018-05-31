@@ -51,6 +51,7 @@ export default class LoginPass extends PureComponent {
             user: '',
             transPassURL: null,//验证码请求地址
             actions: null,//需要传递下去的参数
+            setPassword: false,//是否是修改密码页面给出的参数
         };
     }
 
@@ -93,6 +94,7 @@ export default class LoginPass extends PureComponent {
             checkOpen: false
         });
     };
+
     //修改配置
     _toMain = (responseText, transPassURL, actions) => {
 
@@ -109,6 +111,7 @@ export default class LoginPass extends PureComponent {
                     user: obj,
                     transPassURL: transPassURL,
                     actions: actions,
+                    setPassword: true,
                 })
             } else if (phoneState === 1 && googleState === 0) {
                 //手机认证
@@ -127,6 +130,7 @@ export default class LoginPass extends PureComponent {
                     user: obj,
                     transPassURL: transPassURL,
                     actions: actions,
+                    setPassword: true,
                 })
             } else {
                 toast.show(msg, DURATION.LENGTH_SHORT);
@@ -299,6 +303,7 @@ export default class LoginPass extends PureComponent {
                     click={this._click}
                     transPassURL={this.state.transPassURL}
                     action={this.state.actions}
+                    setPassword={this.state.setPassword}
                 />
                 {/*提示窗组件*/}
                 <Toast

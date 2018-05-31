@@ -128,7 +128,7 @@ export default class CheckModal extends PureComponent {
         //参数
         const actions = {};
 
-        if (this.state.transPassURL) {
+        if (this.prosp.setPassword) {
             url = config.api.person.passCode;
             const {action} = this.props;
             actions.valicode = this.state.smsCode;
@@ -156,11 +156,56 @@ export default class CheckModal extends PureComponent {
                 this.setState({
                     isOpen: false
                 });
-                this.props.saveUser(responseText);
+
+                if(this.props.setPassword){
+                    console.log('谷歌修改密码');
+                    this.setGooglePassword(this.state.googleCode);
+                }else {
+                    this.props.saveUser(responseText);
+                }
             } else {
                 const {msg} = responseText;
                 toast.show(msg, DURATION.LENGTH_SHORT);
             }
+        });
+    };
+
+    //谷歌修改密码验证成功回调
+    setGooglePassword = googleCode => {
+
+        const {toast} = this.refs;
+        const {action} = this.props;
+        console.log(action);
+
+        //地址
+        let url = config.api.login.googlePass;
+        //参数
+        const actions = {
+            pwSmsCode: googleCode,//验证码
+        };
+        Object.assign(actions, action);
+
+        console.log(actions);
+
+        request.post(url, actions, this.props).then((responseText) => {
+
+            if (responseText.ok) {//判断接口是否请求成功
+                console.log('接口请求失败进入失败函数');
+                return;
+            }
+
+            console.log('谷歌修改成功');
+            console.log(responseText);
+
+            if (responseText.success) {
+                    console.log('谷歌修改成功');
+                    this.props.saveUser(responseText);
+            } else {
+                const {msg} = responseText;
+                toast.show(msg, DURATION.LENGTH_SHORT);
+            }
+        }).catch(error => {
+            console.log(error)
         });
     };
 
@@ -206,12 +251,14 @@ export default class CheckModal extends PureComponent {
                     this.setState({
                         codeStyle: styles.codeFalse
                     });
+
                     toast.show('短信发送成功', DURATION.LENGTH_SHORT);
                     let num = 60;
                     this.setState({
                         codeSent: false,
                         isCheckCode: true
                     });
+
                     this.timer1 = setInterval(() => {
 
                         num--;
@@ -228,6 +275,7 @@ export default class CheckModal extends PureComponent {
                             })
                         }
                     }, 1000);
+
                     this.setState({timeId: this.timer1});
                 } else {
                     const {msg} = responseText;
@@ -238,6 +286,7 @@ export default class CheckModal extends PureComponent {
             }
         });
     };
+
     //初始化
     countDown = () => {
         console.log('初始化');
@@ -248,6 +297,7 @@ export default class CheckModal extends PureComponent {
             codeSent: true
         });
     };
+
     //验证码提交函数
     savePhone = () => {
         const {toast} = this.refs;
