@@ -220,23 +220,10 @@ class Index extends PureComponent {
                                         >
                                             <Text style={{color: '#FFF', fontSize: p(24)}}>确认</Text>
                                         </TouchableOpacity>
-                                        : step === 3 ?
-                                        <TouchableOpacity
-                                            onPress={() => switchVersion(hash)}
-                                            style={{
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                borderRadius: p(5),
-                                                width: width - p(300),
-                                                backgroundColor: '#D95411',
-                                                height: p(60)
-                                            }}
-                                        >
-                                            <Text style={{color: '#FFF', fontSize: p(24)}}>确认</Text>
-                                        </TouchableOpacity>
-                                        : step === 4 ?
+                                        :
+                                        step === 3 ?
                                             <TouchableOpacity
-                                                onPress={() => Linking.openURL(hash)}
+                                                onPress={() => switchVersion(hash)}
                                                 style={{
                                                     alignItems: 'center',
                                                     justifyContent: 'center',
@@ -248,8 +235,25 @@ class Index extends PureComponent {
                                             >
                                                 <Text style={{color: '#FFF', fontSize: p(24)}}>确认</Text>
                                             </TouchableOpacity>
-                                            : null
+                                            :
+                                            step === 4 ?
+                                                <TouchableOpacity
+                                                    onPress={() => Linking.openURL(hash)}
+                                                    style={{
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        borderRadius: p(5),
+                                                        width: width - p(300),
+                                                        backgroundColor: '#D95411',
+                                                        height: p(60)
+                                                    }}
+                                                >
+                                                    <Text style={{color: '#FFF', fontSize: p(24)}}>确认</Text>
+                                                </TouchableOpacity>
+                                                :
+                                                null
                                 }
+
                                 {
                                     step !== 3 ?
                                         <TouchableOpacity
@@ -266,25 +270,28 @@ class Index extends PureComponent {
                                         >
                                             <Text style={{color: '#FFF', fontSize: p(24)}}>取消</Text>
                                         </TouchableOpacity>
-                                        : null
+                                        :
+                                        null
                                 }
                             </View>
-                            : step === 2 ?
-                            <View style={{
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                marginTop: p(40),
-                                marginBottom: p(30)
-                            }}>
-                                <ProgressBarAndroid
-                                    color="#D95411"
-                                    styleAttr='Horizontal'
-                                    progress={this.state.progress}
-                                    indeterminate={true}
-                                    style={{marginTop: 10, width: width - p(300)}}
-                                />
-                            </View>
-                            : null
+                            :
+                            step === 2 ?
+                                <View style={{
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    marginTop: p(40),
+                                    marginBottom: p(30)
+                                }}>
+                                    <ProgressBarAndroid
+                                        color="#D95411"
+                                        styleAttr='Horizontal'
+                                        progress={this.state.progress}
+                                        indeterminate={true}
+                                        style={{marginTop: 10, width: width - p(300)}}
+                                    />
+                                </View>
+                                :
+                                null
                     }
                 </View>
             </Overlay.PopView>
