@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types'; // ES6
+import store from 'react-native-simple-store';
 
 import FirstStart from '../../components/startPage/firstStart';
 import SecondStart from '../../components/startPage/secondStart';
@@ -38,7 +39,7 @@ class App extends PureComponent {
 
     //在完成首次渲染之前调用
     componentWillMount() {
-
+        store.save('loginIndex', 1);//重置登陆判定的拦截状态 => 防止在弹窗时关闭界面没有重置
     }
 
     //真实的DOM被渲染出来后调用

@@ -123,24 +123,6 @@ export default class CheckModal extends PureComponent {
             password: this.state.password,
         };
 
-        /*//地址
-        let url = '';
-        //参数
-        const actions = {};
-
-        if (this.prosp.setPassword) {
-            url = config.api.person.passCode;
-            const {action} = this.props;
-            actions.valicode = this.state.smsCode;
-            Object.assign(actions, action);
-        } else {
-            url = config.api.login.googleAuth;
-            actions.username = this.state.username;
-            actions.verifyCode = this.state.googleCode;
-            actions.password = this.state.password;
-        }*/
-
-
         console.log(actions);
 
         request.post(url, actions, this.props).then((responseText) => {
@@ -153,59 +135,17 @@ export default class CheckModal extends PureComponent {
             }
 
             if (responseText.success) {
-                this.setState({
-                    isOpen: false
-                });
 
-                if(this.props.setPassword){
+                if (this.state.transPassURL) {
                     console.log('谷歌修改密码');
-                    this.setGooglePassword(this.state.googleCode);
-                }else {
+                    this.savePhone();
+                } else {
                     this.props.saveUser(responseText);
                 }
             } else {
                 const {msg} = responseText;
                 toast.show(msg, DURATION.LENGTH_SHORT);
             }
-        });
-    };
-
-    //谷歌修改密码验证成功回调
-    setGooglePassword = googleCode => {
-
-        const {toast} = this.refs;
-        const {action} = this.props;
-        console.log(action);
-
-        //地址
-        let url = config.api.login.googlePass;
-        //参数
-        const actions = {
-            pwSmsCode: googleCode,//验证码
-        };
-        Object.assign(actions, action);
-
-        console.log(actions);
-
-        request.post(url, actions, this.props).then((responseText) => {
-
-            if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
-                return;
-            }
-
-            console.log('谷歌修改成功');
-            console.log(responseText);
-
-            if (responseText.success) {
-                    console.log('谷歌修改成功');
-                    this.props.saveUser(responseText);
-            } else {
-                const {msg} = responseText;
-                toast.show(msg, DURATION.LENGTH_SHORT);
-            }
-        }).catch(error => {
-            console.log(error)
         });
     };
 
@@ -301,14 +241,24 @@ export default class CheckModal extends PureComponent {
     //验证码提交函数
     savePhone = () => {
         const {toast} = this.refs;
+        //console.log(toast);
+
         if (null === this.state.telephone || '' === this.state.telephone) {
             toast.show('请输入手机号码', DURATION.LENGTH_SHORT);
+            console.log('请输入手机号码');
             return;
         }
-        if (null === this.state.smsCode || '' === this.state.smsCode) {
+// || null === this.state.googleCode || '' === this.state.googleCode
+        console.log(null === this.state.googleCode || '' === this.state.googleCode);
+        console.log(null === this.state.smsCode || '' === this.state.smsCode);
+        console.log((null === this.state.smsCode || '' === this.state.smsCode) && (null === this.state.googleCode || '' === this.state.googleCode));
+        if ((null === this.state.smsCode || '' === this.state.smsCode) && (null === this.state.googleCode || '' === this.state.googleCode)) {
             toast.show('请输入手机验证码', DURATION.LENGTH_SHORT);
+            console.log('请输入手机验证码');
             return;
         }
+
+        console.log('adsad-4');
         //地址
         let url = '';
         //参数
@@ -317,7 +267,7 @@ export default class CheckModal extends PureComponent {
         if (this.state.transPassURL) {
             url = this.state.transPassURL;
             const {action} = this.props;
-            actions.valicode = this.state.smsCode;
+            actions.valicode = this.state.smsCode || this.state.googleCode;
             Object.assign(actions, action);
         } else {
             url = config.api.login.phoneAuth;
@@ -325,6 +275,8 @@ export default class CheckModal extends PureComponent {
             actions.verifyCode = this.state.smsCode;
             actions.password = this.state.password;
         }
+
+        console.log(actions);
 
         request.post(url, actions, this.props).then((responseText) => {
 
@@ -486,16 +438,15 @@ export default class CheckModal extends PureComponent {
                                         key={index}
                                         title={item}
                                         activeTitleStyle={{
-                                            color: '#FFFFFF',
                                             fontSize: p(28),
+                                            color: '#FFFFFF',
                                         }}
                                         titleStyle={{
+                                            fontSize: p(28),
                                             color: '#FFFFFF',
-                                            fontSize: p(28)
                                         }}
                                         style={{
                                             width: p(200),
-                                            color: '#000',
                                             borderWidth: StyleSheet.hairlineWidth,
                                             borderColor: '#ffffff',
                                             backgroundColor: customStyleIndex === index ? '#D95411' : '#B0B0B0',
@@ -525,8 +476,13 @@ export default class CheckModal extends PureComponent {
                                     onPress={this.googleKey}
                                     activeOpacity={.8}
                                     style={{
-                                        height: p(80), backgroundColor: '#D95411', width: width - p(200), marginTop: p(30),
-                                        alignItems: 'center', justifyContent: 'center', borderRadius: p(10)
+                                        height: p(80),
+                                        backgroundColor: '#D95411',
+                                        width: width - p(200),
+                                        marginTop: p(30),
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        borderRadius: p(10)
                                     }}>
                                     <Text style={{color: '#fff', fontSize: p(26)}}>{I18n.t("baocun")}</Text>
                                 </TouchableOpacity>
@@ -559,8 +515,13 @@ export default class CheckModal extends PureComponent {
                                     onPress={this.savePhone}
                                     activeOpacity={.8}
                                     style={{
-                                        height: p(80), backgroundColor: '#D95411', marginTop: p(30), width: width - p(200),
-                                        alignItems: 'center', justifyContent: 'center', borderRadius: p(10)
+                                        height: p(80),
+                                        backgroundColor: '#D95411',
+                                        marginTop: p(30),
+                                        width: width - p(200),
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        borderRadius: p(10)
                                     }}>
                                     <Text style={{color: '#fff', fontSize: p(26)}}>{I18n.t("baocun")}</Text>
                                 </TouchableOpacity>
