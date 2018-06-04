@@ -185,14 +185,16 @@ class MySetUp extends PureComponent {
         Alert.alert('温馨提醒', '确定退出吗?', [
             {text: '取消', onPress: () => {}},
             {text: '确定', onPress: () => {
-                    store.delete('member');
+                    store.delete('member').then(reason => {
+                        console.log(reason);
 
-                    const resetAction = StackActions.reset({
-                        index: 0,
-                        actions: [NavigationActions.navigate({routeName: 'TabBar'})],
+                        const resetAction = StackActions.reset({
+                            index: 0,
+                            actions: [NavigationActions.navigate({routeName: 'TabBar'})],
+                        });
+
+                        this.props.navigation.dispatch(resetAction);
                     });
-
-                    this.props.navigation.dispatch(resetAction);
                 }
             }
         ]);

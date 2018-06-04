@@ -195,7 +195,9 @@ export default class LoginPass extends PureComponent {
                 console.log('接口请求失败进入失败函数');
                 return;
             }
+
             console.log(responseText);
+
             if (responseText.success) {//false 需要验证 teur 不需要验证
                 store.save('loginIndex', 2).then(value => {
                     console.log('loginIndex => value =>', value);

@@ -56,7 +56,6 @@ export default class CheckModal extends PureComponent {
         };
         //监听输入键盘显示事件
         Keyboard.addListener('keyboardDidShow', (frames) => {
-            console.log('键盘显示=>', frames);
             if (!frames.endCoordinates) {
                 return
             }
@@ -66,7 +65,6 @@ export default class CheckModal extends PureComponent {
         });
         //监听输入键盘消失事件
         Keyboard.addListener('keyboardDidHide', () => {
-            console.log('键盘消失');
             this.setState({
                 keyboardSpace: 0
             });
@@ -123,13 +121,9 @@ export default class CheckModal extends PureComponent {
             password: this.state.password,
         };
 
-        console.log(actions);
-
         request.post(url, actions, this.props).then((responseText) => {
-            console.log("responseText", responseText);
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 toast.show('登陆失败', 5000);
                 return;
             }
@@ -137,7 +131,6 @@ export default class CheckModal extends PureComponent {
             if (responseText.success) {
 
                 if (this.state.transPassURL) {
-                    console.log('谷歌修改密码');
                     this.savePhone();
                 } else {
                     this.props.saveUser(responseText);

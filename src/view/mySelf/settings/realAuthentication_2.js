@@ -48,11 +48,9 @@ export default class RealAuthentication_2 extends PureComponent {
         request.post(url, {}, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            console.log('responseText', responseText);
             const {obj} = responseText;
             let cardNum = obj.cardId;
 

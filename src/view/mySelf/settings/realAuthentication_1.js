@@ -153,6 +153,7 @@ class RealAuthentication_1 extends PureComponent {
             value: I18n.t('nv'),
         }]
     }
+
     //提交按钮
     _tarnAuthentication = () => {
         const {toast} = this.refs;
@@ -681,8 +682,10 @@ class RealAuthentication_1 extends PureComponent {
                             <Text style={styles.reg_btn_text}>{I18n.t('tijiaorz')}</Text>
                         </TouchableOpacity>
                     </View>
+
                     {/*加载特效组件*/}
                     <Loading visible={this.state.visible}/>
+
                     {/*提示框*/}
                     <Toast
                         ref="toast"

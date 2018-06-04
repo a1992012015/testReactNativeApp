@@ -165,7 +165,6 @@ class Login extends PureComponent {
 
     //关闭登陆界面
     _closeLogin = () => {
-        console.log('关闭登陆界面');
         store.save('loginIndex', 1);//是否打开登陆提示窗的标记
 
         if (this.state.ISForm) {
@@ -183,7 +182,6 @@ class Login extends PureComponent {
     menu = null;
     //自动显示之前登录过的账号
     showMenu = type => {
-        console.log('自动显示之前登录过的账号');
         if (type === 1 && this.state.strName.length > 0) {
             this.menu.show();
         } else if (!this.state.name && this.state.strName.length > 0) {
@@ -192,17 +190,14 @@ class Login extends PureComponent {
     };
     //设置ref节点
     setMenuRef = ref => {
-        console.log('设置ref节点');
         this.menu = ref;
     };
     //隐藏ref节点
     hideMenu = () => {
-        console.log('隐藏ref节点');
         this.menu.hide();
     };
     //选择下拉列表里面的账号
     _selectPerson = (type, item) => {
-        console.log('选择下拉列表里面的账号');
         this.setState({
             name: item.text,
         });
@@ -210,14 +205,12 @@ class Login extends PureComponent {
     };
     //删除输入框内的用户名
     _cleanText = () => {
-        console.log('删除输入框内的字段');
         this.setState({
             name: ''
         })
     };
     //删除输入框内的密码
     _cleanTextPwd = () => {
-        console.log('删除输入框内的密码');
         this.setState({
             pwd: ''
         })
@@ -225,7 +218,6 @@ class Login extends PureComponent {
     //去登陆的函数
     _toLogin = () => {
         const {toast} = this.refs;
-        console.log(DURATION);
         //判断是否输入用户名
         if (this.state.name === '' || this.state.name === null) {
             toast.show(I18n.t('emailisnull'), DURATION.LENGTH_SHORT);
@@ -247,8 +239,6 @@ class Login extends PureComponent {
             username: this.state.name,
             password: md5.md5(this.state.pwd),
         };
-        console.log(this.state.pwd);
-        console.log(actions);
 
         request.post(loginURL, actions, this.props).then((responseText) => {
 
@@ -257,7 +247,6 @@ class Login extends PureComponent {
             });
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 toast.show('登陆失败', 5000);
                 return;
             }
@@ -269,9 +258,7 @@ class Login extends PureComponent {
                     :
                     toast.show(msg, DURATION.LENGTH_SHORT);
             }
-        }).catch(error => {
-            console.log('错误函数');
-            console.log(error);
+        }).catch(() => {
             toast.show('登陆失败', DURATION.LENGTH_SHORT);
         })
     };
@@ -306,7 +293,6 @@ class Login extends PureComponent {
     };
     //登陆
     _btnView = (items) => {
-        console.log('登陆');
         switch (items.value) {
             case 1:
                 this._toLogin();
@@ -358,7 +344,6 @@ class Login extends PureComponent {
     };
     //隐藏验证码弹出框
     _click = () => {
-        console.log('隐藏验证码弹出框');
         this.setState({
             checkOpen: false
         });

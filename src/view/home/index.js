@@ -82,9 +82,8 @@ class Index extends PureComponent {
 
     //真实的DOM被渲染出来后调用
     componentDidMount() {
-
         const {IndexLoopReducer} = this.props;
-        console.log('在缓存里面拿到数据=>', IndexLoopReducer);
+
         if (!IndexLoopReducer.homeLoading) {
             this.handleData(IndexLoopReducer.homeData);
         }
@@ -96,7 +95,6 @@ class Index extends PureComponent {
     //组件接收到新的props时调用，并将其作为参数nextProps使用
     componentWillReceiveProps(nextProps) {
         const {IndexLoopReducer} = nextProps;
-        console.log('轮询拿到的数据', IndexLoopReducer);
 
         if (!IndexLoopReducer.homeLoading) {
             this.handleData(IndexLoopReducer.homeData);
@@ -118,7 +116,6 @@ class Index extends PureComponent {
             request.post(URL, {}, this.props).then(responseText => {
 
                 if (responseText.ok) {//判断接口是否请求成功
-                    console.log('接口请求失败进入失败函数');
                     //toast.show('登陆失败', 50000);
                     return;
                 }
@@ -134,7 +131,6 @@ class Index extends PureComponent {
     checkUpdate = () => {
         checkUpdate(appKey).then(info => {
             this.info = info;
-            console.log(info);
             const {expired, upToDate} = info;
             if (expired) {
                 this.showPop('zoomOut', true, '版本升级', '您的应用版本已更新,需下载新的版本!', 4, config.api.appReleaseApk)
@@ -144,7 +140,6 @@ class Index extends PureComponent {
                 this.showPop('zoomOut', true, '更新提示', '检查到新的版本' + info.name + ',是否现在更新?', 1, '')
             }
         }).catch(err => {
-            console.log('更新失败错误=>', err);
             this.showPop('zoomOut', true, '温馨提示', '更新失败', 0, '')
         });
     };
@@ -155,7 +150,6 @@ class Index extends PureComponent {
         downloadUpdate(info).then(hash => {
             this.showPop('zoomOut', true, '温馨提示', '已更新完毕,请重启您的应用!', 3, hash)
         }).catch(err => {
-            console.log('更新错误=>', err);
             overlayPopView.close();
             this.showPop('zoomOut', true, '温馨提示', '更新失败', 0, '')
         });
@@ -358,7 +352,6 @@ class Index extends PureComponent {
         request.post(URL, {}, this.props).then(responseText => {
 
             if (response.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 //toast.show('登陆失败', 50000);
                 return;
             }

@@ -56,11 +56,9 @@ class App extends PureComponent {
     render() {
         if (!this.state.firstFlag) {
             //第一次启动app显示的图片
-            console.log('app第一次启动');
             return <FirstStart {...this.props} />
         } else {
             //第一次之后启动app显示的图片
-            console.log('app第二次启动');
             return (
                 <View style={styles.bootPage}>
                     <SecondStart {...this.props} />

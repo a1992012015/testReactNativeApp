@@ -108,7 +108,6 @@ export default class Item_1 extends PureComponent {
         request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 return;
             }
 
@@ -117,8 +116,7 @@ export default class Item_1 extends PureComponent {
             });
 
             const {obj, msg} = responseText;
-            console.log('============================');
-            console.log(obj);
+
             if (responseText.success) {
                 const {ref_buyNum} = this.refs;
                 this.setState({

@@ -61,11 +61,10 @@ export default class BuySellModal extends PureComponent {
 
     render() {
         const {buySellData} = this.state;
-        console.log(buySellData);
 
         if (buySellData !== null && buySellData !== undefined) {
             const {bankowner, bankname, bankcard, transactionMoney, randomNum, status2,} = buySellData;
-            console.log('buySellData', buySellData);
+
             return (
                 <Modal
                     style={[styles.modal, styles.modal3]}
@@ -182,7 +181,6 @@ export default class BuySellModal extends PureComponent {
                 </Modal>
             );
         } else {
-            console.log('buySellData => null');
             return (
                 <View/>
             );

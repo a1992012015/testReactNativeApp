@@ -52,7 +52,6 @@ export default class NewsList extends PureComponent {
 
     /*点击新闻的触发函数*/
     newsDetail = index => {
-        console.log('点击俩表');
 
         const {obj} = this.state;
 
@@ -76,11 +75,8 @@ export default class NewsList extends PureComponent {
         request.post(url, actions, this.props).then((responseText) => {
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 return;
             }
-
-            console.log("responseText", responseText);
 
             const {obj} = responseText;
 
@@ -137,11 +133,9 @@ export default class NewsList extends PureComponent {
             request.post(url, actions, this.props).then(responseText => {
 
                 if (responseText.ok) {//判断接口是否请求成功
-                    console.log('接口请求失败进入失败函数');
                     return;
                 }
 
-                console.log("responseText", responseText);
                 const {obj, recordsTotal} = responseText;
 
                 if (obj.length > 0 && (this.pageIndex - 1) * 10 < recordsTotal) {

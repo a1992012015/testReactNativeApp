@@ -140,8 +140,6 @@ class Business extends PureComponent {
                 const {dispatch} = this.props;
                 dispatch(InitUserInfo(this.props));//获取用户资产数据
 
-                console.log(member.memberInfo);
-
                 this.setState({
                     username: member.memberInfo.username,
                     memberInfo: member.memberInfo,
@@ -264,7 +262,6 @@ class Business extends PureComponent {
         request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 return;
             }
 
@@ -371,7 +368,6 @@ class Business extends PureComponent {
 
     //显示头部切换币种列表
     setOpen = isOpen => {
-        console.log("isOpen", isOpen);
         this.setState({
             isOpen: isOpen,
         })
@@ -399,7 +395,6 @@ class Business extends PureComponent {
         request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 return;
             }
 

@@ -16,15 +16,11 @@ export const InitUserInfo = props => {
     return dispatch => {
         let URL = config.api.person.isRealUrl;
 
-        console.log(URL);
-
         dispatch(fetchIndexMiddleBanner());
 
         request.post(URL, {}, props).then((responseText) => {
-            console.log('用户资产', responseText);
 
             if (responseText.ok) {
-                console.log('获取数据失败 => 地址 =>', URL);
                 return;
             }
 

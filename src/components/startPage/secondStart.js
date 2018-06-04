@@ -32,10 +32,6 @@ class SecondStart extends PureComponent {
         this._toMain();
     }
 
-    test() {
-        console.log(this.props.navigation.state);
-    }
-
     //第二次启动APP开始启动页会自动消失
     _toMain = () => {
         if (config.api.dEnvironment) {

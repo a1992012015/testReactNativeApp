@@ -58,11 +58,8 @@ export default class SpotAssets extends PureComponent {
         request.post(url, {}, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 return;
             }
-
-            console.log('获取资产=>', responseText);
 
             if (responseText.obj) {
                 this.setState({
@@ -128,7 +125,6 @@ export default class SpotAssets extends PureComponent {
         request.post(url, {}, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 return;
             }
 
@@ -156,7 +152,6 @@ export default class SpotAssets extends PureComponent {
             request.post(url, {}, this.props).then(responseText => {
 
                 if (responseText.ok) {//判断接口是否请求成功
-                    console.log('接口请求失败进入失败函数');
                     return;
                 }
 
@@ -185,7 +180,6 @@ export default class SpotAssets extends PureComponent {
             request.post(url, {}, this.props).then(responseText => {
 
                 if (responseText.ok) {//判断接口是否请求成功
-                    console.log('接口请求失败进入失败函数');
                     return;
                 }
 
@@ -208,7 +202,6 @@ export default class SpotAssets extends PureComponent {
     /*跳转下级页面方法*/
     isRealName = (page, memberInfo, item) => {
         let {user} = this.state;
-        console.log(user);
         let {isChongbi, isTibi} = user;
 
         if (isChongbi === "0" || isChongbi === 0) {
@@ -312,7 +305,7 @@ export default class SpotAssets extends PureComponent {
                                 this.state.coinAccount.map((item, i) => {
                                     const {moneyAndCoin, coinCode, name, hotMoney, coldMoney, picturePath} = item;
                                     const keepDecimalForCoin = 8;
-                                    console.log('item对象的属性，作用为保留几位小数 => 因为没有数据 => 全部暂时显示为8 =>', keepDecimalForCoin);
+
                                     return (
                                         <View key={`ScrollView${i}`}>
                                             {

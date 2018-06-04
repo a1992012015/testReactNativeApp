@@ -56,8 +56,6 @@ export default function () {
 
         url = await this.joinActionsPost(`${config.api.host}${url}`, actions);
 
-        console.log(url);
-
         return fetch(url, {
             method: 'POST',
             headers: {
@@ -67,7 +65,6 @@ export default function () {
         }).then(response => {
 
             if (!response.ok) {
-                console.log('接口请求失败');
                 return {ok: true};
             }
 
@@ -77,17 +74,14 @@ export default function () {
             return this.manyLogin(props, response).then(msg => {
 
                 if (!msg) {
-                    console.log('没有登陆！');
                     return {ok: true};
                 }
 
                 return response;
-            }).catch(error => {
-                console.log(error);
+            }).catch(() => {
                 return {ok: true};
             });
-        }).catch(error => {
-            console.log(error);
+        }).catch(() => {
             return {ok: true};
         })
     };
@@ -105,7 +99,6 @@ export default function () {
         }).then((response) => {
 
             if (!response.ok) {
-                console.log('请求失败');
                 return {ok: true};
             }
 
@@ -115,17 +108,14 @@ export default function () {
             return this.manyLogin(props, response).then(msg => {
 
                 if (!msg) {
-                    console.log('没有登陆！');
                     return {ok: true};
                 }
 
                 return response;
-            }).catch(error => {
-                console.log(error);
+            }).catch(() => {
                 return {ok: true};
             });
         }).catch(error => {
-            console.log(error);
             return {ok: true};
         })
     };
@@ -143,10 +133,6 @@ export default function () {
             }
         });
 
-        console.log("服务器返回的数据------", responseText);
-        console.log("routeName------", routeName);
-        console.log('loginIndex', loginIndex);
-
         if (!success && (msg === "请先登录" || msg === "登录已超时" || msg === "未登录" || msg === "请登录或重新登录")) {
 
             if (routeName === "Login" || loginIndex > 1) {
@@ -156,19 +142,22 @@ export default function () {
             await store.save('loginIndex', 2);
 
             return await store.get('member').then((member) => {
-                console.log('getMember', member);
                 if (member) {
-
                     Alert.alert(
                         '温馨提示',
                         '登录已超时，请重新登录！',
                         [
-                            {text: '取消', onPress: () => store.save('loginIndex', 1)},
+                            {text: '取消', onPress: () => {
+                                store.save('loginIndex', 1).then(() => {
+                                    store.delete('member');
+                                })
+                            }},
                             {text: '确定', onPress: () => {
 
-                                    store.delete('member');
+                                    store.delete('member').then(() => {
+                                        props.navigation.navigate('Login');
+                                    });
 
-                                    props.navigation.navigate('Login');
                                 }
                             }
                         ],
@@ -183,7 +172,11 @@ export default function () {
                         '温馨提示',
                         '是否前往登录',
                         [
-                            {text: '取消', onPress: () => store.save('loginIndex', 1)},
+                            {text: '取消', onPress: () => {
+                                    store.save('loginIndex', 1).then(() => {
+                                        store.delete('member');
+                                    })
+                                }},
                             {text: '确定', onPress: () => {
                                     if (routeName !== "Login") {
                                         props.navigation.navigate('Login');

@@ -74,7 +74,6 @@ class myHome extends PureComponent {
     //真是的结构被渲染出来之后调用
     componentDidMount() {
         const {dispatch} = this.props;
-        console.log('进入个人信息页面，开始获取个人信息');
         dispatch(InitUserInfo(this.props));
         let that = this;
         store.get('member').then(member => {
@@ -91,7 +90,6 @@ class myHome extends PureComponent {
         const {HomeReducer} = nextProps;
         const {obj} = HomeReducer.userAssets;
         const myAccount = obj && obj.myAccount;
-        console.log('接收到新的props');
 
         if (!HomeReducer.userLoading) {
             this.setState({
@@ -116,10 +114,8 @@ class myHome extends PureComponent {
         request.post(url, {}, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 return;
             }
-            console.log('upState', responseText);
 
             const {obj} = responseText;
 
@@ -139,7 +135,6 @@ class myHome extends PureComponent {
     //获取数据失败的提示窗
     pageCloses() {
         const {toast} = this.refs;
-        console.log(toast);
         toast.show('获取数据失败', DURATION.LENGTH_SHORT);
     }
 

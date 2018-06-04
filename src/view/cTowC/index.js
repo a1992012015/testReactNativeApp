@@ -60,13 +60,9 @@ export default class CTwoC extends PureComponent {
         }
         //查询币
         let url = config.api.ctc.c2c;
-        console.log('================C2C页面数据=================');
         request.post(url, {}, this.props).then(responseText => {
-            console.log('================C2C页面数据=================');
-            console.log(responseText);
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 return;
             }
 
@@ -98,7 +94,6 @@ export default class CTwoC extends PureComponent {
         request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 return;
             }
 
@@ -191,7 +186,6 @@ export default class CTwoC extends PureComponent {
                     <ScrollableTabView
                         locked={false}
                         onChangeTab={(item) => {
-                            console.log("item", item.i);
                             if (item.i > 1) {
                                 this.c2cBuySellFunction(this.state.busTitle);
                             }

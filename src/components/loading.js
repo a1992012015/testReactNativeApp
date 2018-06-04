@@ -26,7 +26,8 @@ class Loading extends PureComponent {
     // 渲染
     render() {
         return (
-            this.props.visible && <View
+            this.props.visible &&
+            <View
                 style={styles.contentView}>
                 <View style={styles.viewSty}>
                     <ActivityIndicator

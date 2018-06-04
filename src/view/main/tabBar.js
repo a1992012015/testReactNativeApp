@@ -136,6 +136,7 @@ class TabBarView extends PureComponent {
         this.lastBackButtonPress = new Date().getTime();
         return true;
     };
+
     //底部标签的点击事件
     tabPage = (name, tabTitle) => {
 
@@ -228,9 +229,10 @@ class TabBarView extends PureComponent {
                                                                          style={styles.iconStyle}/>}
                                         onPress={() => this.tabPage(item.name)}
                                     >
-                                        <Component {...this.props}
-                                                   tabPage={this.tabPage}
-                                                   tabTitle={this.state.tabTitle}
+                                        <Component
+                                            {...this.props}
+                                            tabPage={this.tabPage}
+                                            tabTitle={this.state.tabTitle}
                                         />
                                     </TabNavigator.Item>
                                     : null

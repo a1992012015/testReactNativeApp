@@ -31,7 +31,6 @@ export default class IntoCurrency extends PureComponent {
     constructor(props) {
         super(props);
         // 初始状态
-        console.log('获取地址页面');
         this.state = {
             coinName: '',
             intoData: ''
@@ -41,7 +40,6 @@ export default class IntoCurrency extends PureComponent {
     //真实的结构渲染出来以后调用
     componentDidMount() {
         const {params} = this.props.navigation.state;
-        console.log(params);
 
         this.setState({
             intoData: params.intoData,
@@ -65,7 +63,6 @@ export default class IntoCurrency extends PureComponent {
         request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 toast.show('接口请求失败', DURATION.LENGTH_SHORT);
                 return;
             }
@@ -95,7 +92,6 @@ export default class IntoCurrency extends PureComponent {
         request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 toast.show('接口请求失败', DURATION.LENGTH_SHORT);
             }
         });

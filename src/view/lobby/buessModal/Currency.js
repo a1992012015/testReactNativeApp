@@ -33,7 +33,6 @@ export default class Currency extends PureComponent {
 
     render() {
         const {currList} = this.props;
-        console.log(currList);
 
         return (
             <FlatList

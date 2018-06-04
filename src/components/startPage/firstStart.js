@@ -33,7 +33,6 @@ class FirstStart extends PureComponent {
 
     //首次启动app点击最后一张图片的操作函数
     _toLogin = () => {
-        console.log('进入函数');
 
         const {dispatch, navigation} = this.props;
 
