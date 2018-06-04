@@ -265,8 +265,8 @@ class Purchase extends PureComponent {
                 if (success) {
                     this.setState({
                         balance: true,
-                        entrustPrice: 0,
-                        entrustCount: 0,
+                        entrustPrice: '',
+                        entrustCount: '',
                         visible: false
                     }, () => {
                         this.queryCoin();
