@@ -159,7 +159,7 @@ class RealAuthentication_1 extends PureComponent {
         const {toast} = this.refs;
 
         if (null === this.state.surname || '' === this.state.surname) {
-            toast.show(I18n.t('xingshishuru'), DURATION.LENGTH_SHORT);
+            toast.show('请输入名字', DURATION.LENGTH_SHORT);
             return;
         }
 
@@ -319,11 +319,11 @@ class RealAuthentication_1 extends PureComponent {
             const {abroad} = actions;
             const {just, Back, hold} = abroad;
             if(!just){
-                toast.show('请上传证件正面照', DURATION.LENGTH_SHORT);
+                toast.show('请上传护照封面照', DURATION.LENGTH_SHORT);
             }else if(!Back){
-                toast.show('请上传证件背面照', DURATION.LENGTH_SHORT);
+                toast.show('请上传护照个人信息页', DURATION.LENGTH_SHORT);
             }else if(!hold){
-                toast.show('请上传证件手持照', DURATION.LENGTH_SHORT);
+                toast.show('请上传护照手持照', DURATION.LENGTH_SHORT);
             }
         }
     };
@@ -555,7 +555,7 @@ class RealAuthentication_1 extends PureComponent {
                                         underlineColorAndroid='transparent'
                                         clearButtonMode={'while-editing'}
                                         placeholderTextColor={'#B0B0B0'}
-                                        placeholder={I18n.t('qxzleixing')}
+                                        placeholder='请输入名字'
                                         value={this.state.surname}
                                         selectionColor={"#D95411"}
                                         onChangeText={text => this.setState({surname: text})}
@@ -628,7 +628,7 @@ class RealAuthentication_1 extends PureComponent {
                                 </View>
                                 {/*护照正面照*/}
                                 <View style={styles.regInputView}>
-                                    <Text style={styles.inputText}>{I18n.t('huzhaozm')}:</Text>
+                                    <Text style={styles.inputText}>{I18n.t('huzhaofm')}:</Text>
                                     <TouchableOpacity
                                         onPress={() => this.choiceImage(this.state.type, 1)}
                                         activeOpacity={.8}
@@ -642,7 +642,7 @@ class RealAuthentication_1 extends PureComponent {
                                 </View>
                                 {/*护照封面*/}
                                 <View style={[styles.regInputView, {marginVertical: p(20)}]}>
-                                    <Text style={styles.inputText}>{I18n.t('huzhaofm')}:</Text>
+                                    <Text style={styles.inputText}>护照个人信息页:</Text>
                                     <TouchableOpacity
                                         onPress={() => this.choiceImage(this.state.type, 2)}
                                         activeOpacity={.8}
@@ -656,7 +656,7 @@ class RealAuthentication_1 extends PureComponent {
                                 </View>
                                 {/*本人手持护照照片*/}
                                 <View style={[styles.regInputView, {marginBottom: p(20)}]}>
-                                    <Text style={styles.inputText}>{I18n.t('huzhaosc')}:</Text>
+                                    <Text style={styles.inputText}>手持本人护照个人信息页和个人签字:</Text>
                                     <TouchableOpacity
                                         onPress={() => this.choiceImage(this.state.type, 3)}
                                         activeOpacity={.8}
