@@ -43,7 +43,6 @@ export default class PromptModal extends PureComponent {
 
     //组件接收到新的props时调用
     componentWillReceiveProps(nextProps) {
-        console.log("nextProps.isOpen", nextProps.isOpen);
         this.setState({
             isOpen: nextProps.isOpen
         });

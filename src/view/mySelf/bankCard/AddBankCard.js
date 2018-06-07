@@ -74,15 +74,11 @@ export default class AddBankCard extends PureComponent {
         request.post(url, {}, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            console.log('responseText', responseText);
-
             const {obj} = responseText;
             let data = JSON.parse(obj);
-            console.log('data', data);
             let provinceList = [];
             for (let i = 0; i < data.length; i++) {
                 let item = {
@@ -109,16 +105,12 @@ export default class AddBankCard extends PureComponent {
         request.post(url, {}, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 return;
             }
-
-            console.log('responseText', responseText);
 
             const {obj} = responseText;
             let data = JSON.parse("[" + obj + "]");
             let cityList = [];
-            console.log('data', data);
 
             for (let i = 0; i < data.length; i++) {
                 let item = {
@@ -142,11 +134,8 @@ export default class AddBankCard extends PureComponent {
         request.post(url, {}, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 return;
             }
-
-            console.log('responseTextBank', responseText);
 
             const {obj} = responseText;
             let data = JSON.parse(obj.key);
@@ -231,11 +220,9 @@ export default class AddBankCard extends PureComponent {
         request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            console.log('responseText', responseText);
             this.setState({
                 visible: false
             });

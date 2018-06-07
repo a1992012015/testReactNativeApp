@@ -99,7 +99,6 @@ class TabBarView extends PureComponent {
 
     //真实的DOM被渲染出来后调用
     componentDidMount() {
-        console.log("this.props.navigation", this.props.navigation.state);
         //添加导航失去焦点事件（如果有过渡，过渡完成）
         this._willBlurSubscription = this.props.navigation.addListener('willBlur', () =>
             BackHandler.removeEventListener('hardwareBackPress', this._onBackAndroid)
@@ -121,7 +120,6 @@ class TabBarView extends PureComponent {
     //监听安卓的返回键
     _onBackAndroid = () => {
         const {dispatch, navigation} = this.props;
-        console.log(navigation.state);
         //不在主页则返回上一页
         if (navigation.state.routeName !== "TabBar") {
             dispatch(NavigationActions.back());
@@ -140,21 +138,14 @@ class TabBarView extends PureComponent {
     //底部标签的点击事件
     tabPage = (name, tabTitle) => {
 
-        let strD = new Date().getTime();
-        console.log(`事件开始时间${strD}`);
-
         const {selectedTab} = this.state;
         //点击当前选择的标签无效
         if (selectedTab === name) {
-            console.log('重复点击无效');
-            let endD = new Date().getTime();
-            console.log(`一共花费${(endD - strD) / 1000}`);
             return;
         }
 
         if (name === 'mySelf' || name === 'assets' || name === 'cTwoC') {
             store.get('member').then(member => {
-                console.log(member);
                 if (!member) {
                     this.props.navigation.navigate('Login', {ISForm: true});
                 } else {
@@ -169,14 +160,10 @@ class TabBarView extends PureComponent {
                         this.setState({
                             tabTitle: null
                         });
-
-                        let endD = new Date().getTime();
-                        console.log(`一共花费${(endD - strD) / 1000}`);
-
                     })
                 }
             }).catch(error => {
-                console.log(error)
+                console.log('獲取用戶信息失敗', error)
             })
         } else {
             this.setState({
@@ -186,10 +173,6 @@ class TabBarView extends PureComponent {
                 this.setState({
                     tabTitle: null
                 });
-
-                let endD = new Date().getTime();
-                console.log(`一共花费${(endD - strD) / 1000}`);
-
             });
         }
     };

@@ -41,7 +41,6 @@ export default class ClosingRecord extends PureComponent {
     componentDidMount() {
         //交易记录地址
         let url = config.api.main.apptradeslist;
-        console.log('ClosingURL', url);
 
         const {params} = this.props.navigation.state;
         const {mobile} = params.member;

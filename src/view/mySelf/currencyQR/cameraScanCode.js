@@ -201,7 +201,6 @@ export default class CameraScanCode extends PureComponent {
     //  识别二维码
     onBarCodeRead = result => {
         let {data} = result;
-        console.log("二维码扫描结果", data);
         const {params} = this.props.navigation.state;
         params.getQRValue(data);
         this.props.navigation.goBack();

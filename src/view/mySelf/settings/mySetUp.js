@@ -101,7 +101,7 @@ class MySetUp extends PureComponent {
         if (route === null || route === '') {
             return;
         }
-        console.log('routeName =>', route);
+
         if (route === "RealAuthentications_2" || route === "TransPassword" || route === "RealAuthentications_1") {
             this.props.navigation.navigate(route, {
                 member: this.state.member,
@@ -119,11 +119,8 @@ class MySetUp extends PureComponent {
         request.post(url, {}, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 return;
             }
-
-            console.log('responseText', responseText);
 
             const {obj} = responseText;
             const {states, phoneState} = obj.user;
@@ -132,8 +129,6 @@ class MySetUp extends PureComponent {
             store.update('member', {
                 memberInfo: obj.user
             });
-
-            console.log('states=>', states);
 
             if (states === 0) {
                 this.setState({
@@ -177,7 +172,7 @@ class MySetUp extends PureComponent {
                 member: obj.user
             })
         }).catch(error => {
-            console.log('j进入错误函数 =>', error);
+            console.log('进入错误函数 =>', error);
         })
     };
     //退出的方法
@@ -185,9 +180,7 @@ class MySetUp extends PureComponent {
         Alert.alert('温馨提醒', '确定退出吗?', [
             {text: '取消', onPress: () => {}},
             {text: '确定', onPress: () => {
-                    store.delete('member').then(reason => {
-                        console.log(reason);
-
+                    store.delete('member').then(() => {
                         const resetAction = StackActions.reset({
                             index: 0,
                             actions: [NavigationActions.navigate({routeName: 'TabBar'})],

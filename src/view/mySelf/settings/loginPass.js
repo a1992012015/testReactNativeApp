@@ -58,7 +58,7 @@ export default class LoginPass extends PureComponent {
     //真实结构渲染之后
     componentDidMount() {
         const {params} = this.props.navigation.state;
-        console.log("member", params.member);
+
         this.setState({
             username: params.username,
             user: params.member
@@ -192,15 +192,11 @@ export default class LoginPass extends PureComponent {
         request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 return;
             }
 
-            console.log(responseText);
-
             if (responseText.success) {//false 需要验证 teur 不需要验证
                 store.save('loginIndex', 2).then(value => {
-                    console.log('loginIndex => value =>', value);
                     this.saveUser();
                 });
             } else {

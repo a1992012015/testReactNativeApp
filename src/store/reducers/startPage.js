@@ -17,7 +17,6 @@ let StartPage = (state = initialState, action) => {
     switch (action.type) {
         //获取全部
         case types.START_PAGE_DATA:
-            console.log('修改启动页的方式');
             return Object.assign({}, state, {pageFlag: true});
         default:
             return state;

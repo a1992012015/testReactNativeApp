@@ -73,7 +73,6 @@ export default class ForgotPass extends PureComponent {
         request.post(url, actions, this.props).then((responseText) => {
 
             if (responseText.ok) {
-                console.log('请求接口失败');
                 toast.show('数据获取失败', DURATION.LENGTH_SHORT);
                 return;
             }

@@ -205,7 +205,6 @@ class RealAuthentication_1 extends PureComponent {
         let url = '';
         let formData = new FormData();
         let actions = {};
-        console.log('this.state.type', this.state.type);
 
         if (this.state.type === 1) {
             let picIDa2 = this.state.picIDa2;
@@ -272,7 +271,6 @@ class RealAuthentication_1 extends PureComponent {
             });
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 toast.show('提交失败', DURATION.LENGTH_SHORT);
                 return;
             }
@@ -333,7 +331,7 @@ class RealAuthentication_1 extends PureComponent {
         if (this.state.isCheck) {
             return;
         }
-        console.log('type=>', type, 'step=>', step);
+
         const options = {
             title: I18n.t('qxuanzhe'),
             cancelButtonTitle: I18n.t('quxiao'),
@@ -349,7 +347,6 @@ class RealAuthentication_1 extends PureComponent {
         this.state.isCheck = true;
 
         ImagePicker.showImagePicker(options, (response) => {
-            console.log('Response = ', response);
 
             if (response.didCancel) {
                 console.log('User cancelled image picker');
@@ -423,7 +420,6 @@ class RealAuthentication_1 extends PureComponent {
                 }
             }
 
-            console.log(this.state.actions);
             this.state.isCheck = false;
         });
 

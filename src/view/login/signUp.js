@@ -64,14 +64,13 @@ class SignUp extends PureComponent {
         request.post(url, {}, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 //toast.show('登陆失败', 5000);
                 return;
             }
 
             if (responseText.success) {
                 const {obj} = responseText;
-                console.log(obj.regreg);
+
                 this.setState({
                     content: obj.regreg,
                 })
@@ -128,7 +127,6 @@ class SignUp extends PureComponent {
         }
         //地址
         let signUrl = config.api.login.reg;
-        console.log('signUrl', signUrl);
         //参数
         const actions = {
             username: this.state.data.telephone,
@@ -142,10 +140,8 @@ class SignUp extends PureComponent {
         });
 
         request.post(signUrl, actions, this.props).then(responseText => {
-            console.log("responseText", responseText);
 
             if (responseText.ok) {
-                console.log('请求接口失败');
                 toast.show('数据获取失败', DURATION.LENGTH_SHORT);
                 return;
             }

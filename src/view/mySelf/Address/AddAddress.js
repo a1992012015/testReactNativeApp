@@ -56,7 +56,6 @@ export default class AddAddress extends PureComponent {
         request.post(typeUrl, {}, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 return;
             }
 
@@ -74,7 +73,7 @@ export default class AddAddress extends PureComponent {
                 };
                 currencyList.push(item);
             }
-            console.log("currencyList", currencyList);
+
             this.setState({
                 currencyList: currencyList,
             })
@@ -108,11 +107,10 @@ export default class AddAddress extends PureComponent {
         }
 
         if(this.state.visible){
-            console.log('重复提交');
             toast.show('不能重复提交', DURATION.LENGTH_SHORT);
             return;
         }
-        console.log('正常')
+
         this.setState({
             visible: true
         });
@@ -133,7 +131,6 @@ export default class AddAddress extends PureComponent {
             });
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 return;
             }
 

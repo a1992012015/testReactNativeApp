@@ -56,11 +56,8 @@ export default class CurrencyWith extends PureComponent {
         request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 return;
             }
-
-            console.log("responseText", responseText);
 
             const {obj} = responseText;
             let data = obj.rows;
@@ -96,7 +93,6 @@ export default class CurrencyWith extends PureComponent {
             request.post(url, actions, this.props).then(responseText => {
 
                 if (responseText.ok) {//判断接口是否请求成功
-                    console.log('接口请求失败进入失败函数');
                     return;
                 }
 

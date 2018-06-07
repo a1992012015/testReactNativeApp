@@ -157,7 +157,6 @@ class Purchase extends PureComponent {
 
     //委托成功重新查询可用余额和币  EA2000
     queryCoin = () => {
-        console.log('定位函数位置=======================================》');
         //地址
         let url = config.api.trades.appgetAccountInfo;
         //参数
@@ -169,7 +168,6 @@ class Purchase extends PureComponent {
         request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 toast.show('接口请求失败', DURATION.LENGTH_SHORT);
                 return;
             }
@@ -177,7 +175,6 @@ class Purchase extends PureComponent {
             if (responseText.obj) {
 
                 const {obj} = responseText;
-                console.log(obj);
 
                 this.setState({
                     availableMoney: obj.coinAccount ? parseFloat(obj.coinAccount.hotMoney) : 0,
@@ -202,7 +199,6 @@ class Purchase extends PureComponent {
             return;
         }
         //验证价格
-        console.log("entrustPrice", this.state.entrustPrice);
 
         if (isNaN(this.state.entrustPrice) || this.state.entrustPrice < 0) {
             toast.show('请输入正确的价格', DURATION.LENGTH_SHORT);
@@ -256,7 +252,6 @@ class Purchase extends PureComponent {
             request.post(url, actions, this.props).then(responseText => {
 
                 if (responseText.ok) {//判断接口是否请求成功
-                    console.log('接口请求失败进入失败函数');
                     return;
                 }
 
@@ -362,7 +357,7 @@ class Purchase extends PureComponent {
                                 style={styles.inputTextView}
                                 value={this.state.entrustPrice.toString()}
                                 onChangeText={text => {
-                                    if (text === "" || text === null || /\s/.exec(text) !== null || isNaN(text)) {
+                                    if (text === "" || text === 0 || text === null || /\s/.exec(text) !== null || isNaN(text)) {
                                         text = '';
                                     }
 

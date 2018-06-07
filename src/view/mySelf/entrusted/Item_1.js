@@ -75,7 +75,6 @@ class Item_1 extends PureComponent {
         request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 toast.show('接口请求失败', DURATION.LENGTH_SHORT);
                 return;
             }
@@ -124,13 +123,11 @@ class Item_1 extends PureComponent {
 
     //滚动到界面最底部时回调
     reachedKill = () => {
-        console.log('12321321312321321312313123-=============');
         let offsetValue = this.state.offset * 10;
         if (offsetValue > this.state.total) {
             return;
         }
 
-        console.log(112123);
         const {toast} = this.refs;
         //地址
         let url = config.api.trades.list;
@@ -148,7 +145,6 @@ class Item_1 extends PureComponent {
 
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 toast.show('接口请求失败', DURATION.LENGTH_SHORT);
                 return;
             }
@@ -272,58 +268,47 @@ class Item_1 extends PureComponent {
             querypath: 'enter',
         };
 
-        let strD = new Date().getTime();
-        setTimeout(() => {
+        request.post(url, actions, this.props).then(responseText => {
 
-            let endD = new Date().getTime();
-            console.log((endD- strD) / 1000);
-            console.log('延迟执行');
-            request.post(url, actions, this.props).then(responseText => {
-
-                this.setState({//关闭特效
-                    visible: false,
-                });
-
-                if (responseText.ok) {//判断接口是否请求成功
-                    console.log('接口请求失败进入失败函数');
-                    toast.show('接口请求失败', DURATION.LENGTH_SHORT);
-                    return;
-                }
-
-                const {obj} = responseText;
-
-                if (obj) {
-                    let rows = obj.rows;
-                    let kill = [];
-                    if (rows.length > 0) {
-                        rows.map((item, index) => {
-                            kill.push({
-                                key: index,
-                                value: item,
-                            });
-                        });
-
-                        console.log(kill);
-                        console.log(obj.total);
-
-                        this.setState({
-                            killData: kill,
-                            total: obj.total,
-                        })
-                    } else {
-                        this.setState({
-                            killData: []
-                        })
-                    }
-                }
-            }).catch((error) => {
-                console.log('进入失败函数 =>', error);
-                toast.show(I18n.t("exception"), DURATION.LENGTH_SHORT);
-                this.setState({
-                    visible: false,
-                })
+            this.setState({//关闭特效
+                visible: false,
             });
-        }, 0)
+
+            if (responseText.ok) {//判断接口是否请求成功
+                toast.show('接口请求失败', DURATION.LENGTH_SHORT);
+                return;
+            }
+
+            const {obj} = responseText;
+
+            if (obj) {
+                let rows = obj.rows;
+                let kill = [];
+                if (rows.length > 0) {
+                    rows.map((item, index) => {
+                        kill.push({
+                            key: index,
+                            value: item,
+                        });
+                    });
+
+                    this.setState({
+                        killData: kill,
+                        total: obj.total,
+                    })
+                } else {
+                    this.setState({
+                        killData: []
+                    })
+                }
+            }
+        }).catch((error) => {
+            console.log('进入失败函数 =>', error);
+            toast.show(I18n.t("exception"), DURATION.LENGTH_SHORT);
+            this.setState({
+                visible: false,
+            })
+        });
     };
 
     //撤销委托
@@ -352,8 +337,8 @@ class Item_1 extends PureComponent {
                         };
 
                         request.post(url, actions, this.props).then(responseText => {
+
                             if (responseText.ok) {//判断接口是否请求成功
-                                console.log('接口请求失败进入失败函数');
                                 toast.show('接口请求失败', DURATION.LENGTH_SHORT);
                                 return;
                             }

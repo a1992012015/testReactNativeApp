@@ -53,11 +53,11 @@ export default class RollingCaption extends PureComponent {
         request.post(url, actions, this.props).then(response => {
 
             if (response.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 return;
             }
-            console.log('获取公告信息=>', response);
+
             const {obj} = response;
+
             this.setState({
                 articleList: obj,
                 isLoading: true,
@@ -69,29 +69,9 @@ export default class RollingCaption extends PureComponent {
 
     //点击信息函数跳转到具体的公告
     newsDetail = id => {
-        /*let url = config.api.index.articleContent;
-        //参数
-        const actions = {
-            type : id,
-        };
-
-        request.post(url, actions).then(response => {
-
-            if(response.ok){//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
-                return;
-            }
-
-            const { obj } = response;
-            console.log(this.state.articleList);*/
-
         const obj = this.state.articleList[id];
-        console.log(obj);
 
         this.props.navigation.navigate('ConsDetail', {content: obj.content, title: obj.title, ...this.props})
-        /*}).catch(error => {
-            console.log('进入失败函数=>', error)
-        });*/
     };
 
     render() {

@@ -63,12 +63,8 @@ export default class MyNews extends PureComponent {
         let url = config.api.main.myMsg;
         //参数
         store.get('member').then(member => {
-            console.log('=====================================');
-            console.log(member);
             const {memberInfo} = member;
             const {mobile} = memberInfo;
-
-            console.log(mobile);
 
             const actions = {
                 email: mobile,
@@ -77,7 +73,6 @@ export default class MyNews extends PureComponent {
             request.post(url, actions, this.props).then((responseText) => {
 
                 if (responseText.ok) {//判断接口是否请求成功
-                    console.log('接口请求失败进入失败函数');
                     return;
                 }
 
@@ -122,7 +117,6 @@ export default class MyNews extends PureComponent {
             request.post(url, {}, this.props).then((responseText) => {
 
                 if (responseText.ok) {//判断接口是否请求成功
-                    console.log('接口请求失败进入失败函数');
                     return;
                 }
 

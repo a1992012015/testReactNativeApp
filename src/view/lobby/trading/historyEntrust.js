@@ -73,7 +73,6 @@ export default class HistoryEntrust extends PureComponent {
 
     //加载列表
     queryKill = () => {
-        console.log('加载列表');
         this.setState({
             visible: true,
             killData: [],
@@ -92,8 +91,6 @@ export default class HistoryEntrust extends PureComponent {
             };
             const {toast} = this.refs;
 
-            console.log(actions);
-
             request.post(url, actions, this.props).then(responseText => {
 
                 this.setState({
@@ -101,7 +98,6 @@ export default class HistoryEntrust extends PureComponent {
                 });
 
                 if (responseText.ok) {//判断接口是否请求成功
-                    console.log('接口请求失败进入失败函数');
                     return;
                 }
 
@@ -122,8 +118,6 @@ export default class HistoryEntrust extends PureComponent {
                         let offsets = this.state.offset;
                         offsets++;
 
-                        console.log(kill);
-
                         this.setState({
                             balance: false,
                             killData: kill,
@@ -136,7 +130,7 @@ export default class HistoryEntrust extends PureComponent {
                         })
                     }
                 }
-            }).catch((error) => {
+            }).catch(error => {
                 toast.show(I18n.t("exception"), DURATION.LENGTH_SHORT);
                 console.log(error);
                 this.setState({
@@ -148,7 +142,6 @@ export default class HistoryEntrust extends PureComponent {
 
 
     reachedKill = () => {
-        console.log('重复执行函数');
         let offsetValue = this.state.offset * 10;
 
         if (offsetValue > this.state.total) {
@@ -170,7 +163,6 @@ export default class HistoryEntrust extends PureComponent {
         request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 return;
             }
 
@@ -219,7 +211,6 @@ export default class HistoryEntrust extends PureComponent {
 
     //切换买入卖出列表
     _radioModal = (id, item) => {
-        console.log(id, item);
         this.queryKill(id);
         this.setState({initId: id, initItem: item})
     };
@@ -284,7 +275,6 @@ export default class HistoryEntrust extends PureComponent {
                     request.post(url, actions, this.props).then(responseText => {
 
                         if (responseText.ok) {//判断接口是否请求成功
-                            console.log('接口请求失败进入失败函数');
                             return;
                         }
 
@@ -292,7 +282,6 @@ export default class HistoryEntrust extends PureComponent {
                             visible: false
                         });
 
-                        console.log("responseText", responseText);
                         const {success, msg} = responseText;
 
                         if (success) {

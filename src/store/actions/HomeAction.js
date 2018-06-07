@@ -26,7 +26,7 @@ export const InitUserInfo = props => {
 
             dispatch(myAssets(responseText));
         }).catch(error => {
-            console.log(error);
+            console.log('進入錯誤函數', error);
         })
     }
 };

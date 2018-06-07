@@ -150,7 +150,7 @@ export default class CheckModal extends PureComponent {
         }
 
         const {toast} = this.refs;
-        console.log(DURATION);
+
         if (null === this.state.telephone || '' === this.state.telephone) {
             toast.show('请输入手机号码', DURATION.LENGTH_SHORT);
             return;
@@ -174,7 +174,6 @@ export default class CheckModal extends PureComponent {
         request.post(url, actions, this.props).then((responseText) => {
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 toast.show('登陆失败', 5000);
                 return;
             }
@@ -222,7 +221,6 @@ export default class CheckModal extends PureComponent {
 
     //初始化
     countDown = () => {
-        console.log('初始化');
         clearInterval(this.timer1);
         this.setState({
             codeStyle: styles.codeObtain,
@@ -234,24 +232,17 @@ export default class CheckModal extends PureComponent {
     //验证码提交函数
     savePhone = () => {
         const {toast} = this.refs;
-        //console.log(toast);
 
         if (null === this.state.telephone || '' === this.state.telephone) {
             toast.show('请输入手机号码', DURATION.LENGTH_SHORT);
-            console.log('请输入手机号码');
-            return;
-        }
-// || null === this.state.googleCode || '' === this.state.googleCode
-        console.log(null === this.state.googleCode || '' === this.state.googleCode);
-        console.log(null === this.state.smsCode || '' === this.state.smsCode);
-        console.log((null === this.state.smsCode || '' === this.state.smsCode) && (null === this.state.googleCode || '' === this.state.googleCode));
-        if ((null === this.state.smsCode || '' === this.state.smsCode) && (null === this.state.googleCode || '' === this.state.googleCode)) {
-            toast.show('请输入手机验证码', DURATION.LENGTH_SHORT);
-            console.log('请输入手机验证码');
             return;
         }
 
-        console.log('adsad-4');
+        if ((null === this.state.smsCode || '' === this.state.smsCode) && (null === this.state.googleCode || '' === this.state.googleCode)) {
+            toast.show('请输入手机验证码', DURATION.LENGTH_SHORT);
+            return;
+        }
+
         //地址
         let url = '';
         //参数
@@ -269,12 +260,9 @@ export default class CheckModal extends PureComponent {
             actions.password = this.state.password;
         }
 
-        console.log(actions);
-
         request.post(url, actions, this.props).then((responseText) => {
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 toast.show('登陆失败', 5000);
                 return;
             }
@@ -296,7 +284,6 @@ export default class CheckModal extends PureComponent {
 
     //谷歌验证码特有函数，作用存疑？
     handleSelect = index => {
-        console.log(index);
         this.setState({
             customStyleIndex: index,
         });
@@ -304,7 +291,7 @@ export default class CheckModal extends PureComponent {
 
     render() {
         const {type, keyboardSpace} = this.state;
-        console.log("keyboardSpace", keyboardSpace);
+
         return (
             <Modal
                 position={"center"}
@@ -344,7 +331,6 @@ export default class CheckModal extends PureComponent {
 
     //生成不同验证规则下的UI界面
     checkType = state => {
-        console.log(state);
         let {customStyleIndex} = this.state;
 
         if (state === 0) {//短信验证

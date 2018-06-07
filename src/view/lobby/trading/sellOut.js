@@ -131,7 +131,6 @@ class SellOut extends PureComponent {
         request.post(url, actions, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 return;
             }
 
@@ -249,11 +248,9 @@ class SellOut extends PureComponent {
             request.post(url, actions, this.props).then(responseText => {
 
                 if (responseText.ok) {//判断接口是否请求成功
-                    console.log('接口请求失败进入失败函数');
                     return;
                 }
 
-                console.log('responseText', responseText);
                 const {success, msg} = responseText;
                 const {queryCoinEntrust} = this.props;
 
@@ -380,7 +377,7 @@ class SellOut extends PureComponent {
                                 style={styles.inputTextView}
                                 value={this.state.entrustPrice.toString()}
                                 onChangeText={text => {
-                                    if (text === "" || text === null || /\s/.exec(text) !== null || isNaN(text)) {
+                                    if (text === "" || text === 0 || text === null || /\s/.exec(text) !== null || isNaN(text)) {
                                         text = '';
                                     }
 

@@ -123,7 +123,7 @@ class Index extends PureComponent {
                 dispatch(homeLoop(responseText));
                 this.pollingData();
             }).catch(error => {
-                console.log('进入失败函数', error);
+                console.log('进入失败函数 =>', error);
             });
         }, 1000);
     };
@@ -357,8 +357,8 @@ class Index extends PureComponent {
             }
 
             dispatch(homeLoop(responseText));
-        }).catch(() => {
-            console.log('进入失败函数');
+        }).catch(error => {
+            console.log('进入失败函数 =>', error);
         });
     };
 

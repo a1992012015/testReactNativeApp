@@ -53,7 +53,6 @@ export default class ConsDetail extends PureComponent {
     render() {
         const {newsBody, isLoading} = this.state;
         const newsBodyContent = newsBody ? newsBody : '暂无资讯';
-        console.log(newsBodyContent);
 
         if (isLoading) {
             if (newsBodyContent === '暂无资讯') {

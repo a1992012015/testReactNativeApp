@@ -60,7 +60,6 @@ export default class Recommend extends PureComponent {
         request.post(url, {}, this.props).then(responseText => {
 
             if (responseText.ok) {//判断接口是否请求成功
-                console.log('接口请求失败进入失败函数');
                 return;
             }
 
@@ -78,8 +77,8 @@ export default class Recommend extends PureComponent {
                 reData: CommendInfo,
                 loadData: true
             });
-        }).catch(function (error) {
-            console.log(error);
+        }).catch(error => {
+            console.log('獲取數據異常', error);
             this.props.navigation.goBack(null);
             Alert.alert("服务器异常，请稍后访问");
 
@@ -87,9 +86,6 @@ export default class Recommend extends PureComponent {
     };
 
     render() {
-        const {toast} = this.refs;
-        //console.log(toast);
-
         if (this.state.loadData) {
             let {reData, commendCode, commendLink, commendCount} = this.state;
             return (
