@@ -75,7 +75,6 @@ class CurrentEntrust extends PureComponent {
 
     //加载列表
     queryKill = () => {
-
         this.setState({
             visible: true,
             killData: [],

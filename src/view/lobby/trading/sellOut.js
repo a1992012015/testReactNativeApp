@@ -190,23 +190,24 @@ class SellOut extends PureComponent {
     purchase = () => {
         const {toast} = this.refs;
 
-        if (null == this.state.entrustPrice || '' === this.state.entrustPrice || this.state.entrustPrice === 0) {
+        if (null == this.state.entrustPrice || '' === this.state.entrustPrice) {
             toast.show('请输入委托价格', DURATION.LENGTH_SHORT);
             return;
         }
+
         //验证价格
-        if (isNaN(this.state.entrustPrice) || this.state.entrustPrice < 0) {
-            toast.show('请输入正确的价格', DURATION.LENGTH_SHORT);
+        if (isNaN(this.state.entrustPrice) || parseFloat(this.state.entrustPrice) <= 0) {
+            toast.show('请输入正确的委托价格', DURATION.LENGTH_SHORT);
             return;
         }
 
-        if (null == this.state.entrustCount || '' === this.state.entrustCount || this.state.entrustCount === 0) {
+        if (null == this.state.entrustCount || '' === this.state.entrustCount) {
             toast.show('请输入委托数量', DURATION.LENGTH_SHORT);
             return;
         }
 
-        if (isNaN(this.state.entrustCount) || this.state.entrustCount <= 0) {
-            toast.show('请输入正确的数量', DURATION.LENGTH_SHORT);
+        if (isNaN(this.state.entrustCount) || parseFloat(this.state.entrustCount) <= 0) {
+            toast.show('请输入正确的委托数量', DURATION.LENGTH_SHORT);
             return;
         }
 
@@ -469,7 +470,9 @@ class SellOut extends PureComponent {
                             {this.isLoginType()}
                         </View>
                     </View>
+
                     <View style={{height: height * .8, backgroundColor: '#ccc', width: StyleSheet.hairlineWidth}}/>
+
                     <View style={{marginLeft: p(20), alignItems: 'center', paddingVertical: p(10)}}>
                         <TouchableOpacity
                             style={styles.panelView}
@@ -491,6 +494,7 @@ class SellOut extends PureComponent {
                                 keyExtractor={(item, index) => index.toString()}
                             />
                         </View>
+
                         <TouchableOpacity
                             onPress={() => {
                                 this.calculation(tradingData.priceNew + "")
@@ -511,6 +515,7 @@ class SellOut extends PureComponent {
                                 </Text>
                             </Text>
                         </TouchableOpacity>
+
                         <View style={{height: height * .31}}>
                             <FlatList
                                 horizontal={false}

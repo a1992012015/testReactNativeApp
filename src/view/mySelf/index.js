@@ -19,7 +19,6 @@ import {
     RefreshControl,
 } from 'react-native' ;
 import Icon from 'react-native-vector-icons/Ionicons';
-import Toast, {DURATION} from 'react-native-easy-toast';
 import store from 'react-native-simple-store';
 import {connect} from 'react-redux';
 
@@ -75,9 +74,9 @@ class myHome extends PureComponent {
     componentDidMount() {
         const {dispatch} = this.props;
         dispatch(InitUserInfo(this.props));
-        let that = this;
+
         store.get('member').then(member => {
-            that.setState({
+            this.setState({
                 username: member.memberInfo.username,
                 memberInfo: member.memberInfo,
             })
@@ -86,10 +85,11 @@ class myHome extends PureComponent {
 
     //接受到一个新的Props之后调用
     componentWillReceiveProps(nextProps) {
-        this.upState();
         const {HomeReducer} = nextProps;
         const {obj} = HomeReducer.userAssets;
         const myAccount = obj && obj.myAccount;
+
+        this.upState(obj);
 
         if (!HomeReducer.userLoading) {
             this.setState({
@@ -104,39 +104,20 @@ class myHome extends PureComponent {
 
     //列表的点击事件跳转页面
     onClickChange = (route, member) => {
-        this.props.navigation.navigate(route, {member: member, onClose: () => this.pageCloses()});
+        this.props.navigation.navigate(route, {member: member});
     };
 
     //
-    upState = () => {
-        let url = config.api.person.isRealUrl;
-
-        request.post(url, {}, this.props).then(responseText => {
-
-            if (responseText.ok) {//判断接口是否请求成功
-                return;
-            }
-
-            const {obj} = responseText;
-
-            store.update('member', {
-                memberInfo: obj.user
-            });
-
-            this.setState({
-                memberInfo: obj.user,
-                languageCode: obj.languageCode,
-            })
-        }).catch(error => {
-            console.log('进入失败函数 =>', error);
+    upState = obj => {
+        store.update('member', {
+            memberInfo: obj.user
         });
-    };
 
-    //获取数据失败的提示窗
-    pageCloses() {
-        const {toast} = this.refs;
-        toast.show('获取数据失败', DURATION.LENGTH_SHORT);
-    }
+        this.setState({
+            memberInfo: obj.user,
+            languageCode: obj.languageCode,
+        })
+    };
 
     //打开新的下级页面
     jumpPage = page => {
@@ -169,7 +150,7 @@ class myHome extends PureComponent {
             Alert.alert(
                 '提示',
                 '请先实名认证',
-                [{text: '确认', onPress: () => this.props.navigation.navigate("realAuthentication", {
+                [{text: '确认', onPress: () => this.props.navigation.navigate("RealAuthentications_1", {
                         member: memberInfo,
                         infoAction: this.upState
                     })
@@ -185,7 +166,7 @@ class myHome extends PureComponent {
             Alert.alert(
                 '提示',
                 '实名申请被拒绝，请重新认证',
-                [{text: '确认', onPress: () => this.props.navigation.navigate("realAuthentication", {
+                [{text: '确认', onPress: () => this.props.navigation.navigate("RealAuthentications_1", {
                         member: memberInfo,
                         infoAction: this.upState,
                     })
@@ -341,13 +322,6 @@ class myHome extends PureComponent {
                         />
                     </View>
                 </ScrollView>
-                {/*弹出提示窗组件*/}
-                <Toast
-                    ref="toast"
-                    style={{backgroundColor: 'rgba(0,0,0,.6)'}}
-                    position='center'
-                    textStyle={{color: 'white'}}
-                />
             </View>
         );
     }

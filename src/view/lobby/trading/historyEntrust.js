@@ -370,7 +370,7 @@ export default class HistoryEntrust extends PureComponent {
                         //onEndReachedThreshold={0.2}
                         ListEmptyComponent={this.renderEmpty}
                         refreshing={false}
-                        onRefresh={() => this.queryKill}
+                        onRefresh={this.queryKill}
                         keyExtractor={(item, index) => index.toString()}
                     />
                 </View>

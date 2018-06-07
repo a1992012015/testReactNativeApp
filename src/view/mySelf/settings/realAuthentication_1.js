@@ -159,7 +159,7 @@ class RealAuthentication_1 extends PureComponent {
         const {toast} = this.refs;
 
         if (null === this.state.surname || '' === this.state.surname) {
-            toast.show('请输入名字', DURATION.LENGTH_SHORT);
+            toast.show(I18n.t('xingshishuru'), DURATION.LENGTH_SHORT);
             return;
         }
 
@@ -287,8 +287,8 @@ class RealAuthentication_1 extends PureComponent {
                             const {dispatch} = this.props;
 
                             params.infoAction();
-                            this.props.navigation.goBack();
                             dispatch(InitUserInfo(this.props));
+                            this.props.navigation.goBack();
                         }
                     }]
                 );

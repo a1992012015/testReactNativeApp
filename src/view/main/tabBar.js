@@ -212,11 +212,23 @@ class TabBarView extends PureComponent {
                                                                          style={styles.iconStyle}/>}
                                         onPress={() => this.tabPage(item.name)}
                                     >
-                                        <Component
-                                            {...this.props}
-                                            tabPage={this.tabPage}
-                                            tabTitle={this.state.tabTitle}
-                                        />
+                                        {
+                                            index === 0 ?
+                                                <Component
+                                                    {...this.props}
+                                                    tabPage={this.tabPage}
+                                                />
+                                                :
+                                                index === 1 ?
+                                                    <Component
+                                                        {...this.props}
+                                                        tabTitle={this.state.tabTitle}
+                                                    />
+                                                    :
+                                                    <Component
+                                                        {...this.props}
+                                                    />
+                                        }
                                     </TabNavigator.Item>
                                     : null
                             )
@@ -260,9 +272,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default connect((state) => {
-    const {IndexLoopReducer} = state;
-    return {
-        IndexLoopReducer
-    }
-})(TabBarView);
+export default TabBarView;

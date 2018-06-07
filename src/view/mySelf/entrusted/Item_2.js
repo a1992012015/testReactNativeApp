@@ -39,21 +39,24 @@ export default class Item_2 extends PureComponent {
             balance: true,
             visible: true,
             offset: 0,
-            total: 10
+            total: 10,
+            isRefreshing: false,
         }
     }
 
     //真实结构渲染出来之后
     componentDidMount() {
-        this.queryKill(0)
+        this.queryKill()
     }
 
     //加载列表
     queryKill = () => {
+        console.log('获取数据');
         this.setState({
             visible: true,
             killData: [],
-            offset: 0
+            offset: 0,
+            isRefreshing: true,
         }, () => {
             const {toast} = this.refs;
             //地址
@@ -76,7 +79,8 @@ export default class Item_2 extends PureComponent {
                 }
 
                 this.setState({
-                    visible: false
+                    visible: false,
+                    isRefreshing: false,
                 });
 
                 const {obj} = responseText;
@@ -111,7 +115,8 @@ export default class Item_2 extends PureComponent {
                 console.log('进入失败函数 =>', error);
                 toast.show(I18n.t("exception"), DURATION.LENGTH_SHORT);
                 this.setState({
-                    visible: false
+                    visible: false,
+                    isRefreshing: false,
                 })
             });
         });
@@ -123,9 +128,14 @@ export default class Item_2 extends PureComponent {
             return;
         }
 
+        this.setState({
+            visible: true,
+            isRefreshing: true,
+        });
+
         const {toast} = this.refs;
         //地址
-        let url = `${config.api.trades.list}history&limit=12&offset=${offsetValue}&typeone=0&sortOrder=asc&querypath=enter`;
+        let url = config.api.trades.list;
         //参数
         const actions = {
             tyep: 'history',
@@ -144,7 +154,8 @@ export default class Item_2 extends PureComponent {
             }
 
             this.setState({
-                visible: false
+                visible: false,
+                isRefreshing: false,
             });
 
             const {obj} = responseText;
@@ -181,7 +192,8 @@ export default class Item_2 extends PureComponent {
             console.log('进入失败函数 =>', error);
             toast.show(I18n.t("exception"), DURATION.LENGTH_SHORT);
             this.setState({
-                visible: false
+                visible: false,
+                isRefreshing: false,
             })
         });
     };
@@ -291,7 +303,8 @@ export default class Item_2 extends PureComponent {
                     onEndReached={this.reachedKill}
                     onEndReachedThreshold={1}
                     ListEmptyComponent={this.renderEmpty}
-                    refreshing={false}
+                    refreshing={this.state.isRefreshing}
+                    onRefresh={this.reachedKill}//下拉刷新事件回调
                     keyExtractor={(item, index) => index.toString()}
                 />
                 <Toast
@@ -301,7 +314,7 @@ export default class Item_2 extends PureComponent {
                     textStyle={{color: 'white'}}
                 />
 
-                <Loading visible={this.state.visible}/>
+                {/*<Loading visible={this.state.visible}/>*/}
             </View>
         )
     }

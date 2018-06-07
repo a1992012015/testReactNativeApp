@@ -141,7 +141,7 @@ export default function () {
 
             await store.save('loginIndex', 2);
 
-            return await store.get('member').then((member) => {
+            return await store.get('member').then(member => {
                 if (member) {
                     Alert.alert(
                         '温馨提示',

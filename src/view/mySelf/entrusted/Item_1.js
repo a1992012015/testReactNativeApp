@@ -245,7 +245,7 @@ class Item_1 extends PureComponent {
                 />
 
                 {/*加载特效*/}
-                <Loading visible={this.state.visible}/>
+                {/*<Loading visible={this.state.visible}/>*/}
             </View>
         )
     }

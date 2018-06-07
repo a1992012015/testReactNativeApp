@@ -125,7 +125,6 @@ class MySetUp extends PureComponent {
             const {obj} = responseText;
             const {states, phoneState} = obj.user;
 
-            //let obj = responseText.obj.user;
             store.update('member', {
                 memberInfo: obj.user
             });
@@ -175,6 +174,7 @@ class MySetUp extends PureComponent {
             console.log('进入错误函数 =>', error);
         })
     };
+
     //退出的方法
     signOut = () => {
         Alert.alert('温馨提醒', '确定退出吗?', [
@@ -200,10 +200,12 @@ class MySetUp extends PureComponent {
 
             return (
                 <View style={[styles.defaultView, {paddingBottom: p(100)}]}>
+
                     {/*顶部标签组件*/}
                     <Title titleName={I18n.t('anquanshezhi')} canBack={true} {...this.props}/>
 
                     <View style={{margin: p(20)}}>
+
                         {/*实名认证*/}
                         <View style={styles.blockSty}>
                             <BottomMenu
@@ -215,6 +217,7 @@ class MySetUp extends PureComponent {
                                 textView={textRal}
                             />
                         </View>
+
                         {/*登录密码*/}
                         <View style={styles.blockSty}>
                             <BottomMenu
@@ -226,6 +229,7 @@ class MySetUp extends PureComponent {
                                 textView="修改"
                             />
                         </View>
+
                         {/*退出按钮*/}
                         <TouchableOpacity
                             onPress={this.signOut}
