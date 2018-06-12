@@ -25,11 +25,13 @@ import config from '../../utils/config';
 import p from '../../utils/tranfrom';
 import Request from '../../utils/request';
 import Title from '../../components/title';
+import { connect } from "react-redux";
+import { InitUserInfo } from "../../store/actions/HomeAction";
 
 const {width, height} = Dimensions.get('window');
 const request = new Request();
 
-export default class SpotAssets extends PureComponent {
+class SpotAssets extends PureComponent {
     //构建
     constructor(props) {
         super(props);
@@ -45,39 +47,47 @@ export default class SpotAssets extends PureComponent {
 
     //加载数据
     componentDidMount() {
-
         let {params} = this.props.navigation.state;
+        console.log(params);
         if (params) {
             this.setState({
                 canBack: params.canBack,
             })
         }
-        //地址
-        let url = config.api.person.isRealUrl;
 
-        request.post(url, {}, this.props).then(responseText => {
+        const {HomeReducer} = this.props;
+        const {userAssets} = HomeReducer;
 
-            if (responseText.ok) {//判断接口是否请求成功
-                return;
-            }
-
-            if (responseText.obj) {
+        setTimeout(() => {//解决初次点击会很卡的问题
+            if (userAssets.obj) {
                 this.setState({
-                    coinAccount: responseText.obj.coinAccount,
-                    queryAccount: responseText.obj.coinAccount,
+                    coinAccount: userAssets.obj.coinAccount,
+                    queryAccount: userAssets.obj.coinAccount,
                     loadData: true,
-                    user: responseText.obj,
+                    user: userAssets.obj,
                 })
             }
-        }).catch(error => {
-            console.log('进入失败函数=>', error);
-        });
+        }, 1000);
 
         store.get('member').then(member => {
             this.setState({
                 member: member.memberInfo
             })
         });
+    }
+
+    //接收到一个新的props
+    componentWillReceiveProps(props) {
+        const {HomeReducer} = props;
+        const {userAssets} = HomeReducer;
+
+        if (userAssets.obj) {
+            this.setState({
+                coinAccount: userAssets.obj.coinAccount,
+                queryAccount: userAssets.obj.coinAccount,
+                user: userAssets.obj,
+            })
+        }
     }
 
     //查询
@@ -304,7 +314,6 @@ export default class SpotAssets extends PureComponent {
                             {
                                 this.state.coinAccount.map((item, i) => {
                                     const {moneyAndCoin, coinCode, name, hotMoney, coldMoney, picturePath} = item;
-                                    const keepDecimalForCoin = 8;
 
                                     return (
                                         <View key={`ScrollView${i}`}>
@@ -323,10 +332,10 @@ export default class SpotAssets extends PureComponent {
                                                                 <Text style={styles.textOne}>{coinCode} （{name}）</Text>
                                                                 {/*总数*/}
                                                                 <Text
-                                                                    style={styles.textTwo}>{parseFloat(hotMoney).toFixed(keepDecimalForCoin)}</Text>
+                                                                    style={styles.textTwo}>{parseFloat(hotMoney)}</Text>
                                                                 {/*冻结*/}
                                                                 <Text
-                                                                    style={styles.textThree}>冻结{parseFloat(coldMoney).toFixed(keepDecimalForCoin)}</Text>
+                                                                    style={styles.textThree}>冻结{parseFloat(coldMoney)}</Text>
                                                             </View>
                                                             {/*显示图片*/}
                                                             <View style={{marginRight: p(50)}}>
@@ -508,3 +517,10 @@ const styles = StyleSheet.create({
         marginBottom: p(30),
     },
 });
+
+export default connect((state) => {
+    const {HomeReducer} = state;
+    return {
+        HomeReducer
+    }
+})(SpotAssets);

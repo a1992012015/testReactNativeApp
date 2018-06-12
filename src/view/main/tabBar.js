@@ -149,10 +149,6 @@ class TabBarView extends PureComponent {
                 if (!member) {
                     this.props.navigation.navigate('Login', {ISForm: true});
                 } else {
-                    //每次跳转都会获取用户资产 => 存疑无需获取
-                    /*const { dispatch } = this.props;
-                    dispatch(InitUserInfo(this.props));*/
-
                     this.setState({
                         selectedTab: name,
                         tabTitle: tabTitle,

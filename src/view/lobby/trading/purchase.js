@@ -233,6 +233,7 @@ class Purchase extends PureComponent {
         }
     };
 
+    //提交订单函数
     requestMethod = () => {
 
         this.setState({

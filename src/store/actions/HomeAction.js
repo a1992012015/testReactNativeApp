@@ -23,6 +23,7 @@ export const InitUserInfo = props => {
             if (responseText.ok) {
                 return;
             }
+            console.log(responseText);
 
             dispatch(myAssets(responseText));
         }).catch(error => {
