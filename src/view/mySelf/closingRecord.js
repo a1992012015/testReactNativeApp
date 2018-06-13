@@ -164,7 +164,7 @@ export default class ClosingRecord extends PureComponent {
                         <Text style={[styles.textRecord, {width: '14%'}]}>单价</Text>
                         <Text style={[styles.textRecord, {width: '14%'}]}>数量</Text>
                         <Text style={[styles.textRecord, {width: '14%'}]}>金额</Text>
-                        <Text style={[styles.textRecord, {flex: 1}]}>收付费</Text>
+                        <Text style={[styles.textRecord, {flex: 1}]}>手续费</Text>
                     </View>
                     <ListView
                         horizontal={false}
@@ -193,8 +193,22 @@ export default class ClosingRecord extends PureComponent {
         }
     }
 
+    /*科学计数法转换数值*/
+    convertNum = (num) => {
+        let result = num.toString();
+
+        // 判断一下有没有减号
+        if (result.indexOf('-') >= 0) {
+            result = '0' + String(Number(result) + 1).substr(1);
+            return result;
+        }else{
+            return result;
+        }
+    };
+
     _quotRow = row => {
-        const {transactionTime, type, coinCode, transactionPrice, transactionCount, transactionSum, transactionFee} = row;
+        const {transactionTime, type, coinCode, transactionPrice = 0, transactionCount = 0, transactionSum = 0, transactionFee = 0} = row;
+
         return (
             <View style={{
                 flexDirection: 'row', padding: p(10), borderBottomWidth: StyleSheet.hairlineWidth,
@@ -205,10 +219,10 @@ export default class ClosingRecord extends PureComponent {
                     {type === 1 ? '买' : '卖'}
                 </Text>
                 <Text style={[styles.textRecord, {width: '14%'}]}>{coinCode}</Text>
-                <Text style={[styles.textRecord, {width: '14%'}]}>{transactionPrice}</Text>
-                <Text style={[styles.textRecord, {width: '14%'}]}>{transactionCount}</Text>
-                <Text style={[styles.textRecord, {width: '14%'}]}>{transactionSum}</Text>
-                <Text style={[styles.textRecord, {flex: 1}]}>{transactionFee}</Text>
+                <Text style={[styles.textRecord, {width: '14%'}]}>{this.convertNum(transactionPrice)}</Text>
+                <Text style={[styles.textRecord, {width: '14%'}]}>{this.convertNum(transactionCount)}</Text>
+                <Text style={[styles.textRecord, {width: '14%'}]}>{this.convertNum(transactionSum)}</Text>
+                <Text style={[styles.textRecord, {flex: 1}]}>{this.convertNum(transactionFee)}</Text>
             </View>
         )
     }
