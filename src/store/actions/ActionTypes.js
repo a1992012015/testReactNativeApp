@@ -23,3 +23,4 @@ export const FETCHING_HOME_DATA = 'FETCHING_HOME_DATA';
 
 //启动页面的图片显示
 export const START_PAGE_DATA = 'START_PAGE_DATA';
+export const START_PAGE_DELETE = 'START_PAGE_DELETE';

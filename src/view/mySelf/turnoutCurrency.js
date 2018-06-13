@@ -37,7 +37,10 @@ class TurnoutCurrency extends PureComponent {
         super(props);
         // 初始状态
         this.state = {
-            intoData: '',
+            intoData: {
+                hotMoney: 0,
+                coldMoney: 0,
+            },
             addressList: [],
             btcKey: null,
             telephone: '133****9449',
@@ -147,6 +150,7 @@ class TurnoutCurrency extends PureComponent {
         })
     };
 
+    //确认转账
     currencyOut = () => {
         const {toast} = this.refs;
 
@@ -209,7 +213,11 @@ class TurnoutCurrency extends PureComponent {
                             const {dispatch} = this.props;
                             dispatch(InitUserInfo(this.props));
                             const {params} = this.props.navigation.state;
-                            params.pullTurnout();
+
+                            if(params.pullTurnout){
+                                params.pullTurnout();
+                            }
+
                             this.props.navigation.goBack();
                         }
                     }]
@@ -273,6 +281,28 @@ class TurnoutCurrency extends PureComponent {
         });
     };
 
+    /*科学计数法转换数值*/
+    scientificToNumber =  (num) => {
+        let str = num.toString();
+        let reg = /^(\d+)(e)([\-]?\d+)$/;
+        let arr, len,
+            zero = '';
+
+        /*6e7或6e+7 都会自动转换数值*/
+        if (!reg.test(str)) {
+            return num;
+        } else {
+            /*6e-7 需要手动转换*/
+            arr = reg.exec(str);
+            len = Math.abs(arr[3]) - 1;
+            for (let i = 0; i < len; i++) {
+                zero += '0';
+            }
+
+            return '0.' + zero + arr[1];
+        }
+    };
+
     // 渲染
     render() {
         const {numInput} = this.refs;
@@ -301,14 +331,14 @@ class TurnoutCurrency extends PureComponent {
                         <Text style={styles.textPrice}>
                             可用{this.state.coinType}：
                             <Text style={{color: '#018F67'}}>
-                                {this.state.intoData.hotMoney}
+                                {this.scientificToNumber(this.state.intoData.hotMoney)}
                             </Text>
                         </Text>
                         {/*冻结的币*/}
                         <Text style={styles.textPrice}>
                             冻结{this.state.coinType}：
                             <Text style={{color: '#F6574D'}}>
-                                {this.state.intoData.coldMoney}
+                                {this.scientificToNumber(this.state.intoData.coldMoney)}
                             </Text>
                         </Text>
                     </View>
@@ -369,7 +399,7 @@ class TurnoutCurrency extends PureComponent {
                                 this.setState({
                                     feeTur: feeTur,
                                     actualTur: turNum - feeTur,
-                                    btcNum: turNum,
+                                    btcNum: turNum === 0 ? null : turNum.toString(),
                                 });
                             }}
                         />

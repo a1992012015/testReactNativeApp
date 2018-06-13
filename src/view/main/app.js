@@ -82,7 +82,6 @@ const styles = StyleSheet.create({
         height: height,
         backgroundColor: '#fff',
         justifyContent: 'center',
-
     }
 });
 // 属性类型
@@ -93,6 +92,6 @@ FirstStart.propTypes = {
 export default connect((state) => {
     const {StartPage} = state;
     return {
-        StartPage
+        StartPage,
     }
 })(App);

@@ -43,7 +43,6 @@ import Title from '../../components/title';
 import RollingCaption from '../../components/rollingCaption';
 import SwiperBanner from '../../components/swiperBanner';
 import {homeLoop} from '../../store/actions/IndexLoopAction';
-import store from "react-native-simple-store";
 
 const {appKey} = urlConfig.api[Platform.OS];
 const {width} = Dimensions.get('window');

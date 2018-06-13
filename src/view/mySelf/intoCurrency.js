@@ -33,7 +33,10 @@ export default class IntoCurrency extends PureComponent {
         // 初始状态
         this.state = {
             coinName: '',
-            intoData: ''
+            intoData: {
+                hotMoney: 0,
+                coldMoney: 0,
+            }
         };
     }
 
@@ -49,7 +52,30 @@ export default class IntoCurrency extends PureComponent {
         });
     }
 
-    //生成币地址
+    /*科学计数法转换数值*/
+    scientificToNumber =  (num) => {
+        console.log(num);
+        let str = num.toString();
+        let reg = /^(\d+)(e)([\-]?\d+)$/;
+        let arr, len,
+            zero = '';
+
+        /*6e7或6e+7 都会自动转换数值*/
+        if (!reg.test(str)) {
+            return num;
+        } else {
+            /*6e-7 需要手动转换*/
+            arr = reg.exec(str);
+            len = Math.abs(arr[3]) - 1;
+            for (let i = 0; i < len; i++) {
+                zero += '0';
+            }
+
+            return '0.' + zero + arr[1];
+        }
+    };
+
+    //没有币地址 => 生成币地址
     _createPublicKey = () => {
         //地址
         let url = config.api.currency.createPublicKey;
@@ -78,6 +104,7 @@ export default class IntoCurrency extends PureComponent {
             }
         });
     };
+
     //获取币地址
     _getpublicKey = () => {
         //地址
@@ -100,6 +127,7 @@ export default class IntoCurrency extends PureComponent {
     // 渲染
     render() {
         const {toast} = this.refs;
+        const {intoData, publicKey} = this.state;
 
         return (
             <View style={styles.defaultView}>
@@ -113,7 +141,7 @@ export default class IntoCurrency extends PureComponent {
                             color='#fff'
                             style={{paddingHorizontal: p(20)}}/>
                     </TouchableOpacity>
-                    <Text style={styles.headerTitle}>转入{this.state.intoData.coinCode}</Text>
+                    <Text style={styles.headerTitle}>转入{intoData.coinCode}</Text>
                     <View/>
                 </View>
 
@@ -121,15 +149,15 @@ export default class IntoCurrency extends PureComponent {
                     {/*可用和冻结的币*/}
                     <View style={{marginLeft: p(20)}}>
                         <Text style={styles.textPrice}>
-                            可用{this.state.intoData.coinCode}：
+                            可用{intoData.coinCode}：
                             <Text style={{color: '#018F67'}}>
-                                {this.state.intoData.hotMoney}
+                                {this.scientificToNumber(intoData.hotMoney)}
                             </Text>
                         </Text>
                         <Text style={styles.textPrice}>
-                            冻结{this.state.intoData.coinCode}：
+                            冻结{intoData.coinCode}：
                             <Text style={{color: '#F6574D'}}>
-                                {this.state.intoData.coldMoney}
+                                {this.scientificToNumber(intoData.coldMoney)}
                             </Text>
                         </Text>
                     </View>
@@ -143,7 +171,7 @@ export default class IntoCurrency extends PureComponent {
                         <Text style={styles.textPrice}>钱包地址:</Text>
 
                         {
-                            !this.state.publicKey ?
+                            !publicKey ?
                                 <TouchableOpacity
                                     onPress={() => this._createPublicKey()}
                                     activeOpacity={.8}
@@ -159,16 +187,16 @@ export default class IntoCurrency extends PureComponent {
                                     <Text style={{
                                         color: '#fff',
                                         fontSize: p(26)
-                                    }}>获取地址({this.state.intoData.coinCode})</Text>
+                                    }}>获取地址({intoData.coinCode})</Text>
                                 </TouchableOpacity>
                                 :
                                 <View>
                                     {/*币地址*/}
-                                    <Text style={styles.textPrice}>{this.state.publicKey}</Text>
+                                    <Text style={styles.textPrice}>{publicKey}</Text>
                                     {/*点击复制*/}
                                     <TouchableOpacity
                                         onPress={() => {
-                                            Clipboard.setString(this.state.publicKey);
+                                            Clipboard.setString(publicKey);
                                             toast.show(I18n.t('fuzhisuccess'), DURATION.LENGTH_SHORT);
                                         }}
                                         style={styles.touView}
@@ -182,7 +210,7 @@ export default class IntoCurrency extends PureComponent {
                                         borderWidth: p(5),
                                     }}>
                                         <QRCode
-                                            value={this.state.publicKey}
+                                            value={publicKey}
                                             size={p(300)}
                                             bgColor='#000000'
                                             fgColor='white'
@@ -204,7 +232,7 @@ export default class IntoCurrency extends PureComponent {
                     >
                         <Text style={styles.promptText}>转入说明：</Text>
                         <Text style={styles.promptText}>
-                            1.禁止充值除{this.state.intoData.coinCode}之外的其他资产，任何非{this.state.intoData.coinCode}资产充值将不可找回
+                            1.禁止充值除{intoData.coinCode}之外的其他资产，任何非{intoData.coinCode}资产充值将不可找回
                         </Text>
 
                     </View>

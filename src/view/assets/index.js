@@ -20,13 +20,13 @@ import {
     ScrollView
 } from 'react-native';
 import store from 'react-native-simple-store';
+import { connect } from "react-redux";
 
 import config from '../../utils/config';
 import p from '../../utils/tranfrom';
 import Request from '../../utils/request';
 import Title from '../../components/title';
-import { connect } from "react-redux";
-import { InitUserInfo } from "../../store/actions/HomeAction";
+import Loading from '../../components/loading';
 
 const {width, height} = Dimensions.get('window');
 const request = new Request();
@@ -42,6 +42,7 @@ class SpotAssets extends PureComponent {
             member: null,
             user: null,
             queryAccount: [],
+            userIsLogin: false,//是否开启正在加载特效
         }
     }
 
@@ -151,8 +152,13 @@ class SpotAssets extends PureComponent {
             console.log('进入失败函数 =>', error);
         });
     };
+
     //充币
     getIntoCurrency = item => {
+        this.setState({
+            userIsLogin: true,
+        });
+
         const {moneyAndCoin, coinCode} = item;
 
         if (moneyAndCoin === 0) {
@@ -167,6 +173,10 @@ class SpotAssets extends PureComponent {
 
                 let data = responseText.obj;
 
+                this.setState({
+                    userIsLogin: false,
+                });
+
                 for (let i = 0; i < data.length; i++) {
                     if (data[i].coinCode === coinCode) {
                         this.props.navigation.navigate('IntoCurrency', {intoData: data[i]});
@@ -177,8 +187,13 @@ class SpotAssets extends PureComponent {
             });
         }
     };
+
     //提币
     getTurnoutCurrency = item => {
+        this.setState({
+            userIsLogin: true,
+        });
+
         const {moneyAndCoin, coinCode} = item;
 
         if (moneyAndCoin === 0) {
@@ -195,20 +210,24 @@ class SpotAssets extends PureComponent {
 
                 let data = responseText.obj;
 
+                this.setState({
+                    userIsLogin: false,
+                });
+
                 for (let i = 0; i < data.length; i++) {
                     if (data[i].coinCode === coinCode) {
                         this.props.navigation.navigate('TurnoutCurrency', {intoData: data[i], telephone: ''});
                     }
                 }
             });
-
         }
-
     };
+
     //账单
     getCodeBillFlow = item => {
         this.props.navigation.navigate('CodeBillFlow', {intoData: item});
     };
+
     /*跳转下级页面方法*/
     isRealName = (page, memberInfo, item) => {
         let {user} = this.state;
@@ -232,6 +251,7 @@ class SpotAssets extends PureComponent {
             }
         }
     };
+
     //实名认证判断
     realNameJump = (page, memberInfo, item) => {
         const {states} = memberInfo;
@@ -280,6 +300,28 @@ class SpotAssets extends PureComponent {
                 this.getCodeBillFlow(item);
 
             }
+        }
+    };
+
+    /*科学计数法转换数值*/
+    scientificToNumber =  (num) => {
+        let str = num.toString();
+        let reg = /^(\d+)(e)([\-]?\d+)$/;
+        let arr, len,
+            zero = '';
+
+        /*6e7或6e+7 都会自动转换数值*/
+        if (!reg.test(str)) {
+            return num;
+        } else {
+            /*6e-7 需要手动转换*/
+            arr = reg.exec(str);
+            len = Math.abs(arr[3]) - 1;
+            for (let i = 0; i < len; i++) {
+                zero += '0';
+            }
+
+            return '0.' + zero + arr[1];
         }
     };
 
@@ -332,10 +374,10 @@ class SpotAssets extends PureComponent {
                                                                 <Text style={styles.textOne}>{coinCode} （{name}）</Text>
                                                                 {/*总数*/}
                                                                 <Text
-                                                                    style={styles.textTwo}>{parseFloat(hotMoney)}</Text>
+                                                                    style={styles.textTwo}>{this.scientificToNumber(hotMoney)}</Text>
                                                                 {/*冻结*/}
                                                                 <Text
-                                                                    style={styles.textThree}>冻结{parseFloat(coldMoney)}</Text>
+                                                                    style={styles.textThree}>冻结{this.scientificToNumber(coldMoney)}</Text>
                                                             </View>
                                                             {/*显示图片*/}
                                                             <View style={{marginRight: p(50)}}>
@@ -354,6 +396,7 @@ class SpotAssets extends PureComponent {
                                                         }}/>
 
                                                         <View style={styles.viewTwo}>
+
                                                             {/*充币组件*/}
                                                             <TouchableOpacity
                                                                 onPress={() => this.isRealName(1, this.state.member, item)}
@@ -383,6 +426,7 @@ class SpotAssets extends PureComponent {
                                                                 backgroundColor: '#dfdfdf',
                                                                 width: p(2)
                                                             }}/>
+
                                                             {/*提币组件*/}
                                                             <TouchableOpacity
                                                                 onPress={() => this.isRealName(2, this.state.member, item)}
@@ -412,6 +456,7 @@ class SpotAssets extends PureComponent {
                                                                 backgroundColor: '#dfdfdf',
                                                                 width: p(2)
                                                             }}/>
+
                                                             {/*账单组件*/}
                                                             <TouchableOpacity
                                                                 onPress={() => this.isRealName(3, this.state.member, item)}
@@ -444,6 +489,9 @@ class SpotAssets extends PureComponent {
                             }
                         </ScrollView>
                     </View>
+
+                    {/*正在加载特效*/}
+                    <Loading visible={this.state.userIsLogin}/>
                 </View>
             )
         } else {

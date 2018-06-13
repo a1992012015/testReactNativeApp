@@ -51,13 +51,14 @@ class FirstStart extends PureComponent {
         const {wrapper, dot, activeDot, btnStyle, page} = styles;
         return (
             <View style={{flex: 1}}>
-                <Swiper autoplay={false}
-                        style={wrapper}
-                        height={height}
-                        dot={<View style={dot}/>}
-                        activeDot={<View style={activeDot}/>}
-                        paginationStyle={{bottom: p(60), left: 0, right: 0}}
-                        loop={false}
+                <Swiper
+                    autoplay={false}
+                    style={wrapper}
+                    height={height}
+                    dot={<View style={dot}/>}
+                    activeDot={<View style={activeDot}/>}
+                    paginationStyle={{bottom: p(60), left: 0, right: 0}}
+                    loop={false}
                 >
                     {
                         appUrl.api.guideImage.map((item, index) => {
@@ -69,13 +70,15 @@ class FirstStart extends PureComponent {
                                                 activeOpacity={1}
                                                 onPress={this._toLogin}
                                                 style={btnStyle}>
-                                                <Image style={page}
-                                                       source={appUrl.api.guideImage[index]}
+                                                <Image
+                                                    style={page}
+                                                    source={appUrl.api.guideImage[index]}
                                                 />
                                             </TouchableOpacity>
                                             :
-                                            <Image style={page}
-                                                   source={appUrl.api.guideImage[index]}
+                                            <Image
+                                                style={page}
+                                                source={appUrl.api.guideImage[index]}
                                             />
                                     }
                                 </View>

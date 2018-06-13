@@ -33,6 +33,8 @@ import md5 from '../../utils/hrymd5';
 import CheckModal from '../../components/checkModal';
 import SModal from '../../components/sModal';
 import MenuSelect, {MenuItem} from '../../components/MenuItem/index';
+import { InitUserInfo } from "../../store/actions/HomeAction";
+import { connect } from "react-redux";
 
 const request = new Request();
 
@@ -304,6 +306,7 @@ class Login extends PureComponent {
                 break;
         }
     };
+
     //缓存用户名
     saveUser = responseText => {
         AsyncStorage.getItem('loginUserName').then(data => {
@@ -335,11 +338,13 @@ class Login extends PureComponent {
             token: UUID
         });
 
+        const {navigation, dispatch} = this.props;
+        dispatch(InitUserInfo(this.props));
+
         const resetAction = StackActions.reset({
             index: 0,
             actions: [NavigationActions.navigate({routeName: 'TabBar'})],
         });
-        const {navigation} = this.props;
         navigation.dispatch(resetAction);
     };
     //隐藏验证码弹出框
@@ -534,4 +539,9 @@ class Login extends PureComponent {
     }
 }
 
-export default Login;
+export default connect((state) => {
+    const {HomeReducer} = state;
+    return {
+        HomeReducer,
+    }
+})(Login);

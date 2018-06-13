@@ -541,9 +541,10 @@ class Purchase extends PureComponent {
     calculation = text => {
         const {toast} = this.refs;
 
-        if (parseFloat(text) < 0) {
+        if (parseFloat(text) < 0 || parseFloat(text) > 9999999) {
             text = '';
             toast.show("请输入正确的委托价格", DURATION.LENGTH_SHORT);
+            return;
         }
 
         let turnovers;

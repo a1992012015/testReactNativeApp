@@ -324,7 +324,7 @@ export default class HistoryEntrust extends PureComponent {
     };
 
     renderKillRow = ({item}) => {
-        const {entrustTime, entrustPrice} = item.value;
+        const {entrustTime, entrustPrice, entrustCount} = item.value;
         const time = entrustTime.substring(5);
         const num = this.scientificToNumber(entrustPrice);
 
@@ -333,7 +333,7 @@ export default class HistoryEntrust extends PureComponent {
                 <Text style={[styles.textPrice, {width: '25%'}]}>{time}</Text>
                 {this.killType(item.value.type)}
                 <Text style={[styles.textPrice, {width: '20%'}]}>{num}</Text>
-                <Text style={[styles.textPrice, {width: '20%'}]}>{item.value.entrustCount}</Text>
+                <Text style={[styles.textPrice, {width: '20%'}]}>{this.scientificToNumber(entrustCount)}</Text>
                 {this.killStatus(item.value.status)}
             </View>
         )

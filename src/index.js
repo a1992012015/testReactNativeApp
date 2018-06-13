@@ -13,7 +13,7 @@ import {PersistGate} from 'redux-persist/integration/react';
 import configureStore from './store/store';
 import AppNavigator from './navigationConfiguration';
 
-if (!__DEV__) {
+/*if (!__DEV__) {
     global.console = {
         info: () => {
         },
@@ -24,7 +24,7 @@ if (!__DEV__) {
         error: () => {
         },
     };
-}
+}*/
 
 const {store, durable} = configureStore();
 

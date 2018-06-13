@@ -18,6 +18,9 @@ let StartPage = (state = initialState, action) => {
         //获取全部
         case types.START_PAGE_DATA:
             return Object.assign({}, state, {pageFlag: true});
+            //重新初始化
+        case types.START_PAGE_DELETE:
+            return Object.assign({}, state, {pageFlag: false});
         default:
             return state;
     }

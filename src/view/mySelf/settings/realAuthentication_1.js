@@ -552,9 +552,9 @@ class RealAuthentication_1 extends PureComponent {
                                         clearButtonMode={'while-editing'}
                                         placeholderTextColor={'#B0B0B0'}
                                         placeholder='请输入名字'
-                                        value={this.state.surname}
+                                        value={this.state.trueName}
                                         selectionColor={"#D95411"}
-                                        onChangeText={text => this.setState({surname: text})}
+                                        onChangeText={text => this.setState({trueName: text})}
                                     />
                                 </View>
                                 {/*姓氏*/}
@@ -566,9 +566,9 @@ class RealAuthentication_1 extends PureComponent {
                                         clearButtonMode={'while-editing'}
                                         placeholderTextColor={'#B0B0B0'}
                                         placeholder={I18n.t('xingshishuru')}
-                                        value={this.state.trueName}
+                                        value={this.state.surname}//surname
                                         selectionColor={"#D95411"}
-                                        onChangeText={text => this.setState({trueName: text})}
+                                        onChangeText={text => this.setState({surname: text})}
                                     />
                                 </View>
                                 {/*性别*/}

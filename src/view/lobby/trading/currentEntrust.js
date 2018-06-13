@@ -442,7 +442,7 @@ class CurrentEntrust extends PureComponent {
 
     /*每条数据的显示方式*/
     renderKillRow = ({item}) => {
-        const {entrustTime, entrustPrice} = item.value;
+        const {entrustTime, entrustPrice, entrustCount} = item.value;
         const time = entrustTime.substring(5);
         const num = this.scientificToNumber(entrustPrice);
 
@@ -451,7 +451,7 @@ class CurrentEntrust extends PureComponent {
                 <Text style={[styles.textPrice, {width: '20%'}]}>{time}</Text>
                 {this.killType(item.value.type)}
                 <Text style={[styles.textPrice, {width: '20%'}]}>{num}</Text>
-                <Text style={[styles.textPrice, {width: '20%'}]}>{item.value.entrustCount}</Text>
+                <Text style={[styles.textPrice, {width: '20%'}]}>{this.scientificToNumber(entrustCount)}</Text>
                 {this.killStatus(item.value.status)}
                 <TouchableOpacity
                     onPress={() => this.revokeKill(item.value)}
