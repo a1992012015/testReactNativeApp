@@ -194,7 +194,8 @@ export default class ClosingRecord extends PureComponent {
     }
 
     /*科学计数法转换数值*/
-    convertNum = (num) => {
+    convertNum = num => {
+        console.log(num);
         let result = num.toString();
 
         // 判断一下有没有减号
